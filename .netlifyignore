@@ -1,0 +1,7 @@
+source_assets/
+docs/
+CLAUDE.md
+.claude/
+temporary screenshots/
+screenshots/
+.qa-shots/

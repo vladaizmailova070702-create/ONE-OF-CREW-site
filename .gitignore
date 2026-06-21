@@ -1,0 +1,14 @@
+node_modules/
+dist/
+build/
+.claude/
+temporary screenshots/*
+!temporary screenshots/README.md
+screenshots/
+.qa-shots/
+*.tmp
+.env
+.env.*
+*.log
+.DS_Store
+Thumbs.db
