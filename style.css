@@ -36,6 +36,9 @@
   --pad: clamp(20px, 5vw, 56px);
   --radius: 8px;
   --radius-lg: 22px;
+
+  /* film grain tile (reused across photo overlays + page texture) */
+  --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -271,8 +274,8 @@ ul { margin: 0; padding: 0; list-style: none; }
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  opacity: 0.5;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E");
+  opacity: 0.62;
+  background-image: var(--noise);
 }
 .hero-content {
   position: relative;
@@ -380,7 +383,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   transition: transform 0.28s ease;
 }
 .why-card:hover { transform: translateY(-6px); }
-.why-media { aspect-ratio: 3 / 2; overflow: hidden; }
+.why-media { aspect-ratio: 3 / 2; overflow: hidden; position: relative; }
 .why-media img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.05); transition: filter 0.35s ease, transform 0.4s ease; }
 .why-card:hover .why-media img { filter: grayscale(0.2); transform: scale(1.04); }
 .why-body { padding: 26px 26px 30px; position: relative; }
@@ -405,7 +408,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 /* ============================================================
    4. КРАСНЫЙ БАННЕР / ВИДЕО
    ============================================================ */
-.band-section { background: var(--surface-alt); padding-block: 0 clamp(64px, 9vw, 120px); }
+.band-section { background: var(--bg); padding-block: 0 clamp(64px, 9vw, 120px); }
 .band {
   position: relative;
   display: block;
@@ -840,7 +843,117 @@ ul { margin: 0; padding: 0; list-style: none; }
   transition: color 0.2s ease;
 }
 .footer-nav a:hover { color: var(--white); }
+.footer-meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 22px; }
 .copyright { font-size: 0.82rem; color: var(--text-secondary); letter-spacing: 0.04em; }
+.contacts-inner .tag { margin-bottom: 18px; }
+
+/* ============================================================
+   REFERENCE DETAILS — torn ink edges, grain, film strip,
+   arrow CTA, bracket micro-type
+   ============================================================ */
+
+/* torn "ink" edges where dark meets light */
+.section-light { position: relative; }
+.section-light::before,
+.section-light::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: clamp(22px, 3.6vw, 50px);
+  background: url("assets/web/ink-edge.svg") top center / 100% 100% no-repeat;
+  z-index: 4;
+  pointer-events: none;
+}
+.section-light::before { top: -1px; }
+.section-light::after { bottom: -1px; transform: rotate(180deg); }
+
+/* large-grain page texture */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: var(--noise);
+  background-size: 220px 220px;
+}
+
+/* dense grain over photos */
+.why-media::after,
+.dir-card::after,
+.band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  background-image: var(--noise);
+  background-size: 170px 170px;
+}
+.why-media::after { z-index: 2; }
+.dir-card::after { z-index: 1; }
+.band::after { z-index: 1; }
+
+/* arrow → CTA gesture */
+.arrow-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(16px, 2vw, 30px);
+  margin-top: clamp(40px, 5vw, 64px);
+  color: var(--light-text);
+}
+.arrow-cta-svg {
+  width: clamp(110px, 20vw, 280px);
+  height: auto;
+  flex: none;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+.arrow-cta-label {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: clamp(1.4rem, 2.8vw, 2.2rem);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 2px;
+}
+.arrow-cta:hover { color: var(--accent); }
+.arrow-cta:hover .arrow-cta-svg { transform: translateX(12px); }
+.arrow-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+/* film "contact sheet" meta rows */
+.film-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px 28px;
+  flex-wrap: wrap;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  padding: 12px 0;
+}
+.film-meta-top { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: clamp(8px, 2vw, 18px); }
+.film-meta-bottom { justify-content: flex-start; gap: clamp(16px, 4vw, 54px); margin-top: clamp(8px, 2vw, 18px); }
+.film-meta-bottom span { color: var(--accent-hover); }
+
+/* bracket micro-typography */
+.tag {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.tag::before { content: "[ "; color: var(--accent-hover); }
+.tag::after { content: " ]"; color: var(--accent-hover); }
 
 /* ============================================================
    RESPONSIVE
