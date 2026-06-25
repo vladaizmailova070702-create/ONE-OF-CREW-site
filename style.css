@@ -559,57 +559,189 @@ ul { margin: 0; padding: 0; list-style: none; }
 .dir-actions .btn-light:hover { background: var(--white); color: var(--light-text); border-color: var(--white); }
 
 /* ============================================================
-   6. SCHEDULE / PLANS
+   6. SCHEDULE / PRICING
    ============================================================ */
-.schedule {
-  background: linear-gradient(135deg, var(--accent-bright) 0%, var(--surface-alt) 55%, var(--bg) 100%);
+.schedule { background: var(--bg); }
+
+/* editorial overlapping title */
+.pricing-title {
+  position: relative;
+  text-align: right;
+  margin-bottom: clamp(-18px, -1.5vw, -8px);
+  padding-right: clamp(4px, 2vw, 24px);
+  z-index: 2;
+  pointer-events: none;
 }
-.plans-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(16px, 2vw, 28px);
+.pricing-title-sm {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(1.1rem, 2.4vw, 2rem);
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
 }
-.plan-card {
-  background: rgba(13, 13, 13, 0.55);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 32px 28px 34px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  transition: transform 0.28s ease, border-color 0.28s ease;
-}
-.plan-card.featured { background: var(--accent); border-color: var(--accent-hover); }
-.plan-card:hover { transform: translateY(-6px); border-color: var(--accent-hover); }
-.plan-tag {
-  font-size: 11px; font-weight: 600;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--accent-hover); margin-bottom: 16px;
-}
-.plan-card.featured .plan-tag { color: var(--white); }
-.plan-card h3 {
+.pricing-title-lg {
   font-family: var(--font-head);
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: clamp(3.4rem, 11vw, 9rem);
+  line-height: 0.82;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--white);
+}
+.pricing-title-and { color: var(--text-secondary); }
+
+.price-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(16px, 2vw, 24px);
+  position: relative;
+  z-index: 1;
+}
+.price-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: clamp(20px, 4vw, 56px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: clamp(28px, 3.5vw, 44px);
+  overflow: hidden;
+  isolation: isolate;
+}
+.price-card::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -55%;
+  left: 12%;
+  right: 12%;
+  height: 90%;
+  background: radial-gradient(60% 70% at 50% 100%, rgba(242, 242, 242, 0.16), transparent 70%);
+  pointer-events: none;
+}
+.price-card-main h3 {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 20px;
+}
+.price-feats { display: flex; flex-direction: column; gap: 12px; }
+.price-feats li {
+  position: relative;
+  padding-left: 20px;
+  color: var(--text-secondary);
+  font-size: 0.98rem;
+}
+.price-feats li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-hover);
+}
+.price-card-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+.price-amount {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  line-height: 1;
+  color: var(--white);
+}
+.price-amount span { font-family: var(--font-body); font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); letter-spacing: 0.02em; }
+.price-prepay { margin-top: 8px; font-size: 0.85rem; letter-spacing: 0.04em; color: var(--accent-hover); text-transform: uppercase; }
+.price-meta { margin-top: auto; padding-top: 22px; display: flex; flex-direction: column; gap: 4px; }
+.price-meta p { font-size: 0.88rem; color: var(--text-secondary); }
+.price-card-side .btn { margin-top: 20px; }
+
+/* additional services table */
+.addon-title {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  color: var(--white);
+  margin: clamp(48px, 6vw, 80px) 0 clamp(20px, 2.5vw, 32px);
+}
+.addon-table {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: clamp(8px, 1.5vw, 18px) clamp(20px, 3vw, 36px);
+  background: var(--surface);
+}
+.addon-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: clamp(16px, 1.8vw, 22px) 0;
+  border-bottom: 1px solid var(--border);
+}
+.addon-row:last-child { border-bottom: none; }
+.addon-name { color: var(--text-primary); font-size: 1rem; }
+.addon-hint { color: var(--text-secondary); font-size: 0.82rem; }
+.addon-price {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+  color: var(--white);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+/* reserved schedule board */
+.schedule-board {
+  margin-top: clamp(24px, 3vw, 40px);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: clamp(24px, 3vw, 40px);
+}
+.schedule-board-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 18px;
+  margin-bottom: 22px;
+}
+.schedule-board-head h3 {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
   text-transform: uppercase;
   letter-spacing: 0.02em;
   color: var(--white);
 }
-.plan-age { margin: 6px 0 16px; font-size: 0.9rem; color: var(--text-secondary); }
-.plan-card.featured .plan-age { color: rgba(255, 255, 255, 0.85); }
-.plan-desc { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px; flex: 1; }
-.plan-card.featured .plan-desc { color: rgba(255, 255, 255, 0.9); }
-.plan-price {
-  font-family: var(--font-head);
-  font-weight: 700;
-  font-size: 1.9rem;
-  color: var(--white);
-  margin-bottom: 22px;
+.schedule-board-note { color: var(--text-secondary); font-size: 0.9rem; }
+.schedule-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
 }
-.plan-price span { font-family: var(--font-body); font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); }
-.plan-card.featured .plan-price span { color: rgba(255, 255, 255, 0.85); }
-.plan-card.featured .btn-accent { background: var(--white); color: var(--accent-bright); }
-.plan-card.featured .btn-accent:hover { background: var(--text-primary); }
+.schedule-days li {
+  text-align: center;
+  padding: 16px 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
 
 /* ============================================================
    7. GALLERY
@@ -722,13 +854,19 @@ ul { margin: 0; padding: 0; list-style: none; }
   .dir-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
+@media (max-width: 720px) {
+  .price-card { grid-template-columns: 1fr; }
+  .price-card-side { align-items: flex-start; text-align: left; }
+  .price-meta { margin-top: 22px; }
+}
+
 @media (max-width: 640px) {
   .dir-grid { grid-template-columns: 1fr; }
-  .plans-grid { grid-template-columns: 1fr; }
   .contact-links { grid-template-columns: 1fr; }
   .hero-styles { gap: 12px 26px; }
   .tabs { display: flex; width: 100%; }
   .tab { flex: 1; padding-inline: 12px; }
+  .schedule-days { grid-template-columns: repeat(4, 1fr); }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -291,39 +291,97 @@
     <!-- ======================= 6. РАСПИСАНИЕ И ЦЕНЫ ======================= -->
     <section class="schedule section" id="schedule" aria-labelledby="schedule-title">
       <div class="container">
-        <div class="section-head">
-          <h2 id="schedule-title" class="display-h2">Расписание и цены</h2>
-          <p class="section-lead">Танцы для детей и взрослых в Хабаровске. Выбери удобный формат.</p>
+        <div class="pricing-title">
+          <span class="pricing-title-sm">прайс-лист</span>
+          <h2 id="schedule-title" class="pricing-title-lg">Цены<span class="pricing-title-and"> и расписание</span></h2>
         </div>
 
-        <!-- TODO: заменить цены, расписание и адрес на реальные -->
-        <div class="plans-grid">
-          <article class="plan-card">
-            <span class="plan-tag">Дети</span>
-            <h3>Детские группы</h3>
-            <p class="plan-age">Breaking с 5 · Contemporary с 10 · K-Pop с 12</p>
-            <p class="plan-desc">Мягкий старт: координация, ритм и первые постановки.</p>
-            <p class="plan-price">от 2 500&nbsp;₽<span>/мес</span></p>
-            <a href="#contacts" class="btn btn-accent">Записаться</a>
+        <!-- Цены. TODO: подтвердить итоговые суммы абонементов -->
+        <div class="price-cards">
+          <article class="price-card">
+            <div class="price-card-main">
+              <h3>Детские группы</h3>
+              <ul class="price-feats">
+                <li>8 занятий в месяц</li>
+                <li>Breaking · Contemporary · K-Pop</li>
+                <li>Техника, координация, растяжка</li>
+                <li>Участие в постановках</li>
+                <li>Открытые уроки для родителей</li>
+              </ul>
+            </div>
+            <div class="price-card-side">
+              <p class="price-amount">от 3 000&nbsp;₽<span>/мес</span></p>
+              <p class="price-prepay">до 4 000&nbsp;₽ по направлению</p>
+              <div class="price-meta">
+                <p>Возраст: с 5 лет</p>
+                <p>Пробное занятие — бесплатно</p>
+              </div>
+              <a href="#contacts" class="btn btn-accent btn-sm">Записаться</a>
+            </div>
           </article>
 
-          <article class="plan-card featured">
-            <span class="plan-tag">Взрослые</span>
-            <h3>ONE OF CREW</h3>
-            <p class="plan-age">Choreo · 16+</p>
-            <p class="plan-desc">Основной состав студии: техника, стиль и выступления.</p>
-            <p class="plan-price">от 3 200&nbsp;₽<span>/мес</span></p>
-            <a href="#contacts" class="btn btn-accent">Записаться</a>
+          <article class="price-card">
+            <div class="price-card-main">
+              <h3>Взрослые группы</h3>
+              <ul class="price-feats">
+                <li>8 занятий в месяц</li>
+                <li>Choreo · Jazz-Funk · K-Pop</li>
+                <li>Постановки и выходы на сцену</li>
+                <li>Группы по уровням подготовки</li>
+                <li>Работа над собственным стилем</li>
+              </ul>
+            </div>
+            <div class="price-card-side">
+              <p class="price-amount">от 4 000&nbsp;₽<span>/мес</span></p>
+              <p class="price-prepay">состав ONE OF CREW · 16+</p>
+              <div class="price-meta">
+                <p>Проектные группы — по запросу</p>
+                <p>Пробное занятие — бесплатно</p>
+              </div>
+              <a href="#contacts" class="btn btn-accent btn-sm">Записаться</a>
+            </div>
           </article>
+        </div>
 
-          <article class="plan-card">
-            <span class="plan-tag">Проект</span>
-            <h3>Проектная группа</h3>
-            <p class="plan-age">Jazz-Funk Choreo · MALINA · 16+</p>
-            <p class="plan-desc">Постановка номера под конкретный выход на сцену.</p>
-            <p class="plan-price">по запросу</p>
-            <a href="#contacts" class="btn btn-accent">Узнать условия</a>
-          </article>
+        <!-- Дополнительные услуги -->
+        <h3 class="addon-title">Дополнительные услуги</h3>
+        <!-- TODO: подтвердить цены доп. услуг -->
+        <div class="addon-table">
+          <div class="addon-row">
+            <span class="addon-name">Пробное занятие</span>
+            <span class="addon-price">Бесплатно</span>
+          </div>
+          <div class="addon-row">
+            <span class="addon-name">Разовое занятие</span>
+            <span class="addon-price">500&nbsp;₽</span>
+          </div>
+          <div class="addon-row">
+            <span class="addon-name">Абонемент 12 занятий</span>
+            <span class="addon-price">от 4 000&nbsp;₽</span>
+          </div>
+          <div class="addon-row">
+            <span class="addon-name">Безлимит на месяц</span>
+            <span class="addon-price">от 5 500&nbsp;₽</span>
+          </div>
+          <div class="addon-row">
+            <span class="addon-name">Второе направление</span>
+            <span class="addon-price">+1 500&nbsp;₽</span>
+          </div>
+          <div class="addon-row">
+            <span class="addon-name">Проектные группы <span class="addon-hint">(MALINA · K-Pop)</span></span>
+            <span class="addon-price">по запросу</span>
+          </div>
+        </div>
+
+        <!-- Расписание. TODO: внести реальное расписание групп (дни / время / зал) -->
+        <div class="schedule-board" aria-labelledby="schedule-board-title">
+          <div class="schedule-board-head">
+            <h3 id="schedule-board-title">Расписание</h3>
+            <span class="schedule-board-note">Скоро здесь появится расписание групп по дням и времени</span>
+          </div>
+          <ul class="schedule-days" aria-hidden="true">
+            <li>Пн</li><li>Вт</li><li>Ср</li><li>Чт</li><li>Пт</li><li>Сб</li><li>Вс</li>
+          </ul>
         </div>
       </div>
     </section>
