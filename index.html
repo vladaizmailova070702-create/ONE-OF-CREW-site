@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>ONE OF STUDIO — танцевальная студия в Хабаровске</title>
-  <meta name="description" content="ONE OF STUDIO — танцевальная студия в Хабаровске. Направления для всех уровней: Hip-Hop, Dancehall, Choreography, Vogue, Breaking. Запишись на пробное занятие." />
+  <meta name="description" content="ONE OF STUDIO — танцевальная студия в Хабаровске. Направления для взрослых и детей: Hip-Hop, Jazz-Funk, K-Pop, Breaking, Contemporary. Запишись на пробное занятие." />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="ONE OF STUDIO — танцевальная студия в Хабаровске" />
-  <meta property="og:description" content="Место, где начинается твой танец. Направления для детей и взрослых в Хабаровске. Запишись на пробное занятие." />
+  <meta property="og:description" content="Место, где начинается твой танец. Учимся через постановки, музыку и сцену. Запишись на пробное занятие." />
   <meta property="og:locale" content="ru_RU" />
   <!-- TODO: добавить реальное og:image (1200×630) и og:url после деплоя -->
   <meta property="og:image" content="https://placehold.co/1200x630/0d0d0d/F2F2F2.png?text=ONE+OF+STUDIO" />
@@ -21,7 +21,7 @@
 
   <!-- Hero image preload -->
   <!-- TODO: заменить на реальное hero-фото танцоров (тёмное, высокий контраст, ~1920px) -->
-  <link rel="preload" as="image" href="https://placehold.co/1920x1080/1a1a1a/1a1a1a.png?text=%20" />
+  <link rel="preload" as="image" href="https://placehold.co/1600x1000/1a1a1a/1a1a1a.png?text=%20" />
 
   <link rel="stylesheet" href="style.css" />
 
@@ -31,7 +31,7 @@
     "@context": "https://schema.org",
     "@type": "DanceSchool",
     "name": "ONE OF STUDIO",
-    "description": "Танцевальная студия в Хабаровске. Направления для детей и взрослых, все уровни подготовки.",
+    "description": "Танцевальная студия в Хабаровске. Направления для взрослых и детей, обучение через постановки и сцену.",
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Хабаровск",
@@ -56,14 +56,14 @@
     </a>
 
     <nav class="nav" aria-label="Основная навигация">
-      <a href="#about">О студии</a>
+      <a href="#why">О студии</a>
       <a href="#directions">Направления</a>
       <a href="#schedule">Расписание</a>
       <a href="#gallery">Галерея</a>
       <a href="#contacts">Контакты</a>
     </nav>
 
-    <a href="#contacts" class="btn btn-outline nav-cta">Записаться</a>
+    <a href="#contacts" class="btn btn-accent nav-cta">Записаться</a>
 
     <button class="nav-toggle" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu">
       <span></span><span></span><span></span>
@@ -73,7 +73,7 @@
   <!-- Mobile menu -->
   <div class="mobile-menu" id="mobile-menu" hidden>
     <nav aria-label="Мобильная навигация">
-      <a href="#about">О студии</a>
+      <a href="#why">О студии</a>
       <a href="#directions">Направления</a>
       <a href="#schedule">Расписание</a>
       <a href="#gallery">Галерея</a>
@@ -86,20 +86,23 @@
 
     <!-- ======================= 1. HERO ======================= -->
     <section class="hero" aria-labelledby="hero-title">
-      <!-- TODO: заменить на реальное тёмное фото танцоров с концертным светом -->
-      <img class="hero-bg" src="https://placehold.co/1920x1080/1a1a1a/1a1a1a.png?text=%20"
-           alt="" width="1920" height="1080" fetchpriority="high" />
-      <div class="hero-overlay"></div>
-      <div class="grain" aria-hidden="true"></div>
+      <div class="hero-card">
+        <!-- TODO: заменить на реальное тёмное фото танцоров с концертным светом -->
+        <img class="hero-bg" src="https://placehold.co/1600x1000/1a1a1a/1a1a1a.png?text=%20"
+             alt="" width="1600" height="1000" fetchpriority="high" />
+        <div class="hero-overlay"></div>
+        <div class="grain" aria-hidden="true"></div>
 
-      <div class="hero-inner">
-        <h1 id="hero-title" class="hero-logo">
-          <span class="hero-logo-main">ONE OF</span>
-          <span class="hero-logo-sub">STUDIO</span>
-        </h1>
-        <p class="hero-tagline">Танцуй. Расти. Будь одним из нас.</p>
-        <p class="hero-sub">Танцевальная студия в Хабаровске. Место, где начинается твой танец.</p>
-        <a href="#contacts" class="btn btn-accent btn-lg">Записаться на пробное</a>
+        <div class="hero-content">
+          <div class="hero-headline">
+            <span class="hero-wordmark">ONE OF STUDIO</span>
+            <h1 id="hero-title">Место, где<br />начинается<br /><span class="accent-text">твой танец</span></h1>
+          </div>
+          <div class="hero-aside">
+            <p>Танцевальная студия в Хабаровске. Учимся через постановки, музыку и сцену — приходи на бесплатное пробное занятие.</p>
+            <a href="#contacts" class="btn btn-accent btn-lg">Записаться на пробное</a>
+          </div>
+        </div>
       </div>
 
       <!-- Style strip -->
@@ -112,137 +115,228 @@
       </ul>
     </section>
 
-    <!-- ======================= ABOUT ======================= -->
-    <section class="about section" id="about" aria-labelledby="about-title">
-      <div class="container about-grid">
-        <div class="section-eyebrow">Студия</div>
-        <h2 id="about-title" class="display-h2">
-          Не просто&nbsp;двигаться.<br /><span class="accent-text">Танцевать осознанно.</span>
-        </h2>
-        <div class="about-copy">
-          <p>ONE OF STUDIO — уникальный проект, где мы сразу начинаем с погружения в музыку и хореографию, обучаясь в процессе участия в постановках. Мы не стремимся везде стать самыми лучшими, мы стремимся раскрыть танцоров и показать их с тех сторон, о которых они не знали.</p>
-          <p>Упор на чувства, поддержку, стремление выходить на сцену и атмосферу полного понимания твоего пути и всех трудностей.</p>
+    <!-- ======================= 2. STATS / О НАС ======================= -->
+    <section class="stats section" id="about" aria-labelledby="stats-title">
+      <div class="container stats-grid">
+        <div class="stats-intro">
+          <span class="pill">О студии</span>
+          <h2 id="stats-title" class="display-h2">ONE OF STUDIO<br />— это</h2>
+        </div>
+
+        <!-- TODO: заменить на реальные показатели (число учеников, площадь зала, постановки) -->
+        <ul class="badges" aria-label="Студия в цифрах">
+          <li class="badge">
+            <span class="badge-num">5</span>
+            <span class="badge-label">направлений<br />в студии</span>
+          </li>
+          <li class="badge badge-accent">
+            <span class="badge-num">С 5 лет</span>
+            <span class="badge-label">берём в<br />Breaking</span>
+          </li>
+          <li class="badge">
+            <span class="badge-num">16+</span>
+            <span class="badge-label">состав<br />ONE OF CREW</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ======================= 3. ПОЧЕМУ МЫ ======================= -->
+    <section class="why section" id="why" aria-labelledby="why-title">
+      <div class="container">
+        <div class="section-head">
+          <span class="pill">Почему мы</span>
+          <h2 id="why-title" class="display-h2">Почему ONE OF STUDIO<br /><span class="accent-text">для тебя?</span></h2>
+        </div>
+
+        <!-- TODO: заменить на реальные фото из зала -->
+        <div class="why-grid">
+          <article class="why-card">
+            <div class="why-media">
+              <img src="https://placehold.co/600x420/1a1a1a/1a1a1a.png" alt="Постановки и репетиции в ONE OF STUDIO" width="600" height="420" loading="lazy" />
+            </div>
+            <div class="why-body">
+              <h3>Обучение через сцену</h3>
+              <p>Сразу начинаем с погружения в музыку и хореографию, обучаясь в процессе участия в постановках.</p>
+            </div>
+          </article>
+
+          <article class="why-card">
+            <div class="why-media">
+              <img src="https://placehold.co/600x420/1a1a1a/1a1a1a.png" alt="Танцоры ONE OF STUDIO" width="600" height="420" loading="lazy" />
+            </div>
+            <div class="why-body">
+              <h3>Раскрываем танцора</h3>
+              <p>Не стремимся стать везде лучшими — стремимся раскрыть тебя и показать с тех сторон, о которых ты не знал.</p>
+            </div>
+          </article>
+
+          <article class="why-card">
+            <div class="why-media">
+              <img src="https://placehold.co/600x420/1a1a1a/1a1a1a.png" alt="Атмосфера студии ONE OF STUDIO" width="600" height="420" loading="lazy" />
+            </div>
+            <div class="why-body">
+              <h3>Атмосфера поддержки</h3>
+              <p>Упор на чувства, поддержку и полное понимание твоего пути и всех трудностей на нём.</p>
+            </div>
+          </article>
         </div>
       </div>
     </section>
 
-    <!-- ======================= 2. НАПРАВЛЕНИЯ ======================= -->
-    <section class="directions section" id="directions" aria-labelledby="directions-title">
+    <!-- ======================= 4. КРАСНЫЙ БАННЕР / ВИДЕО ======================= -->
+    <section class="band-section" aria-labelledby="band-title">
+      <div class="container">
+        <!-- TODO: заменить фон на реальное фото зала и подключить видео -->
+        <a class="band" href="#gallery" aria-labelledby="band-title">
+          <img class="band-bg" src="https://placehold.co/1400x560/591515/591515.png?text=%20" alt="" width="1400" height="560" loading="lazy" />
+          <div class="band-overlay"></div>
+          <span class="band-play" aria-hidden="true">▶</span>
+          <div class="band-content">
+            <h2 id="band-title">Открой для себя<br />яркий мир танцев</h2>
+            <p>Приходи на бесплатное пробное и почувствуй энергию зала на любом из направлений студии.</p>
+            <span class="btn btn-accent">Попробовать бесплатно</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ======================= 5. НАПРАВЛЕНИЯ (СВЕТЛАЯ СЕКЦИЯ) ======================= -->
+    <section class="directions section section-light" id="directions" aria-labelledby="directions-title">
       <div class="container">
         <div class="section-head">
-          <div class="section-eyebrow">Чему учим</div>
-          <h2 id="directions-title" class="display-h2">Направления танцев</h2>
-          <p class="section-lead">Направления для всех уровней: детям, подросткам и взрослым.</p>
+          <span class="pill pill-dark">Направления</span>
+          <h2 id="directions-title" class="display-h2">Выбери своё<br />направление</h2>
+        </div>
+
+        <!-- Toggle adult / kids -->
+        <div class="tabs" role="tablist" aria-label="Возрастные направления">
+          <button class="tab is-active" role="tab" aria-selected="true" aria-controls="panel-adult" id="tab-adult" data-group="adult">Взрослые направления</button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="panel-kids" id="tab-kids" data-group="kids">Детские направления</button>
         </div>
 
         <!-- TODO: добавить реальные фото направлений вместо плейсхолдеров -->
-        <div class="cards-grid">
-          <article class="dir-card">
-            <div class="dir-media">
-              <img src="https://placehold.co/600x400/1a1a1a/ffffff.png?text=Hip-Hop" alt="Группа Hip-Hop ONE OF CREW" width="600" height="400" loading="lazy" />
-            </div>
-            <div class="dir-body">
-              <h3>Hip-Hop</h3>
-              <span class="dir-meta">Группа ONE OF CREW · 16+</span>
-              <p>Команда студии: грув, собственный стиль и совместная работа над постановками.</p>
-            </div>
-          </article>
+        <div class="dir-panel" id="panel-adult" role="tabpanel" aria-labelledby="tab-adult">
+          <div class="dir-grid">
+            <article class="dir-card">
+              <img src="https://placehold.co/700x520/1a1a1a/1a1a1a.png" alt="Группа Hip-Hop ONE OF CREW" width="700" height="520" loading="lazy" />
+              <div class="dir-overlay"></div>
+              <div class="dir-info">
+                <span class="dir-meta">ONE OF CREW · 16+</span>
+                <h3>Hip-Hop</h3>
+                <div class="dir-actions">
+                  <a href="#contacts" class="btn btn-accent btn-sm">Узнать подробнее</a>
+                  <a href="#contacts" class="btn btn-light btn-sm">Пробное занятие</a>
+                </div>
+              </div>
+            </article>
 
-          <article class="dir-card">
-            <div class="dir-media">
-              <img src="https://placehold.co/600x400/1a1a1a/ffffff.png?text=Jazz-Funk" alt="Группа Jazz-Funk Choreo" width="600" height="400" loading="lazy" />
-            </div>
-            <div class="dir-body">
-              <h3>Jazz-Funk Choreo</h3>
-              <span class="dir-meta">Проектная группа · 16+</span>
-              <p>Хореографические постановки под конкретные номера и выходы на сцену.</p>
-            </div>
-          </article>
+            <article class="dir-card">
+              <img src="https://placehold.co/700x520/1a1a1a/1a1a1a.png" alt="Группа Jazz-Funk Choreo" width="700" height="520" loading="lazy" />
+              <div class="dir-overlay"></div>
+              <div class="dir-info">
+                <span class="dir-meta">Проектная группа · 16+</span>
+                <h3>Jazz-Funk Choreo</h3>
+                <div class="dir-actions">
+                  <a href="#contacts" class="btn btn-accent btn-sm">Узнать подробнее</a>
+                  <a href="#contacts" class="btn btn-light btn-sm">Пробное занятие</a>
+                </div>
+              </div>
+            </article>
 
-          <article class="dir-card">
-            <div class="dir-media">
-              <img src="https://placehold.co/600x400/1a1a1a/ffffff.png?text=K-Pop" alt="Группа K-Pop Cover Dance" width="600" height="400" loading="lazy" />
-            </div>
-            <div class="dir-body">
-              <h3>K-Pop Cover Dance</h3>
-              <span class="dir-meta">Проектная группа</span>
-              <p>Каверы любимых групп: разбор хореографии, синхрон и подача для сцены.</p>
-            </div>
-          </article>
+            <article class="dir-card">
+              <img src="https://placehold.co/700x520/1a1a1a/1a1a1a.png" alt="Группа K-Pop Cover Dance" width="700" height="520" loading="lazy" />
+              <div class="dir-overlay"></div>
+              <div class="dir-info">
+                <span class="dir-meta">Проектная группа</span>
+                <h3>K-Pop Cover Dance</h3>
+                <div class="dir-actions">
+                  <a href="#contacts" class="btn btn-accent btn-sm">Узнать подробнее</a>
+                  <a href="#contacts" class="btn btn-light btn-sm">Пробное занятие</a>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
 
-          <article class="dir-card">
-            <div class="dir-media">
-              <img src="https://placehold.co/600x400/1a1a1a/ffffff.png?text=Breaking" alt="Группа Breaking" width="600" height="400" loading="lazy" />
-            </div>
-            <div class="dir-body">
-              <h3>Breaking</h3>
-              <span class="dir-meta">С 5 лет · с нуля до про</span>
-              <p>От первых элементов до продвинутого уровня. Сила, контроль и трюки.</p>
-            </div>
-          </article>
+        <div class="dir-panel" id="panel-kids" role="tabpanel" aria-labelledby="tab-kids" hidden>
+          <div class="dir-grid">
+            <article class="dir-card">
+              <img src="https://placehold.co/700x520/1a1a1a/1a1a1a.png" alt="Детская группа Breaking" width="700" height="520" loading="lazy" />
+              <div class="dir-overlay"></div>
+              <div class="dir-info">
+                <span class="dir-meta">С 5 лет · с нуля до про</span>
+                <h3>Breaking</h3>
+                <div class="dir-actions">
+                  <a href="#contacts" class="btn btn-accent btn-sm">Узнать подробнее</a>
+                  <a href="#contacts" class="btn btn-light btn-sm">Пробное занятие</a>
+                </div>
+              </div>
+            </article>
 
-          <article class="dir-card">
-            <div class="dir-media">
-              <img src="https://placehold.co/600x400/1a1a1a/ffffff.png?text=Contemporary" alt="Группа Contemporary" width="600" height="400" loading="lazy" />
-            </div>
-            <div class="dir-body">
-              <h3>Contemporary</h3>
-              <span class="dir-meta">С 10 лет</span>
-              <p>Пластика, дыхание и эмоция. Танец, в котором слышно музыку.</p>
-            </div>
-          </article>
+            <article class="dir-card">
+              <img src="https://placehold.co/700x520/1a1a1a/1a1a1a.png" alt="Детская группа Contemporary" width="700" height="520" loading="lazy" />
+              <div class="dir-overlay"></div>
+              <div class="dir-info">
+                <span class="dir-meta">С 10 лет</span>
+                <h3>Contemporary</h3>
+                <div class="dir-actions">
+                  <a href="#contacts" class="btn btn-accent btn-sm">Узнать подробнее</a>
+                  <a href="#contacts" class="btn btn-light btn-sm">Пробное занятие</a>
+                </div>
+              </div>
+            </article>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ======================= 3. НАБОР / РАСПИСАНИЕ И ЦЕНЫ ======================= -->
+    <!-- ======================= 6. РАСПИСАНИЕ И ЦЕНЫ ======================= -->
     <section class="schedule section" id="schedule" aria-labelledby="schedule-title">
       <div class="container">
         <div class="section-head">
-          <div class="section-eyebrow light">Группы</div>
-          <h2 id="schedule-title" class="display-h2">Набор и цены</h2>
-          <p class="section-lead">Танцы для детей и взрослых в Хабаровске. Выбери свою группу.</p>
+          <span class="pill">Набор</span>
+          <h2 id="schedule-title" class="display-h2">Расписание и цены</h2>
+          <p class="section-lead">Танцы для детей и взрослых в Хабаровске. Выбери удобный формат.</p>
         </div>
 
         <!-- TODO: заменить цены, расписание и адрес на реальные -->
         <div class="plans-grid">
           <article class="plan-card">
             <span class="plan-tag">Дети</span>
-            <h3>Детская группа</h3>
-            <p class="plan-age">6–10 лет</p>
-            <p class="plan-desc">Мягкий старт: координация, ритм и любовь к движению в игровой форме.</p>
+            <h3>Детские группы</h3>
+            <p class="plan-age">Breaking с 5 лет · Contemporary с 10 лет</p>
+            <p class="plan-desc">Мягкий старт: координация, ритм и первые постановки.</p>
             <p class="plan-price">от 2 500&nbsp;₽<span>/мес</span></p>
             <a href="#contacts" class="btn btn-accent">Записаться</a>
           </article>
 
           <article class="plan-card featured">
-            <span class="plan-tag">Подростки</span>
-            <h3>Подростковая группа</h3>
-            <p class="plan-age">11–16 лет</p>
-            <p class="plan-desc">Техника, стиль и первые выступления. Группы по уровням подготовки.</p>
+            <span class="plan-tag">Взрослые</span>
+            <h3>ONE OF CREW</h3>
+            <p class="plan-age">Hip-Hop · 16+</p>
+            <p class="plan-desc">Основной состав студии: техника, стиль и выступления.</p>
             <p class="plan-price">от 3 200&nbsp;₽<span>/мес</span></p>
             <a href="#contacts" class="btn btn-accent">Записаться</a>
           </article>
 
           <article class="plan-card">
-            <span class="plan-tag">Взрослые</span>
-            <h3>Взрослая группа</h3>
-            <p class="plan-age">17+ лет</p>
-            <p class="plan-desc">С нуля и для продолжающих. Танцуй для себя или готовься к сцене.</p>
-            <p class="plan-price">от 3 500&nbsp;₽<span>/мес</span></p>
-            <a href="#contacts" class="btn btn-accent">Записаться</a>
+            <span class="plan-tag">Проект</span>
+            <h3>Проектные группы</h3>
+            <p class="plan-age">Jazz-Funk Choreo · K-Pop Cover</p>
+            <p class="plan-desc">Постановка номера под конкретный выход на сцену.</p>
+            <p class="plan-price">по запросу</p>
+            <a href="#contacts" class="btn btn-accent">Узнать условия</a>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- TODO: блок «Тренеры» временно убран — вернуть, когда будут фото и данные -->
-
-    <!-- ======================= ГАЛЕРЕЯ / МЕДИА ======================= -->
+    <!-- ======================= 7. ГАЛЕРЕЯ ======================= -->
     <section class="gallery section" id="gallery" aria-labelledby="gallery-title">
       <div class="container">
         <div class="section-head">
-          <div class="section-eyebrow light">Медиа</div>
+          <span class="pill">Медиа</span>
           <h2 id="gallery-title" class="display-h2">Из зала</h2>
           <p class="section-lead">Тренировки, репетиции и выступления ONE OF STUDIO.</p>
         </div>
@@ -251,43 +345,35 @@
       <!-- Film strip -->
       <!-- TODO: заменить на реальные фото из зала -->
       <div class="filmstrip" role="list" aria-label="Фотогалерея студии">
-        <figure class="frame" role="listitem"><img src="https://placehold.co/600x750/1a1a1a/ffffff.png?text=01" alt="Фото из зала ONE OF STUDIO" width="600" height="750" loading="lazy" /></figure>
-        <figure class="frame" role="listitem"><img src="https://placehold.co/600x750/1a1a1a/ffffff.png?text=02" alt="Фото из зала ONE OF STUDIO" width="600" height="750" loading="lazy" /></figure>
-        <figure class="frame" role="listitem"><img src="https://placehold.co/600x750/1a1a1a/ffffff.png?text=03" alt="Фото из зала ONE OF STUDIO" width="600" height="750" loading="lazy" /></figure>
-        <figure class="frame" role="listitem"><img src="https://placehold.co/600x750/1a1a1a/ffffff.png?text=04" alt="Фото из зала ONE OF STUDIO" width="600" height="750" loading="lazy" /></figure>
-        <figure class="frame" role="listitem"><img src="https://placehold.co/600x750/1a1a1a/ffffff.png?text=05" alt="Фото из зала ONE OF STUDIO" width="600" height="750" loading="lazy" /></figure>
-        <figure class="frame" role="listitem"><img src="https://placehold.co/600x750/1a1a1a/ffffff.png?text=06" alt="Фото из зала ONE OF STUDIO" width="600" height="750" loading="lazy" /></figure>
-        <figure class="frame" role="listitem"><img src="https://placehold.co/600x750/1a1a1a/ffffff.png?text=07" alt="Фото из зала ONE OF STUDIO" width="600" height="750" loading="lazy" /></figure>
-        <figure class="frame" role="listitem"><img src="https://placehold.co/600x750/1a1a1a/ffffff.png?text=08" alt="Фото из зала ONE OF STUDIO" width="600" height="750" loading="lazy" /></figure>
-      </div>
-
-      <div class="container">
-        <!-- TODO: заменить на реальный embed видео (YouTube/VK/Rutube) -->
-        <a class="video-embed" href="#gallery" aria-label="Видео из зала (заглушка)">
-          <span class="play-btn" aria-hidden="true">▶</span>
-          <span class="video-label">Видео из зала</span>
-        </a>
+        <figure class="frame" role="listitem"><img src="https://placehold.co/600x750/1a1a1a/1a1a1a.png" alt="Фото из зала ONE OF STUDIO" width="600" height="750" loading="lazy" /></figure>
+        <figure class="frame" role="listitem"><img src="https://placehold.co/600x750/1a1a1a/1a1a1a.png" alt="Фото из зала ONE OF STUDIO" width="600" height="750" loading="lazy" /></figure>
+        <figure class="frame" role="listitem"><img src="https://placehold.co/600x750/1a1a1a/1a1a1a.png" alt="Фото из зала ONE OF STUDIO" width="600" height="750" loading="lazy" /></figure>
+        <figure class="frame" role="listitem"><img src="https://placehold.co/600x750/1a1a1a/1a1a1a.png" alt="Фото из зала ONE OF STUDIO" width="600" height="750" loading="lazy" /></figure>
+        <figure class="frame" role="listitem"><img src="https://placehold.co/600x750/1a1a1a/1a1a1a.png" alt="Фото из зала ONE OF STUDIO" width="600" height="750" loading="lazy" /></figure>
+        <figure class="frame" role="listitem"><img src="https://placehold.co/600x750/1a1a1a/1a1a1a.png" alt="Фото из зала ONE OF STUDIO" width="600" height="750" loading="lazy" /></figure>
+        <figure class="frame" role="listitem"><img src="https://placehold.co/600x750/1a1a1a/1a1a1a.png" alt="Фото из зала ONE OF STUDIO" width="600" height="750" loading="lazy" /></figure>
+        <figure class="frame" role="listitem"><img src="https://placehold.co/600x750/1a1a1a/1a1a1a.png" alt="Фото из зала ONE OF STUDIO" width="600" height="750" loading="lazy" /></figure>
       </div>
     </section>
 
-    <!-- ======================= 6. КОНТАКТЫ ======================= -->
+    <!-- ======================= 8. КОНТАКТЫ ======================= -->
     <section class="contacts section" id="contacts" aria-labelledby="contacts-title">
       <div class="container contacts-inner">
-        <div class="section-eyebrow light">Связь</div>
-        <h2 id="contacts-title" class="display-h2">Запишись на пробное занятие</h2>
+        <span class="pill">Контакты</span>
+        <h2 id="contacts-title" class="display-h2">Запишись на<br />пробное занятие</h2>
         <p class="section-lead">Напиши удобным способом, и мы расскажем про группы, расписание и стоимость.</p>
 
         <!-- TODO: заменить ссылки на реальные контакты и адрес -->
         <div class="contact-links">
-          <a class="contact-btn tg" href="https://t.me/PLACEHOLDER" target="_blank" rel="noopener">
+          <a class="contact-btn" href="https://t.me/PLACEHOLDER" target="_blank" rel="noopener">
             <span class="contact-kicker">Telegram</span>
             <span class="contact-value">@one_of_studio</span>
           </a>
-          <a class="contact-btn wa" href="https://wa.me/PLACEHOLDER" target="_blank" rel="noopener">
+          <a class="contact-btn" href="https://wa.me/PLACEHOLDER" target="_blank" rel="noopener">
             <span class="contact-kicker">WhatsApp</span>
             <span class="contact-value">Написать в WhatsApp</span>
           </a>
-          <a class="contact-btn ph" href="tel:+7XXXXXXXXXX">
+          <a class="contact-btn" href="tel:+7XXXXXXXXXX">
             <span class="contact-kicker">Телефон</span>
             <span class="contact-value">+7 (XXX) XXX-XX-XX</span>
           </a>
@@ -299,7 +385,7 @@
 
   </main>
 
-  <!-- ======================= 7. FOOTER ======================= -->
+  <!-- ======================= FOOTER ======================= -->
   <footer class="site-footer">
     <div class="container footer-inner">
       <a class="brand footer-brand" href="#top" aria-label="ONE OF STUDIO — наверх">
@@ -308,7 +394,7 @@
       </a>
 
       <nav class="footer-nav" aria-label="Навигация в подвале">
-        <a href="#about">О студии</a>
+        <a href="#why">О студии</a>
         <a href="#directions">Направления</a>
         <a href="#schedule">Расписание</a>
         <a href="#gallery">Галерея</a>
@@ -345,6 +431,26 @@
       });
       menu.querySelectorAll('a').forEach(function (a) {
         a.addEventListener('click', close);
+      });
+    })();
+
+    // Directions tabs (adult / kids)
+    (function () {
+      var tabs = document.querySelectorAll('.tab');
+      var panels = { adult: document.getElementById('panel-adult'), kids: document.getElementById('panel-kids') };
+      if (!tabs.length) return;
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          var group = tab.getAttribute('data-group');
+          tabs.forEach(function (t) {
+            var active = t === tab;
+            t.classList.toggle('is-active', active);
+            t.setAttribute('aria-selected', String(active));
+          });
+          Object.keys(panels).forEach(function (k) {
+            if (panels[k]) panels[k].hidden = k !== group;
+          });
+        });
       });
     })();
   </script>
