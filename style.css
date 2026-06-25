@@ -23,8 +23,13 @@
   --light-muted: #6b6463;
   --light-border: rgba(13, 13, 13, 0.12);
 
-  --font-display: "Saira", "Oswald", system-ui, sans-serif;
-  --font-head: "Oswald", "Saira", system-ui, sans-serif;
+  /* 3 fonts only:
+     --font-logo  Saira    — brand mark "ONE OF" (Latin only)
+     --font-head  Oswald   — every heading & number (covers Cyrillic + Latin,
+                             so a whole phrase renders in ONE font)
+     --font-body  Montserrat — body, nav, labels, buttons */
+  --font-logo: "Saira", system-ui, sans-serif;
+  --font-head: "Oswald", system-ui, sans-serif;
   --font-body: "Montserrat", system-ui, sans-serif;
 
   --maxw: 1240px;
@@ -83,11 +88,11 @@ ul { margin: 0; padding: 0; list-style: none; }
 .pill-dark { color: var(--light-muted); border-color: var(--light-border); }
 
 .display-h2 {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(2.2rem, 5.4vw, 4.2rem);
-  line-height: 0.98;
-  letter-spacing: 0.01em;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: clamp(2.3rem, 5.6vw, 4.4rem);
+  line-height: 1.0;
+  letter-spacing: 0.005em;
   text-transform: uppercase;
   color: var(--white);
 }
@@ -152,7 +157,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 .brand { display: inline-flex; flex-direction: column; line-height: 1; }
 .brand-main {
-  font-family: var(--font-display);
+  font-family: var(--font-logo);
   font-weight: 800;
   font-style: italic;
   font-size: 22px;
@@ -290,11 +295,10 @@ ul { margin: 0; padding: 0; list-style: none; }
   margin-bottom: 18px;
 }
 .hero-content h1 {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-style: italic;
+  font-family: var(--font-head);
+  font-weight: 700;
   font-size: clamp(2.6rem, 6.5vw, 5.4rem);
-  line-height: 0.92;
+  line-height: 0.96;
   text-transform: uppercase;
   color: var(--white);
 }
@@ -334,44 +338,28 @@ ul { margin: 0; padding: 0; list-style: none; }
    2. STATS / О НАС
    ============================================================ */
 .stats { background: var(--bg); }
-.stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1.3fr;
-  gap: clamp(32px, 5vw, 72px);
-  align-items: center;
-}
-.badges {
+.principles {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: clamp(16px, 2.5vw, 32px);
+  gap: clamp(20px, 3vw, 48px);
 }
-.badge {
-  position: relative;
-  aspect-ratio: 1 / 1;
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 10px;
+.principle {
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
 }
-.badge-accent { background: var(--accent); border-color: var(--accent-hover); }
-.badge-num {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(1.5rem, 3.2vw, 2.6rem);
-  line-height: 1;
+.principle-label {
+  display: block;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
   color: var(--white);
+  margin-bottom: 14px;
 }
-.badge-label {
-  margin-top: 10px;
-  font-size: clamp(10px, 1vw, 12px);
-  letter-spacing: 0.04em;
-  color: var(--text-secondary);
-}
-.badge-accent .badge-label { color: rgba(255, 255, 255, 0.85); }
+.principle-label::before { content: "[ "; color: var(--accent-hover); }
+.principle-label::after { content: " ]"; color: var(--accent-hover); }
+.principle p { color: var(--text-secondary); font-size: 0.98rem; max-width: 34ch; }
 
 /* ============================================================
    3. ПОЧЕМУ МЫ
@@ -468,8 +456,8 @@ ul { margin: 0; padding: 0; list-style: none; }
   min-height: inherit;
 }
 .band-content h2 {
-  font-family: var(--font-display);
-  font-weight: 800;
+  font-family: var(--font-head);
+  font-weight: 700;
   font-size: clamp(1.9rem, 4.5vw, 3.4rem);
   line-height: 0.98;
   text-transform: uppercase;
@@ -612,8 +600,8 @@ ul { margin: 0; padding: 0; list-style: none; }
 .plan-desc { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px; flex: 1; }
 .plan-card.featured .plan-desc { color: rgba(255, 255, 255, 0.9); }
 .plan-price {
-  font-family: var(--font-display);
-  font-weight: 800;
+  font-family: var(--font-head);
+  font-weight: 700;
   font-size: 1.9rem;
   color: var(--white);
   margin-bottom: 22px;
@@ -729,15 +717,12 @@ ul { margin: 0; padding: 0; list-style: none; }
   .nav, .nav-cta { display: none; }
   .nav-toggle { display: flex; }
   .hero-content { grid-template-columns: 1fr; align-items: start; }
-  .stats-grid { grid-template-columns: 1fr; }
+  .principles { grid-template-columns: 1fr; }
   .why-grid { grid-template-columns: 1fr; }
   .dir-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 640px) {
-  .badges { grid-template-columns: 1fr; max-width: 280px; }
-  .badge { aspect-ratio: auto; border-radius: var(--radius-lg); padding: 28px; flex-direction: row; gap: 16px; justify-content: flex-start; text-align: left; }
-  .badge-label { margin-top: 0; }
   .dir-grid { grid-template-columns: 1fr; }
   .plans-grid { grid-template-columns: 1fr; }
   .contact-links { grid-template-columns: 1fr; }
