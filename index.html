@@ -521,34 +521,41 @@
         io.observe(band);
       }
 
-      // click play: hide loop/overlay, show full video without native controls
-      pb.addEventListener('click', function () {
-        if (!full) return;
+      function openVideo() {
         loop.pause();
         band.classList.add('is-playing');
+        document.body.classList.add('video-open');
         full.currentTime = 0;
         var p = full.play();
         if (p && p.catch) p.catch(function () {});
-      });
+      }
 
-      // click anywhere on full video = toggle pause/play
+      function closeVideo() {
+        full.pause();
+        full.currentTime = 0;
+        band.classList.remove('is-playing');
+        document.body.classList.remove('video-open');
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          var p = loop.play(); if (p && p.catch) p.catch(function () {});
+        }
+      }
+
+      pb.addEventListener('click', openVideo);
+
+      // click on video = pause/resume
       full.addEventListener('click', function () {
         if (full.paused) { var p = full.play(); if (p && p.catch) p.catch(function(){}); }
         else full.pause();
       });
 
-      // ✕ button: stop and return to loop
+      // ✕ button exits fullscreen mode
       var stopBtn = document.getElementById('bandStop');
-      if (stopBtn) {
-        stopBtn.addEventListener('click', function () {
-          full.pause();
-          full.currentTime = 0;
-          band.classList.remove('is-playing');
-          if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            var p = loop.play(); if (p && p.catch) p.catch(function(){});
-          }
-        });
-      }
+      if (stopBtn) stopBtn.addEventListener('click', closeVideo);
+
+      // Escape key also exits
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && band.classList.contains('is-playing')) closeVideo();
+      });
     })();
 
   </script>
