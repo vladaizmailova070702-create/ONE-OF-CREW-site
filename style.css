@@ -412,7 +412,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 /* ============================================================
    4. КРАСНЫЙ БАННЕР / ВИДЕО
    ============================================================ */
-.band-section { background: var(--surface-alt); padding-block: 0 clamp(64px, 9vw, 120px); }
+.band-section { background: #000; padding-block: clamp(48px, 8vw, 96px); }
 .band {
   position: relative;
   display: block;
@@ -425,7 +425,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   position: absolute;
   inset: 0;
   width: 100%; height: 100%;
-  object-fit: contain;        /* show the whole frame — never crop the video */
+  object-fit: cover;          /* card ratio == video ratio, so fills with no letterbox bars */
   background: #000;
   z-index: 0;
 }
