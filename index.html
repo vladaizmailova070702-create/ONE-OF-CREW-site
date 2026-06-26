@@ -193,11 +193,14 @@
     <section class="band-section" aria-labelledby="band-title">
       <div class="container">
         <div class="band" id="band">
-          <video class="band-video" id="bandVideo" poster="assets/web/band-poster.webp" preload="none" playsinline>
+          <video class="band-video band-loop" id="bandLoop" poster="assets/web/band-poster.webp" muted loop playsinline preload="none">
+            <source src="assets/web/one-of-crew-loop.mp4" type="video/mp4" />
+          </video>
+          <video class="band-video band-full" id="bandFull" preload="none" playsinline>
             <source src="assets/web/one-of-crew-zal.mp4" type="video/mp4" />
           </video>
           <div class="band-overlay"></div>
-          <button class="band-play" id="bandPlay" type="button" aria-label="Смотреть видео ONE OF CREW">▶</button>
+          <button class="band-play" id="bandPlay" type="button" aria-label="Смотреть полное видео ONE OF CREW со звуком">▶</button>
           <div class="band-content">
             <h2 id="band-title">Открой для себя<br />яркий мир танцев</h2>
             <p>Приходи на бесплатное пробное и почувствуй энергию зала на любом из направлений студии.</p>
@@ -506,17 +509,36 @@
       });
     })();
 
-    // Band video — load & play on click (preload="none" keeps page light)
+    // Band video — light muted loop autoplays in view; play button opens
+    // the full clip with sound (full preloads only on click).
     (function () {
       var band = document.getElementById('band');
-      var v = document.getElementById('bandVideo');
+      var loop = document.getElementById('bandLoop');
+      var full = document.getElementById('bandFull');
       var pb = document.getElementById('bandPlay');
-      if (!band || !v || !pb) return;
+      if (!band || !loop || !pb) return;
+      loop.muted = true;
+
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reduce && 'IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (band.classList.contains('is-playing')) return;
+            if (e.isIntersecting) { var p = loop.play(); if (p && p.catch) p.catch(function () {}); }
+            else { loop.pause(); }
+          });
+        }, { threshold: 0.25 });
+        io.observe(band);
+      }
+
       pb.addEventListener('click', function () {
-        v.controls = true;
+        if (!full) return;
+        loop.pause();
+        full.controls = true;
         band.classList.add('is-playing');
-        var p = v.play();
-        if (p && p.catch) p.catch(function () { v.controls = true; });
+        full.currentTime = 0;
+        var p = full.play();
+        if (p && p.catch) p.catch(function () { full.controls = true; });
       });
     })();
 
