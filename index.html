@@ -217,14 +217,9 @@
           <h2 id="directions-title" class="display-h2">Выбери своё<br />направление</h2>
         </div>
 
-        <!-- Toggle adult / kids -->
-        <div class="tabs" role="tablist" aria-label="Возрастные направления">
-          <button class="tab is-active" role="tab" aria-selected="true" aria-controls="panel-adult" id="tab-adult" data-group="adult">Взрослые направления</button>
-          <button class="tab" role="tab" aria-selected="false" aria-controls="panel-kids" id="tab-kids" data-group="kids">Детские направления</button>
-        </div>
-
-        <!-- TODO: добавить реальные фото направлений вместо плейсхолдеров -->
-        <div class="dir-panel" id="panel-adult" role="tabpanel" aria-labelledby="tab-adult">
+        <!-- Взрослые направления -->
+        <div class="dir-group">
+          <p class="dir-group-label">Взрослые направления</p>
           <div class="dir-grid">
             <article class="dir-card">
               <img src="assets/web/choreo.webp" alt="Группа Choreo ONE OF CREW на сцене" width="800" height="1000" loading="lazy" />
@@ -251,14 +246,15 @@
                 </div>
               </div>
             </article>
-
           </div>
         </div>
 
-        <div class="dir-panel" id="panel-kids" role="tabpanel" aria-labelledby="tab-kids" hidden>
+        <!-- Детские направления (всегда видны ниже) -->
+        <div class="dir-group dir-group--kids">
+          <p class="dir-group-label">Детские направления</p>
           <div class="dir-grid">
             <article class="dir-card">
-              <img src="assets/web/breaking.webp" alt="Танцор Breaking на крыше — ONE OF STUDIO" width="800" height="1000" loading="lazy" />
+              <img src="assets/web/breaking.webp" alt="Танцор Breaking ONE OF STUDIO" width="800" height="1000" loading="lazy" />
               <div class="dir-overlay"></div>
               <div class="dir-info">
                 <span class="dir-meta">с 0 до PRO · 5+</span>
@@ -541,25 +537,6 @@
       });
     })();
 
-    // Directions tabs (adult / kids)
-    (function () {
-      var tabs = document.querySelectorAll('.tab');
-      var panels = { adult: document.getElementById('panel-adult'), kids: document.getElementById('panel-kids') };
-      if (!tabs.length) return;
-      tabs.forEach(function (tab) {
-        tab.addEventListener('click', function () {
-          var group = tab.getAttribute('data-group');
-          tabs.forEach(function (t) {
-            var active = t === tab;
-            t.classList.toggle('is-active', active);
-            t.setAttribute('aria-selected', String(active));
-          });
-          Object.keys(panels).forEach(function (k) {
-            if (panels[k]) panels[k].hidden = k !== group;
-          });
-        });
-      });
-    })();
   </script>
 </body>
 </html>

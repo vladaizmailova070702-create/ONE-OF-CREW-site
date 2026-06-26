@@ -519,7 +519,29 @@ ul { margin: 0; padding: 0; list-style: none; }
 .tab.is-active { background: var(--accent); color: var(--white); }
 .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-.dir-panel[hidden] { display: none; }
+.dir-group { margin-bottom: clamp(40px, 6vw, 72px); }
+.dir-group:last-child { margin-bottom: 0; }
+.dir-group--kids { padding-top: clamp(8px, 2vw, 16px); }
+
+.dir-group-label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--light-muted);
+  margin: 0 0 clamp(20px, 2.5vw, 32px);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.dir-group-label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--light-border);
+}
+
 .dir-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
