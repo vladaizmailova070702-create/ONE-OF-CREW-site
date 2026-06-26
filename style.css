@@ -896,8 +896,7 @@ body::before {
 
 /* dense grain over photos */
 .why-media::after,
-.dir-card::after,
-.band::after {
+.dir-card::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -908,7 +907,6 @@ body::before {
 }
 .why-media::after { z-index: 2; }
 .dir-card::after { z-index: 1; }
-.band::after { z-index: 1; }
 
 /* arrow → CTA gesture */
 .arrow-cta {
