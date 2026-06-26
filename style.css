@@ -954,20 +954,6 @@ body::before {
   background-size: 220px 220px;
 }
 
-/* dense grain over photos */
-.why-media::after,
-.dir-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.55;
-  background-image: var(--noise);
-  background-size: 170px 170px;
-}
-.why-media::after { z-index: 2; }
-.dir-card::after { z-index: 1; }
-
 /* arrow → CTA gesture */
 .arrow-cta {
   display: inline-flex;
