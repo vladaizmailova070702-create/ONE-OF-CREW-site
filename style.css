@@ -408,7 +408,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 /* ============================================================
    4. КРАСНЫЙ БАННЕР / ВИДЕО
    ============================================================ */
-.band-section { background: var(--bg); padding-block: 0 clamp(64px, 9vw, 120px); }
+.band-section { background: var(--surface-alt); padding-block: 0 clamp(64px, 9vw, 120px); }
 .band {
   position: relative;
   display: block;
@@ -636,6 +636,10 @@ ul { margin: 0; padding: 0; list-style: none; }
 .price-feats { display: flex; flex-direction: column; gap: 12px; }
 .price-feats li {
   position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 14px;
   padding-left: 20px;
   color: var(--text-secondary);
   font-size: 0.98rem;
@@ -649,6 +653,13 @@ ul { margin: 0; padding: 0; list-style: none; }
   height: 6px;
   border-radius: 50%;
   background: var(--accent-hover);
+}
+.feat-price {
+  font-family: var(--font-head);
+  font-weight: 600;
+  color: var(--white);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
 }
 .price-card-side {
   display: flex;
@@ -848,25 +859,11 @@ ul { margin: 0; padding: 0; list-style: none; }
 .contacts-inner .tag { margin-bottom: 18px; }
 
 /* ============================================================
-   REFERENCE DETAILS — torn ink edges, grain, film strip,
-   arrow CTA, bracket micro-type
+   REFERENCE DETAILS — grain, film strip, arrow CTA,
+   bracket micro-type
    ============================================================ */
 
-/* torn "ink" edges where dark meets light */
 .section-light { position: relative; }
-.section-light::before,
-.section-light::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: clamp(22px, 3.6vw, 50px);
-  background: url("assets/web/ink-edge.svg") top center / 100% 100% no-repeat;
-  z-index: 4;
-  pointer-events: none;
-}
-.section-light::before { top: -1px; }
-.section-light::after { bottom: -1px; transform: rotate(180deg); }
 
 /* large-grain page texture */
 body::before {
