@@ -464,6 +464,27 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 .band-play:hover { transform: translate(-50%, -50%) scale(1.08); background: var(--accent-hover); }
 .band-play:focus-visible { outline: 2px solid var(--white); outline-offset: 4px; }
+
+.band-stop {
+  position: absolute;
+  z-index: 5;
+  top: 16px; right: 16px;
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: rgba(13, 13, 13, 0.72);
+  backdrop-filter: blur(8px);
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 1rem;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+.band-stop:hover { background: rgba(13, 13, 13, 0.95); transform: scale(1.08); }
+.band-stop:focus-visible { outline: 2px solid var(--white); outline-offset: 3px; }
+.band.is-playing .band-stop { opacity: 1; pointer-events: auto; }
 .band-content {
   position: relative;
   z-index: 2;

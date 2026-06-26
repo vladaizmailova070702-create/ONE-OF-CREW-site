@@ -195,6 +195,7 @@
           </video>
           <div class="band-overlay"></div>
           <button class="band-play" id="bandPlay" type="button" aria-label="Смотреть полное видео ONE OF CREW со звуком">▶</button>
+          <button class="band-stop" id="bandStop" type="button" aria-label="Закрыть видео">✕</button>
           <div class="band-content">
             <h2 id="band-title">Открой для себя<br />яркий мир танцев</h2>
             <p>Приходи на бесплатное пробное и почувствуй энергию зала на любом из направлений студии.</p>
@@ -520,15 +521,34 @@
         io.observe(band);
       }
 
+      // click play: hide loop/overlay, show full video without native controls
       pb.addEventListener('click', function () {
         if (!full) return;
         loop.pause();
-        full.controls = true;
         band.classList.add('is-playing');
         full.currentTime = 0;
         var p = full.play();
-        if (p && p.catch) p.catch(function () { full.controls = true; });
+        if (p && p.catch) p.catch(function () {});
       });
+
+      // click anywhere on full video = toggle pause/play
+      full.addEventListener('click', function () {
+        if (full.paused) { var p = full.play(); if (p && p.catch) p.catch(function(){}); }
+        else full.pause();
+      });
+
+      // ✕ button: stop and return to loop
+      var stopBtn = document.getElementById('bandStop');
+      if (stopBtn) {
+        stopBtn.addEventListener('click', function () {
+          full.pause();
+          full.currentTime = 0;
+          band.classList.remove('is-playing');
+          if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            var p = loop.play(); if (p && p.catch) p.catch(function(){});
+          }
+        });
+      }
     })();
 
   </script>
