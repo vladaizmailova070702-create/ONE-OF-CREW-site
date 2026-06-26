@@ -1021,6 +1021,32 @@ body::before {
   .tabs { display: flex; width: 100%; }
   .tab { flex: 1; padding-inline: 12px; }
   .schedule-days { grid-template-columns: repeat(4, 1fr); }
+  /* Band card: aspect-ratio crushes content on narrow screens — switch to min-height */
+  .band { aspect-ratio: auto; min-height: 420px; }
+  /* Film meta: items wrap awkwardly — stack as a clean column */
+  .film-meta-top { flex-direction: column; align-items: flex-start; gap: 3px; }
+  /* Footer: long "Танцевальная студия" tag breaks the row — hide it */
+  .footer-meta .tag:nth-child(2) { display: none; }
+}
+
+/* K-Pop lone card in 2-col kids grid at tablet: span full width and centre */
+@media (max-width: 960px) and (min-width: 641px) {
+  .dir-grid .dir-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    max-width: calc(50% - 8px);
+    margin-inline: auto;
+  }
+}
+
+/* Price card amount: prevent "/мес" wrapping at mid-widths before card collapses */
+@media (max-width: 840px) and (min-width: 721px) {
+  .price-amount { font-size: clamp(1.6rem, 3.2vw, 2.4rem); }
+}
+
+/* Pricing section big title: clamp min too large for small screens */
+@media (max-width: 560px) {
+  .pricing-title-lg { font-size: clamp(1.8rem, 10vw, 2.8rem); }
+  .pricing-title { margin-bottom: -4px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
