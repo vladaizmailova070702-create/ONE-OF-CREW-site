@@ -416,10 +416,10 @@ ul { margin: 0; padding: 0; list-style: none; }
 .band {
   position: relative;
   display: block;
-  border-radius: var(--radius-lg);
   overflow: hidden;
   aspect-ratio: 1144 / 720;        /* exact encoded video frame — card = video bounds */
   isolation: isolate;
+  width: 100%;
 }
 .band-video {
   position: absolute;
@@ -503,7 +503,7 @@ body.video-open { overflow: hidden; }
   flex-direction: column;
   justify-content: space-between;
   gap: 18px;
-  padding: clamp(28px, 4vw, 48px);
+  padding: clamp(28px, 4vw, 48px) clamp(28px, 5vw, 72px);
   min-height: inherit;
   pointer-events: none;
   transition: opacity 0.4s ease;
