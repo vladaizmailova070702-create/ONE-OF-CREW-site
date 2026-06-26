@@ -417,11 +417,12 @@ ul { margin: 0; padding: 0; list-style: none; }
   min-height: clamp(360px, 42vw, 520px);
   isolation: isolate;
 }
-.band-bg {
+.band-video {
   position: absolute;
   inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
+  background: #000;
   z-index: 0;
 }
 .band-overlay {
@@ -429,8 +430,15 @@ ul { margin: 0; padding: 0; list-style: none; }
   inset: 0;
   z-index: 1;
   background:
-    linear-gradient(120deg, rgba(64, 14, 14, 0.85) 0%, rgba(89, 21, 21, 0.55) 55%, rgba(13, 13, 13, 0.45) 100%);
+    linear-gradient(120deg, rgba(64, 14, 14, 0.82) 0%, rgba(89, 21, 21, 0.5) 55%, rgba(13, 13, 13, 0.45) 100%);
+  transition: opacity 0.4s ease;
 }
+/* when the video is playing, clear the poster overlay/text so it reads as a player */
+.band.is-playing .band-overlay,
+.band.is-playing .band-content,
+.band.is-playing .band-play { opacity: 0; visibility: hidden; pointer-events: none; }
+.band.is-playing .band-video { z-index: 4; }
+.band.is-playing { isolation: auto; }
 .band-play {
   position: absolute;
   z-index: 3;
@@ -444,9 +452,11 @@ ul { margin: 0; padding: 0; list-style: none; }
   font-size: 1.6rem;
   padding-left: 5px;
   border: 2px solid rgba(255, 255, 255, 0.25);
-  transition: transform 0.25s ease, background-color 0.25s ease;
+  cursor: pointer;
+  transition: transform 0.25s ease, background-color 0.25s ease, opacity 0.3s ease;
 }
-.band:hover .band-play { transform: translate(-50%, -50%) scale(1.08); background: var(--accent-hover); }
+.band-play:hover { transform: translate(-50%, -50%) scale(1.08); background: var(--accent-hover); }
+.band-play:focus-visible { outline: 2px solid var(--white); outline-offset: 4px; }
 .band-content {
   position: relative;
   z-index: 2;
@@ -457,7 +467,11 @@ ul { margin: 0; padding: 0; list-style: none; }
   gap: 18px;
   padding: clamp(28px, 4vw, 48px);
   min-height: inherit;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
 }
+.band-content .btn,
+.band-content a { pointer-events: auto; }
 .band-content h2 {
   font-family: var(--font-head);
   font-weight: 700;

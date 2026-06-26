@@ -12,3 +12,7 @@ screenshots/
 *.log
 .DS_Store
 Thumbs.db
+
+# heavy source media — kept locally, excluded from deploy and git
+assets/originals/
+brand_assets/originals/

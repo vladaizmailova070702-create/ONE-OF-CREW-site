@@ -192,17 +192,18 @@
     <!-- ======================= 4. КРАСНЫЙ БАННЕР / ВИДЕО ======================= -->
     <section class="band-section" aria-labelledby="band-title">
       <div class="container">
-        <!-- TODO: заменить фон на реальное фото зала и подключить видео -->
-        <a class="band" href="#gallery" aria-labelledby="band-title">
-          <img class="band-bg" src="https://placehold.co/1400x560/591515/591515.png?text=%20" alt="" width="1400" height="560" loading="lazy" />
+        <div class="band" id="band">
+          <video class="band-video" id="bandVideo" poster="assets/web/band-poster.webp" preload="none" playsinline>
+            <source src="assets/web/one-of-crew-zal.mp4" type="video/mp4" />
+          </video>
           <div class="band-overlay"></div>
-          <span class="band-play" aria-hidden="true">▶</span>
+          <button class="band-play" id="bandPlay" type="button" aria-label="Смотреть видео ONE OF CREW">▶</button>
           <div class="band-content">
             <h2 id="band-title">Открой для себя<br />яркий мир танцев</h2>
             <p>Приходи на бесплатное пробное и почувствуй энергию зала на любом из направлений студии.</p>
-            <span class="btn btn-accent">Попробовать бесплатно</span>
+            <a href="#contacts" class="btn btn-accent">Попробовать бесплатно</a>
           </div>
-        </a>
+        </div>
       </div>
     </section>
 
@@ -502,6 +503,20 @@
       });
       menu.querySelectorAll('a').forEach(function (a) {
         a.addEventListener('click', close);
+      });
+    })();
+
+    // Band video — load & play on click (preload="none" keeps page light)
+    (function () {
+      var band = document.getElementById('band');
+      var v = document.getElementById('bandVideo');
+      var pb = document.getElementById('bandPlay');
+      if (!band || !v || !pb) return;
+      pb.addEventListener('click', function () {
+        v.controls = true;
+        band.classList.add('is-playing');
+        var p = v.play();
+        if (p && p.catch) p.catch(function () { v.controls = true; });
       });
     })();
 
