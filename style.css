@@ -414,7 +414,8 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: block;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  min-height: clamp(360px, 42vw, 520px);
+  aspect-ratio: 1268 / 798;        /* matches the cropped clip */
+  min-height: 360px;               /* keep text readable on narrow screens */
   isolation: isolate;
 }
 .band-video {
