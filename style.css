@@ -414,15 +414,14 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: block;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  aspect-ratio: 1268 / 798;        /* matches the cropped clip */
-  min-height: 360px;               /* keep text readable on narrow screens */
+  aspect-ratio: 1144 / 720;        /* exact encoded video frame — card = video bounds */
   isolation: isolate;
 }
 .band-video {
   position: absolute;
   inset: 0;
   width: 100%; height: 100%;
-  object-fit: cover;
+  object-fit: contain;        /* show the whole frame — never crop the video */
   background: #000;
   z-index: 0;
 }
