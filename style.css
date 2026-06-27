@@ -334,12 +334,13 @@ ul { margin: 0; padding: 0; list-style: none; }
 .hero-styles li:not(:last-child)::after {
   content: "";
   position: absolute;
-  right: clamp(-8px, -2vw, -26px);
+  /* sit in the middle of the flex gap (+0.11em offsets the trailing letter-spacing) */
+  right: calc(clamp(16px, 4vw, 52px) / -2 + 0.11em);
   top: 50%;
   width: 4px; height: 4px;
   border-radius: 50%;
   background: var(--accent-hover);
-  transform: translateY(-50%);
+  transform: translate(50%, -50%);
 }
 
 /* ============================================================
@@ -754,6 +755,7 @@ body.video-open { overflow: hidden; }
 }
 .price-amount span { font-family: var(--font-body); font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); letter-spacing: 0.02em; }
 .price-prepay { margin-top: 8px; font-size: 0.85rem; letter-spacing: 0.04em; color: var(--accent-hover); text-transform: uppercase; }
+.price-sale { margin-top: 6px; font-size: 0.74rem; line-height: 1.3; color: var(--accent); max-width: 24ch; }
 .price-meta { margin-top: auto; padding-top: 22px; display: flex; flex-direction: column; gap: 4px; }
 .price-meta p { font-size: 0.88rem; color: var(--text-secondary); }
 .price-card-side .btn { margin-top: 20px; }
