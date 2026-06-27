@@ -418,14 +418,14 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: block;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  aspect-ratio: 1144 / 720;        /* exact encoded video frame — card = video bounds */
+  aspect-ratio: 16 / 9;            /* matches the 1920x1080 video — card = video bounds */
   isolation: isolate;
 }
 .band-video {
   position: absolute;
   inset: 0;
   width: 100%; height: 100%;
-  object-fit: cover;          /* card ratio == video ratio, so fills with no letterbox bars */
+  object-fit: contain;        /* show the whole frame — never crop the video */
   background: #000;
   z-index: 0;
 }
