@@ -412,7 +412,14 @@ ul { margin: 0; padding: 0; list-style: none; }
 /* ============================================================
    4. КРАСНЫЙ БАННЕР / ВИДЕО
    ============================================================ */
-.band-section { background: #000; padding-block: clamp(48px, 8vw, 96px); }
+.band-section {
+  background: #000;
+  padding-block: clamp(48px, 8vw, 96px);
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .band {
   position: relative;
   display: block;
