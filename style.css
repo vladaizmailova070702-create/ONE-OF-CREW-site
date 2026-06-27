@@ -281,11 +281,9 @@ ul { margin: 0; padding: 0; list-style: none; }
   position: relative;
   z-index: 3;
   width: 100%;
-  max-width: var(--maxw);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  align-items: end;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
   gap: clamp(24px, 4vw, 56px);
   padding: clamp(100px, 12vw, 140px) var(--pad) clamp(52px, 5vw, 72px);
 }
@@ -307,7 +305,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   text-transform: uppercase;
   color: var(--white);
 }
-.hero-aside { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; padding-bottom: 6px; }
+.hero-aside { display: flex; flex-direction: column; align-items: flex-end; text-align: right; gap: 22px; padding-bottom: 6px; }
 .hero-aside p { color: rgba(242, 242, 242, 0.85); font-size: 1rem; max-width: 38ch; }
 
 /* Style strip — sits inside hero just above the dark fade */
@@ -1021,7 +1019,8 @@ body::before {
 @media (max-width: 960px) {
   .nav, .nav-cta { display: none; }
   .nav-toggle { display: flex; }
-  .hero-content { grid-template-columns: 1fr; align-items: start; }
+  .hero-content { flex-direction: column; align-items: flex-start; }
+  .hero-aside { align-items: flex-start; text-align: left; }
   .principles { grid-template-columns: 1fr; }
   .why-grid { grid-template-columns: 1fr; }
   .dir-grid { grid-template-columns: repeat(2, 1fr); }
