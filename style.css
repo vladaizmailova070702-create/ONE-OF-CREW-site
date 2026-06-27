@@ -885,10 +885,10 @@ body.video-open { overflow: hidden; }
 .contacts .section-lead { text-align: center; }
 .contact-links {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
   width: 100%;
-  max-width: 840px;
+  max-width: 600px;
   margin: clamp(30px, 4vw, 48px) 0 28px;
 }
 .contact-btn {
@@ -1016,6 +1016,11 @@ body::before {
 /* ============================================================
    RESPONSIVE
    ============================================================ */
+@media (min-width: 961px) {
+  /* wider edge inset for the hero headline + aside on desktop */
+  .hero-content { padding-inline: clamp(56px, 6.5vw, 96px); }
+}
+
 @media (max-width: 960px) {
   .nav, .nav-cta { display: none; }
   .nav-toggle { display: flex; }
