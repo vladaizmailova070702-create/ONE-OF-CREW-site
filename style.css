@@ -414,18 +414,23 @@ ul { margin: 0; padding: 0; list-style: none; }
    ============================================================ */
 .band-section {
   background: #000;
-  padding-block: clamp(48px, 8vw, 96px);
+  /* medium vertical gap; section height stays 100svh, card grows to fill it */
+  padding-block: clamp(36px, 7vh, 80px);
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
+.band-section > .container { max-width: none; }
 .band {
   position: relative;
   display: block;
   border-radius: var(--radius-lg);
   overflow: hidden;
   aspect-ratio: 16 / 9;            /* matches the 1920x1080 video — card = video bounds */
+  /* as wide as the container, but never taller than the section minus its gap */
+  width: min(100%, calc((100svh - 2 * clamp(36px, 7vh, 80px)) * 16 / 9));
+  margin-inline: auto;
   isolation: isolate;
 }
 .band-video {
