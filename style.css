@@ -159,6 +159,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   border-bottom: 1px solid var(--border);
 }
 .brand { display: inline-flex; flex-direction: column; line-height: 1; }
+.brand-logo { display: block; height: 34px; width: auto; }
 .brand-main {
   font-family: var(--font-logo);
   font-weight: 800;
