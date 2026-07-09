@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="14" fill="#0d0d0d"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="12.5" fill="none" stroke="#7a1c1c" stroke-width="3"/>
+  <g fill="#ffffff" font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif" font-weight="900" text-anchor="middle" letter-spacing="-1">
+    <text x="32" y="30" font-size="20">ONE</text>
+    <text x="32" y="52" font-size="20">OF</text>
+  </g>
+</svg>
