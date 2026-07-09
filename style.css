@@ -813,12 +813,13 @@ body.video-open { overflow: hidden; }
   white-space: nowrap;
 }
 
-/* reserved schedule board */
+/* schedule board */
 .schedule-board {
   margin-top: clamp(24px, 3vw, 40px);
-  border: 1px dashed var(--border);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: clamp(24px, 3vw, 40px);
+  background: var(--surface);
 }
 .schedule-board-head {
   display: flex;
@@ -836,23 +837,6 @@ body.video-open { overflow: hidden; }
   color: var(--white);
 }
 .schedule-board-note { color: var(--text-secondary); font-size: 0.9rem; }
-.schedule-days {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
-}
-.schedule-days li {
-  text-align: center;
-  padding: 16px 6px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-}
 
 /* ============================================================
    7. GALLERY
@@ -934,7 +918,15 @@ body.video-open { overflow: hidden; }
   font-size: 1.12rem;
   color: var(--white);
 }
-.contact-address { font-size: 0.9rem; letter-spacing: 0.06em; color: var(--text-secondary); }
+.contact-addresses {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+  color: var(--text-secondary);
+}
+.contact-address-label { color: var(--accent-hover); font-weight: 600; }
 
 /* ============================================================
    FOOTER
@@ -1062,7 +1054,6 @@ body::before {
   .hero-styles { gap: 12px 26px; }
   .tabs { display: flex; width: 100%; }
   .tab { flex: 1; padding-inline: 12px; }
-  .schedule-days { grid-template-columns: repeat(4, 1fr); }
   /* Band card: aspect-ratio crushes content on narrow screens — switch to min-height */
   .band { aspect-ratio: auto; min-height: 420px; }
   /* Film meta: items wrap awkwardly — stack as a clean column */
