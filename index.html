@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>ONE OF STUDIO — танцевальная студия в Хабаровске</title>
-  <meta name="description" content="ONE OF STUDIO — танцевальная студия в Хабаровске. Направления для взрослых и детей: Hip-Hop, Jazz-Funk, K-Pop, Breaking. Запишись на пробное занятие." />
+  <meta name="description" content="ONE OF STUDIO — танцевальная студия в Хабаровске. Choreo (hip-hop, jazz-funk, girly style) от 16 лет и K-Pop cover dance от 12 лет. Занятия по воскресеньям, ул. Комсомольская, 78. Первое занятие бесплатно." />
 
   <!-- Favicon -->
   <link rel="icon" href="brand_assets/web/favicon.svg" type="image/svg+xml" />
@@ -14,13 +14,19 @@
   <link rel="apple-touch-icon" href="brand_assets/web/apple-touch-icon.png" />
   <meta name="theme-color" content="#0d0d0d" />
 
+  <link rel="canonical" href="https://oneofstudio.ru/" />
+
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="ONE OF STUDIO — танцевальная студия в Хабаровске" />
   <meta property="og:description" content="Место, где начинается твой танец. Учимся через постановки, музыку и сцену. Запишись на пробное занятие." />
   <meta property="og:locale" content="ru_RU" />
-  <!-- TODO: добавить реальное og:image (1200×630) и og:url после деплоя -->
-  <meta property="og:image" content="https://placehold.co/1200x630/0d0d0d/F2F2F2.png?text=ONE+OF+STUDIO" />
+  <meta property="og:url" content="https://oneofstudio.ru/" />
+  <meta property="og:image" content="https://oneofstudio.ru/assets/web/og-cover.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="ONE OF STUDIO" />
+  <meta name="twitter:card" content="summary_large_image" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,28 +34,81 @@
 
   <link rel="preload" as="image" href="assets/web/hero.webp" />
 
-  <link rel="stylesheet" href="style.css?v=3" />
+  <link rel="stylesheet" href="style.css?v=4" />
 
-  <!-- JSON-LD LocalBusiness -->
+  <!-- JSON-LD: DanceSchool + расписание групп -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "DanceSchool",
     "name": "ONE OF STUDIO",
-    "description": "Танцевальная студия в Хабаровске. Направления для взрослых и детей, обучение через постановки и сцену.",
+    "url": "https://oneofstudio.ru/",
+    "image": "https://oneofstudio.ru/assets/web/og-cover.jpg",
+    "description": "Танцевальная студия в Хабаровске. Направления Choreo (hip-hop, jazz-funk, girly style) и K-Pop cover dance. Обучение через постановки и сцену.",
     "address": {
       "@type": "PostalAddress",
+      "streetAddress": "ул. Комсомольская, 78",
       "addressLocality": "Хабаровск",
+      "addressRegion": "Хабаровский край",
       "addressCountry": "RU"
     },
     "areaServed": "Хабаровск",
     "telephone": "+79004153763",
+    "priceRange": "3500–4000 ₽",
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "https://schema.org/Sunday",
+        "opens": "13:00",
+        "closes": "17:00"
+      }
+    ],
     "sameAs": [
       "https://t.me/one_of_studio_khv",
       "https://wa.me/79004153763",
       "https://vk.com/vladislavandreevna",
       "https://max.ru/u/f9LHodD0cOLn3SlAJWYa4_-fZzZDwelDAIgd1G3CEeoWNyKy9dZ7q0JIsmI"
-    ]
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Направления",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "price": "4000",
+          "priceCurrency": "RUB",
+          "itemOffered": {
+            "@type": "Course",
+            "name": "Choreo — ONE OF CREW",
+            "description": "Постановочная хореография: hip-hop, jazz-funk, girly style. Синхрон, сценическая подача, выступления. От 16 лет.",
+            "provider": { "@type": "DanceSchool", "name": "ONE OF STUDIO" },
+            "hasCourseInstance": {
+              "@type": "CourseInstance",
+              "courseMode": "onsite",
+              "courseWorkload": "PT2H",
+              "location": { "@type": "Place", "name": "ONE OF STUDIO", "address": "ул. Комсомольская, 78, Хабаровск" }
+            }
+          }
+        },
+        {
+          "@type": "Offer",
+          "price": "3500",
+          "priceCurrency": "RUB",
+          "itemOffered": {
+            "@type": "Course",
+            "name": "K-Pop Cover Dance",
+            "description": "Проектная cover-dance группа: разбор и постановка k-pop номеров, синхрон, формации, выступления. От 12 лет.",
+            "provider": { "@type": "DanceSchool", "name": "ONE OF STUDIO" },
+            "hasCourseInstance": {
+              "@type": "CourseInstance",
+              "courseMode": "onsite",
+              "courseWorkload": "PT2H",
+              "location": { "@type": "Place", "name": "ONE OF STUDIO", "address": "ул. Комсомольская, 78, Хабаровск" }
+            }
+          }
+        }
+      ]
+    }
   }
   </script>
 </head>
@@ -108,10 +167,11 @@
       <!-- Style strip — inside hero, above the dark fade -->
       <ul class="hero-styles" aria-label="Направления студии">
         <li><a href="#directions">Choreo</a></li>
+        <li><a href="#directions">Hip-Hop</a></li>
         <li><a href="#directions">Jazz-Funk</a></li>
+        <li><a href="#directions">Girly Style</a></li>
         <li><a href="#directions">K-Pop</a></li>
-        <li><a href="#directions">Breaking</a></li>
-        <!-- ВРЕМЕННО СКРЫТО (вернуть позже): <li><a href="#directions">Contemporary</a></li> -->
+        <!-- ВРЕМЕННО СКРЫТО (вернуть позже): <li><a href="#directions">Breaking</a></li> <li><a href="#directions">Contemporary</a></li> -->
       </ul>
     </section>
 
@@ -194,193 +254,91 @@
           <h2 id="directions-title" class="display-h2">Выбери своё<br />направление</h2>
         </div>
 
-        <!-- Взрослые направления -->
-        <div class="dir-group">
-          <p class="dir-group-label">Взрослые направления</p>
-          <div class="dir-grid">
-            <article class="dir-card">
-              <div class="dir-card-inner">
-                <div class="dir-face dir-face--front">
-                  <img src="assets/web/choreo.webp?v=2" alt="Группа Choreo ONE OF CREW на сцене" width="800" height="1000" loading="lazy" />
-                  <div class="dir-overlay"></div>
-                  <div class="dir-info">
-                    <span class="dir-meta">ONE OF CREW · 16+</span>
-                    <h3>Choreo</h3>
-                    <div class="dir-actions">
-                      <button type="button" class="btn btn-accent btn-sm dir-flip-open" aria-label="Подробнее о направлении Choreo">Узнать подробнее</button>
-                      <a href="#contacts" class="btn btn-light btn-sm">Пробное занятие</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="dir-face dir-face--back">
-                  <div class="dir-back-body">
-                    <span class="dir-meta">ONE OF CREW · 16+</span>
-                    <h3>Choreo</h3>
-                    <p class="dir-back-lead">Постановочная хореография: отрабатываем связки под конкретный трек, сценический образ и синхрон в команде.</p>
-                    <ul class="dir-back-list">
-                      <li>Постановки под конкретные треки и образы</li>
-                      <li>Работа над синхроном и сценической подачей</li>
-                      <li>Выступления и конкурсы в составе команды ONE OF CREW</li>
-                      <li>Разбор техники из разных стилей (hip-hop, jazz-funk)</li><!-- ВРЕМЕННО: убрано "contemporary", вернуть позже -->
-                    </ul>
-                    <p class="dir-back-fit"><span class="dir-back-fit-label">Кому подходит:</span> тем, кто хочет танцевать на сцене в команде и выступать на конкурсах.</p>
-                  </div>
-                  <div class="dir-actions dir-actions--back">
-                    <a href="#contacts" class="btn btn-accent btn-sm">Пробное занятие</a>
-                    <button type="button" class="btn btn-light btn-sm dir-flip-close" aria-label="Вернуться к фото">Назад</button>
+        <!-- Направления общие: без деления на детские / взрослые группы.
+             Порог входа указан в .dir-meta каждой карточки. -->
+        <div class="dir-grid dir-grid--duo">
+          <article class="dir-card">
+            <div class="dir-card-inner">
+              <div class="dir-face dir-face--front">
+                <img src="assets/web/choreo.webp?v=2" alt="Группа Choreo ONE OF CREW на сцене" width="800" height="1000" loading="lazy" />
+                <div class="dir-overlay"></div>
+                <div class="dir-info">
+                  <span class="dir-meta">ONE OF CREW · от 16 лет</span>
+                  <h3>Choreo</h3>
+                  <div class="dir-actions">
+                    <button type="button" class="btn btn-accent btn-sm dir-flip-open" aria-label="Подробнее о направлении Choreo">Узнать подробнее</button>
+                    <a href="#contacts" class="btn btn-light btn-sm">Пробное занятие</a>
                   </div>
                 </div>
               </div>
-            </article>
+              <div class="dir-face dir-face--back">
+                <div class="dir-back-body">
+                  <span class="dir-meta">ONE OF CREW · от 16 лет</span>
+                  <h3>Choreo</h3>
+                  <p class="dir-back-lead">Постановочная хореография: отрабатываем связки под конкретный трек, сценический образ и синхрон в команде.</p>
+                  <ul class="dir-styles" aria-label="Стили внутри направления Choreo">
+                    <li>Hip-Hop</li>
+                    <li>Jazz-Funk</li>
+                    <li>Girly Style</li>
+                  </ul>
+                  <ul class="dir-back-list">
+                    <li>Постановки под конкретные треки и образы</li>
+                    <li>Работа над синхроном и сценической подачей</li>
+                    <li>Выступления и конкурсы в составе команды ONE OF CREW</li>
+                  </ul>
+                  <p class="dir-back-fit"><span class="dir-back-fit-label">Кому подходит:</span> тем, кто хочет танцевать на сцене в команде и выступать на конкурсах.</p>
+                </div>
+                <div class="dir-actions dir-actions--back">
+                  <a href="#contacts" class="btn btn-accent btn-sm">Пробное занятие</a>
+                  <button type="button" class="btn btn-light btn-sm dir-flip-close" aria-label="Вернуться к фото">Назад</button>
+                </div>
+              </div>
+            </div>
+          </article>
 
-            <article class="dir-card">
-              <div class="dir-card-inner">
-                <div class="dir-face dir-face--front">
-                  <img src="assets/web/jazz-funk.webp?v=2" alt="Танцовщица группы Jazz-Funk Choreo MALINA на сцене" width="800" height="1000" loading="lazy" />
-                  <div class="dir-overlay"></div>
-                  <div class="dir-info">
-                    <span class="dir-meta">MALINA · 16+</span>
-                    <h3>Jazz-Funk Choreo</h3>
-                    <div class="dir-actions">
-                      <button type="button" class="btn btn-accent btn-sm dir-flip-open" aria-label="Подробнее о направлении Jazz-Funk Choreo">Узнать подробнее</button>
-                      <a href="#contacts" class="btn btn-light btn-sm">Пробное занятие</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="dir-face dir-face--back">
-                  <div class="dir-back-body">
-                    <span class="dir-meta">MALINA · 16+</span>
-                    <h3>Jazz-Funk Choreo</h3>
-                    <p class="dir-back-lead">Женственный и энергичный стиль с акцентом на пластику, изоляции и характер в движении.</p>
-                    <ul class="dir-back-list">
-                      <li>Работа над пластикой, изоляциями и растяжкой</li>
-                      <li>Развитие женственности и уверенной подачи</li>
-                      <li>Постановки под актуальные треки</li>
-                      <li>Выступления в составе команды MALINA</li>
-                    </ul>
-                    <p class="dir-back-fit"><span class="dir-back-fit-label">Кому подходит:</span> девушкам, которые хотят раскрыть женственность и харизму через танец.</p>
-                  </div>
-                  <div class="dir-actions dir-actions--back">
-                    <a href="#contacts" class="btn btn-accent btn-sm">Пробное занятие</a>
-                    <button type="button" class="btn btn-light btn-sm dir-flip-close" aria-label="Вернуться к фото">Назад</button>
+          <article class="dir-card">
+            <div class="dir-card-inner">
+              <div class="dir-face dir-face--front">
+                <img src="assets/web/k-pop.webp?v=2" alt="Занятие группы K-Pop Cover Dance в ONE OF STUDIO" width="800" height="1000" loading="lazy" />
+                <div class="dir-overlay"></div>
+                <div class="dir-info">
+                  <span class="dir-meta">Cover Dance · от 12 лет</span>
+                  <h3>K-Pop</h3>
+                  <div class="dir-actions">
+                    <button type="button" class="btn btn-accent btn-sm dir-flip-open" aria-label="Подробнее о направлении K-Pop">Узнать подробнее</button>
+                    <a href="#contacts" class="btn btn-light btn-sm">Пробное занятие</a>
                   </div>
                 </div>
               </div>
-            </article>
-          </div>
+              <div class="dir-face dir-face--back">
+                <div class="dir-back-body">
+                  <span class="dir-meta">Cover Dance · от 12 лет</span>
+                  <h3>K-Pop</h3>
+                  <p class="dir-back-lead">Проектная cover-dance группа: разбираем и ставим полноценные номера k-pop групп для выхода на сцену.</p>
+                  <ul class="dir-back-list">
+                    <li>Работа над цельным номером от разбора до сцены</li>
+                    <li>Синхрон, формации и перестроения в команде</li>
+                    <li>Сценический образ, подача и работа на зрителя</li>
+                    <li>Выступления и cover-dance проекты на мероприятиях</li>
+                  </ul>
+                  <p class="dir-back-fit"><span class="dir-back-fit-label">Кому подходит:</span> тем, кто хочет не просто повторять движения, а выступать в команде с полноценными k-pop номерами на сцене.</p>
+                </div>
+                <div class="dir-actions dir-actions--back">
+                  <a href="#contacts" class="btn btn-accent btn-sm">Пробное занятие</a>
+                  <button type="button" class="btn btn-light btn-sm dir-flip-close" aria-label="Вернуться к фото">Назад</button>
+                </div>
+              </div>
+            </div>
+          </article>
         </div>
 
-        <!-- Детские направления (всегда видны ниже) -->
-        <div class="dir-group dir-group--kids">
-          <p class="dir-group-label">Детские направления</p>
-          <div class="dir-grid">
-            <article class="dir-card">
-              <div class="dir-card-inner">
-                <div class="dir-face dir-face--front">
-                  <img src="assets/web/breaking.webp?v=2" alt="Танцор Breaking ONE OF STUDIO" width="800" height="1000" loading="lazy" />
-                  <div class="dir-overlay"></div>
-                  <div class="dir-info">
-                    <span class="dir-meta">с 0 до PRO · 10+</span>
-                    <h3>Breaking</h3>
-                    <div class="dir-actions">
-                      <button type="button" class="btn btn-accent btn-sm dir-flip-open" aria-label="Подробнее о направлении Breaking">Узнать подробнее</button>
-                      <a href="#contacts" class="btn btn-light btn-sm">Пробное занятие</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="dir-face dir-face--back">
-                  <div class="dir-back-body">
-                    <span class="dir-meta">с 0 до PRO · 10+</span>
-                    <h3>Breaking</h3>
-                    <p class="dir-back-lead">Брейк-данс — акробатичный уличный стиль с силовыми трюками, вращениями и фризами.</p>
-                    <ul class="dir-back-list">
-                      <li>Участие в баттлах и соревнованиях</li>
-                      <li>Прокачка тела, координации и характера</li>
-                      <li>База + трюки: топ-рок, футворк, пауэрмувы, фризы</li>
-                      <li>Развитие индивидуального стиля и импровизации</li>
-                    </ul>
-                    <p class="dir-back-fit"><span class="dir-back-fit-label">Кому подходит:</span> тем, кто хочет силы, дисциплины и уверенности через баттл-культуру.</p>
-                  </div>
-                  <div class="dir-actions dir-actions--back">
-                    <a href="#contacts" class="btn btn-accent btn-sm">Пробное занятие</a>
-                    <button type="button" class="btn btn-light btn-sm dir-flip-close" aria-label="Вернуться к фото">Назад</button>
-                  </div>
-                </div>
-              </div>
-            </article>
-
-            <!-- ВРЕМЕННО СКРЫТО (вернуть позже): убрать hidden с article ниже -->
-            <article class="dir-card" hidden>
-              <div class="dir-card-inner">
-                <div class="dir-face dir-face--front">
-                  <img src="assets/web/contemporary.webp?v=2" alt="Группа Contemporary — пластика и хореография" width="800" height="1000" loading="lazy" />
-                  <div class="dir-overlay"></div>
-                  <div class="dir-info">
-                    <span class="dir-meta">Choreo · 10+</span>
-                    <h3>Contemporary</h3>
-                    <div class="dir-actions">
-                      <button type="button" class="btn btn-accent btn-sm dir-flip-open" aria-label="Подробнее о направлении Contemporary">Узнать подробнее</button>
-                      <a href="#contacts" class="btn btn-light btn-sm">Пробное занятие</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="dir-face dir-face--back">
-                  <div class="dir-back-body">
-                    <span class="dir-meta">Choreo · 10+</span>
-                    <h3>Contemporary</h3>
-                    <p class="dir-back-lead">Стык современного танца и хореографии: пластика тела, эмоция и выразительность.</p>
-                    <ul class="dir-back-list">
-                      <li>Развитие гибкости, координации и контроля тела</li>
-                      <li>Работа с эмоцией и художественным образом</li>
-                      <li>Постановочные номера для выступлений</li>
-                      <li>Хорошая база для перехода в другие танцевальные стили</li>
-                    </ul>
-                    <p class="dir-back-fit"><span class="dir-back-fit-label">Кому подходит:</span> тем, кто хочет красиво двигаться, раскрепоститься и выражать себя через тело.</p>
-                  </div>
-                  <div class="dir-actions dir-actions--back">
-                    <a href="#contacts" class="btn btn-accent btn-sm">Пробное занятие</a>
-                    <button type="button" class="btn btn-light btn-sm dir-flip-close" aria-label="Вернуться к фото">Назад</button>
-                  </div>
-                </div>
-              </div>
-            </article>
-
-            <article class="dir-card">
-              <div class="dir-card-inner">
-                <div class="dir-face dir-face--front">
-                  <img src="assets/web/k-pop.webp?v=2" alt="Занятие группы K-Pop Cover Dance в ONE OF STUDIO" width="800" height="1000" loading="lazy" />
-                  <div class="dir-overlay"></div>
-                  <div class="dir-info">
-                    <span class="dir-meta">Cover Dance · 12+</span>
-                    <h3>K-Pop</h3>
-                    <div class="dir-actions">
-                      <button type="button" class="btn btn-accent btn-sm dir-flip-open" aria-label="Подробнее о направлении K-Pop">Узнать подробнее</button>
-                      <a href="#contacts" class="btn btn-light btn-sm">Пробное занятие</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="dir-face dir-face--back">
-                  <div class="dir-back-body">
-                    <span class="dir-meta">Cover Dance · 12+</span>
-                    <h3>K-Pop</h3>
-                    <p class="dir-back-lead">Проектная cover-dance группа: разбираем и ставим полноценные номера k-pop групп для выхода на сцену.</p>
-                    <ul class="dir-back-list">
-                      <li>Работа над цельным номером от разбора до сцены</li>
-                      <li>Синхрон, формации и перестроения в команде</li>
-                      <li>Сценический образ, подача и работа на зрителя</li>
-                      <li>Выступления и cover-dance проекты на мероприятиях</li>
-                    </ul>
-                    <p class="dir-back-fit"><span class="dir-back-fit-label">Кому подходит:</span> тем, кто хочет не просто повторять движения, а выступать в команде с полноценными k-pop номерами на сцене.</p>
-                  </div>
-                  <div class="dir-actions dir-actions--back">
-                    <a href="#contacts" class="btn btn-accent btn-sm">Пробное занятие</a>
-                    <button type="button" class="btn btn-light btn-sm dir-flip-close" aria-label="Вернуться к фото">Назад</button>
-                  </div>
-                </div>
-              </div>
-            </article>
-          </div>
-        </div>
+        <!-- ВРЕМЕННО СКРЫТО (вернуть, когда группы снова наберутся):
+             Breaking (с 0 до PRO · 10+, assets/web/breaking.webp),
+             Jazz-Funk Choreo (MALINA · 16+, assets/web/jazz-funk.webp) —
+             стиль сейчас входит в Choreo и показан чипом на обороте карточки,
+             Contemporary (Choreo · 10+, assets/web/contemporary.webp).
+             При возврате: вернуть карточки в .dir-grid, снять модификатор
+             .dir-grid--duo, добавить строки в прайс, расписание и hero-styles. -->
       </div>
     </section>
 
@@ -392,25 +350,23 @@
           <h2 id="schedule-title" class="pricing-title-lg">Цены<span class="pricing-title-and"> и расписание</span></h2>
         </div>
 
-        <!-- Цены. TODO: подтвердить итоговые суммы абонементов -->
+        <!-- Цены по направлениям (группы общие, без деления на детские / взрослые) -->
         <div class="price-cards">
           <article class="price-card">
             <div class="price-card-main">
-              <h3>Детские группы</h3>
+              <h3>Choreo</h3>
+              <p class="price-card-sub">ONE OF CREW · от 16 лет</p>
               <ul class="price-feats">
-                <li>8 занятий в месяц</li>
-                <li>Breaking <span class="feat-price">3 000&nbsp;₽</span></li>
-                <li>K-Pop <span class="feat-price">3 500&nbsp;₽</span></li>
-                <!-- ВРЕМЕННО СКРЫТО (вернуть позже, вместе с направлением Contemporary):
-                     <li>Contemporary <span class="feat-price">TODO&nbsp;₽</span></li>
-                     После возврата пересчитать диапазон в .price-amount ниже. -->
-                <li>Техника, координация, растяжка</li>
-                <li>Участие в постановках</li>
+                <li>8 часов в месяц — занятие раз в неделю по 2 часа</li>
+                <li>Hip-Hop, Jazz-Funk, Girly Style в постановках</li>
+                <li>Работа над синхроном и сценической подачей</li>
+                <li>Выступления и конкурсы в составе команды</li>
               </ul>
             </div>
             <div class="price-card-side">
-              <p class="price-amount">3 000–3 500&nbsp;₽<span>/мес</span></p>
+              <p class="price-amount">4 000&nbsp;₽<span>/мес</span></p>
               <div class="price-meta">
+                <p>Воскресенье, 13:00–15:00</p>
                 <p>Пробное занятие — бесплатно</p>
               </div>
               <a href="#contacts" class="btn btn-accent btn-sm">Записаться</a>
@@ -419,19 +375,19 @@
 
           <article class="price-card">
             <div class="price-card-main">
-              <h3>Взрослые группы</h3>
+              <h3>K-Pop</h3>
+              <p class="price-card-sub">Cover Dance · от 12 лет</p>
               <ul class="price-feats">
-                <li>8 занятий в месяц</li>
-                <li>Choreo <span class="feat-price">4 000&nbsp;₽</span></li>
-                <li>Jazz-Funk <span class="feat-price">4 000&nbsp;₽</span></li>
-                <li>K-Pop <span class="feat-price">3 500&nbsp;₽</span></li>
-                <li>Постановки и выходы на сцену</li>
-                <li>Работа над собственным стилем</li>
+                <li>8 часов в месяц — занятие раз в неделю по 2 часа</li>
+                <li>Разбор и постановка полноценных k-pop номеров</li>
+                <li>Синхрон, формации и сценический образ</li>
+                <li>Выступления и cover-dance проекты</li>
               </ul>
             </div>
             <div class="price-card-side">
-              <p class="price-amount">3 500–4 000&nbsp;₽<span>/мес</span></p>
+              <p class="price-amount">3 500&nbsp;₽<span>/мес</span></p>
               <div class="price-meta">
+                <p>Воскресенье, 15:00–17:00</p>
                 <p>Пробное занятие — бесплатно</p>
               </div>
               <a href="#contacts" class="btn btn-accent btn-sm">Записаться</a>
@@ -452,8 +408,12 @@
             <span class="addon-price">500&nbsp;₽</span>
           </div>
           <div class="addon-row">
-            <span class="addon-name">Абонемент на 8 занятий</span>
-            <span class="addon-price">3 000 – 4 000&nbsp;₽</span>
+            <span class="addon-name">Абонемент на 8 часов (месяц)</span>
+            <span class="addon-price">3 500 – 4 000&nbsp;₽</span>
+          </div>
+          <div class="addon-row">
+            <span class="addon-name">Индивидуальное занятие</span>
+            <span class="addon-price">2 000&nbsp;₽<span class="addon-unit">/час</span></span>
           </div>
           <div class="addon-row">
             <span class="addon-name">Второе направление</span>
@@ -461,12 +421,33 @@
           </div>
         </div>
 
-        <!-- Расписание. TODO: внести актуальное расписание групп в августе -->
+        <!-- Актуальное расписание групп -->
         <div class="schedule-board" aria-labelledby="schedule-board-title">
           <div class="schedule-board-head">
             <h3 id="schedule-board-title">Расписание</h3>
-            <span class="schedule-board-note">Актуальное расписание групп появится в августе</span>
+            <span class="schedule-board-note">ул. Комсомольская, 78</span>
           </div>
+
+          <ul class="schedule-list">
+            <li class="schedule-row">
+              <span class="schedule-day">Воскресенье</span>
+              <span class="schedule-time"><time datetime="13:00">13:00</time>–<time datetime="15:00">15:00</time></span>
+              <span class="schedule-group">
+                <span class="schedule-group-name">Choreo</span>
+                <span class="schedule-group-meta">ONE OF CREW · от 16 лет</span>
+              </span>
+              <a href="#contacts" class="btn btn-accent btn-sm schedule-cta">Записаться</a>
+            </li>
+            <li class="schedule-row">
+              <span class="schedule-day">Воскресенье</span>
+              <span class="schedule-time"><time datetime="15:00">15:00</time>–<time datetime="17:00">17:00</time></span>
+              <span class="schedule-group">
+                <span class="schedule-group-name">K-Pop</span>
+                <span class="schedule-group-meta">Cover Dance · от 12 лет</span>
+              </span>
+              <a href="#contacts" class="btn btn-accent btn-sm schedule-cta">Записаться</a>
+            </li>
+          </ul>
         </div>
       </div>
     </section>
