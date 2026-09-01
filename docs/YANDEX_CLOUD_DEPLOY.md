@@ -18,11 +18,21 @@ Object Storage (хранилище файлов) + Cloud CDN (раздача п�
 ```
 index.html
 style.css
-assets/web/*        (webp, mp4)
+robots.txt          (для поисковых роботов)
+sitemap.xml         (карта сайта для Яндекса и Google)
+assets/web/*        (webp, jpg, mp4)
 brand_assets/web/*  (logo.png, favicon.*, apple-touch-icon.png)
 ```
-НЕ загружай: `assets/originals/`, `brand_assets/originals/`, `docs/`, `CLAUDE.md`,
-`.claude/`, `temporary screenshots/` и прочие служебные файлы.
+НЕ загружай: `assets/originals/`, `brand_assets/originals/`, `docs/`, `promo/`,
+`CLAUDE.md`, `.claude/`, `temporary screenshots/` и прочие служебные файлы.
+
+Пересобрать папку `deploy/` можно одной командой из корня проекта:
+```
+rm -rf deploy && mkdir -p deploy/assets/web deploy/brand_assets/web   && cp index.html style.css robots.txt sitemap.xml deploy/   && cp assets/web/*.webp assets/web/*.jpg assets/web/*.mp4 deploy/assets/web/   && cp brand_assets/web/logo.png brand_assets/web/favicon.*         brand_assets/web/apple-touch-icon.png deploy/brand_assets/web/
+```
+
+Типы контента для новых файлов (шаг 3 ниже): `robots.txt` → `text/plain`,
+`sitemap.xml` → `application/xml`, `.jpg` → `image/jpeg`.
 
 ---
 
