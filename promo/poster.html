@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<title>ONE OF STUDIO — афиша набора</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* ------------------------------------------------------------------
+     ONE OF STUDIO — афиша набора в группы.
+     Рендерится Playwright'ом в promo/render.py:
+       ?f=post   → 1080×1350 (лента VK / Instagram, 4:5)
+       ?f=story  → 1080×1920 (сторис, 9:16)
+     Все данные (группы, время, контакты) правятся прямо в разметке ниже.
+     ------------------------------------------------------------------ */
+  :root {
+    --bg: #0d0d0d;
+    --accent: #591515;
+    --accent-red: #a01f1f;
+    --accent-soft: #c96a66;
+    --paper: #efe9e6;
+    --muted: #a6a4a4;
+    --font-head: "Oswald", system-ui, sans-serif;
+    --font-body: "Montserrat", system-ui, sans-serif;
+    --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #000; font-family: var(--font-body); }
+  ul { list-style: none; }
+
+  .poster {
+    position: relative;
+    width: 1080px;
+    height: 1350px;
+    overflow: hidden;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 72px 72px 64px;
+    isolation: isolate;
+  }
+  body.story .poster { height: 1920px; padding: 110px 78px 92px; }
+
+  /* ---------- photo + light ---------- */
+  .poster-photo {
+    position: absolute;
+    z-index: -3;
+    left: 0; right: 0; bottom: 0;
+    width: 100%;
+    object-fit: cover;
+    object-position: 50% 42%;
+    height: 74%;
+    /* приглушаем сцену почти до монохрома — как в фирменных афишах,
+       иначе цветные софиты забивают текст */
+    filter: grayscale(0.42) contrast(1.12) brightness(0.82);
+  }
+  body.story .poster-photo { height: 80%; object-position: 50% 40%; }
+
+  /* верх уводим в чёрный, чтобы заголовок читался поверх сцены */
+  .poster-fade {
+    position: absolute;
+    z-index: -2;
+    inset: 0;
+    background:
+      /* вертикальная растяжка: чёрный верх под заголовок, тёмный низ под контакты */
+      linear-gradient(180deg, #0d0d0d 0%, rgba(13,13,13,0.96) 24%, rgba(13,13,13,0.62) 42%, rgba(13,13,13,0.38) 62%, rgba(13,13,13,0.80) 86%, rgba(13,13,13,0.96) 100%),
+      /* левая шторка: колонка с текстом всегда на тёмном */
+      linear-gradient(90deg, rgba(13,13,13,0.92) 0%, rgba(13,13,13,0.80) 38%, rgba(13,13,13,0.30) 70%, rgba(13,13,13,0.05) 100%);
+  }
+  /* красный софит слева сверху — как в фирменных афишах */
+  .poster-glow {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background:
+      radial-gradient(46% 34% at 4% 2%, rgba(160,31,31,0.42), transparent 68%),
+      radial-gradient(30% 22% at 98% 6%, rgba(160,31,31,0.22), transparent 70%);
+    mix-blend-mode: screen;
+    pointer-events: none;
+  }
+  .poster-grain {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background-image: var(--noise);
+    opacity: 0.16;
+    pointer-events: none;
+  }
+
+  /* ---------- head ---------- */
+  .eyebrow {
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: 0.30em;
+    text-transform: uppercase;
+    color: var(--paper);
+    padding-bottom: 22px;
+    border-bottom: 1px solid rgba(160,31,31,0.55);
+  }
+  body.story .eyebrow { font-size: 20px; }
+
+  .headline { margin-top: 46px; }
+  body.story .headline { margin-top: 62px; }
+  .headline h1 {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 96px;
+    line-height: 0.94;
+    white-space: nowrap;
+    letter-spacing: 0.005em;
+    text-transform: uppercase;
+    color: var(--paper);
+    text-shadow: 0 6px 40px rgba(0,0,0,0.7);
+  }
+  .headline h1 .open {
+    display: block;
+    color: var(--accent-red);
+    font-size: 150px;
+    line-height: 0.9;
+    margin-top: 4px;
+    text-shadow: 0 8px 46px rgba(0,0,0,0.75);
+  }
+  body.story .headline h1 { font-size: 100px; }
+  body.story .headline h1 .open { font-size: 158px; }
+
+  .lead {
+    margin-top: 40px;
+    max-width: 24em;
+    font-size: 26px;
+    line-height: 1.5;
+    color: var(--paper);
+    text-shadow: 0 2px 18px rgba(0,0,0,0.8);
+  }
+  .lead strong { color: #fff; font-weight: 600; }
+
+  /* ---------- groups ---------- */
+  .groups { margin-top: 44px; max-width: 640px; }
+  body.story .groups { margin-top: 66px; }
+  .groups li {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    padding: 20px 0;
+    border-top: 1px solid rgba(160,31,31,0.45);
+  }
+  .groups li:last-child { border-bottom: 1px solid rgba(160,31,31,0.45); }
+  .group-dot {
+    flex: none;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--accent-red);
+    transform: translateY(-3px);
+  }
+  .group-text { display: flex; flex-direction: column; gap: 5px; }
+  .group-name {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+  .group-name em {
+    font-style: normal;
+    color: var(--accent-soft);
+    font-size: 30px;
+  }
+  .group-when {
+    font-size: 23px;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: 0.01em;
+  }
+  .group-when span { color: var(--muted); }
+
+  /* ---------- footer ---------- */
+  .poster-foot { margin-top: 48px; }
+  .foot-cta {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 42px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-red);
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(160,31,31,0.55);
+  }
+  body.story .foot-cta { font-size: 46px; }
+  .foot-lines {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-size: 24px;
+    line-height: 1.35;
+    color: var(--paper);
+  }
+  .foot-lines .site {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #fff;
+  }
+</style>
+</head>
+<body>
+  <div class="poster">
+    <img class="poster-photo" src="poster-bg.jpg" alt="" />
+    <div class="poster-fade"></div>
+    <div class="poster-glow"></div>
+    <div class="poster-grain"></div>
+
+    <div>
+      <p class="eyebrow">ONE OF STUDIO · Хабаровск · танцевальная студия</p>
+
+      <div class="headline">
+        <h1>Набор в группы<span class="open">открыт</span></h1>
+      </div>
+
+      <p class="lead">Учимся через постановки, музыку и сцену.<br /><strong>Первое пробное — бесплатно.</strong></p>
+    </div>
+
+    <div>
+      <ul class="groups">
+        <li>
+          <span class="group-dot"></span>
+          <span class="group-text">
+            <span class="group-name">Choreo <em>— ONE OF CREW · от 16 лет</em></span>
+            <span class="group-when">Воскресенье, 13:00–15:00 <span>· hip-hop, jazz-funk, girly style</span></span>
+          </span>
+        </li>
+        <li>
+          <span class="group-dot"></span>
+          <span class="group-text">
+            <span class="group-name">K-Pop <em>— COVER DANCE · от 12 лет</em></span>
+            <span class="group-when">Воскресенье, 15:00–17:00 <span>· постановки k-pop номеров</span></span>
+          </span>
+        </li>
+      </ul>
+
+      <div class="poster-foot">
+        <p class="foot-cta">Запишись на бесплатное пробное</p>
+        <div class="foot-lines">
+          <p class="site">oneofstudio.ru</p>
+          <p>г. Хабаровск, ул. Комсомольская, 78</p>
+          <p>Telegram @one_of_studio_khv · WhatsApp +7 900 415-37-63</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ?f=story переключает формат на 1080×1920
+    if (new URLSearchParams(location.search).get('f') === 'story') {
+      document.body.classList.add('story');
+    }
+  </script>
+</body>
+</html>
