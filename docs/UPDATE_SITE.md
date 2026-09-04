@@ -25,18 +25,25 @@
 
 ## Что нужно залить в этот раз
 
-Всё остальное (фото, видео, логотип, фавиконки) уже лежит в бакете с 14.07.2026
-и не менялось. Заново заливать 22 МБ видео не нужно.
+Обновление от 04.09.2026 — SEO-оптимизация под Яндекс. Сайт из одностраничника
+стал восьмистраничным (подробности и что делать дальше — в `YANDEX_SEO.md`).
 
-| Файл | Статус | Размер |
-|---|---|---|
-| `index.html` | изменён | 32,3 КБ |
-| `style.css` | изменён | 37,7 КБ |
-| `robots.txt` | новый | 0,1 КБ |
-| `sitemap.xml` | новый | 0,3 КБ |
-| `assets/web/og-cover.jpg` | новый | 98,9 КБ |
+| Файл | Статус |
+|---|---|
+| `index.html` | изменён — новые title/description, блок FAQ, текст внизу, разметка |
+| `style.css` | изменён — стили FAQ, внутренних страниц и блога |
+| `robots.txt` | изменён — добавлен `Clean-param`, закрыт `/promo/` |
+| `sitemap.xml` | изменён — все 8 адресов |
+| `choreo.html` | новый |
+| `kpop.html` | новый |
+| `hip-hop.html` | новый |
+| `blog.html` | новый |
+| `kuda-poyti-tancevat-v-habarovske.html` | новый |
+| `kak-vybrat-tancevalnoe-napravlenie.html` | новый |
+| `pervoe-zanyatie-tancami.html` | новый |
 
-**Итого 169 КБ.** Все пять лежат в папке `deploy/` в проекте.
+Картинки и видео не менялись — заново заливать 22 МБ не нужно.
+Всё перечисленное лежит в папке `deploy/` (около 240 КБ вместе).
 
 ---
 
@@ -46,7 +53,7 @@
 Иначе, из корня проекта:
 
 ```bash
-rm -rf deploy && mkdir -p deploy/assets/web deploy/brand_assets/web && cp index.html style.css robots.txt sitemap.xml deploy/ && cp assets/web/*.webp assets/web/*.jpg assets/web/*.mp4 deploy/assets/web/ && cp brand_assets/web/logo.png brand_assets/web/favicon.* brand_assets/web/apple-touch-icon.png deploy/brand_assets/web/
+rm -rf deploy && mkdir -p deploy/assets/web deploy/brand_assets/web && cp *.html style.css robots.txt sitemap.xml deploy/ && cp assets/web/*.webp assets/web/*.jpg assets/web/*.mp4 deploy/assets/web/ && cp brand_assets/web/logo.png brand_assets/web/favicon.* brand_assets/web/apple-touch-icon.png deploy/brand_assets/web/
 ```
 
 ## Шаг 2. Открыть бакет в консоли Yandex Cloud
@@ -61,12 +68,11 @@ rm -rf deploy && mkdir -p deploy/assets/web deploy/brand_assets/web && cp index.
 ## Шаг 3. Залить изменённые файлы
 
 1. В бакете нажать **Загрузить**.
-2. Перетащить из папки `deploy/`: `index.html`, `style.css`, `robots.txt`,
-   `sitemap.xml`. Они лягут в корень бакета поверх старых — консоль спросит
-   подтверждение перезаписи, согласиться.
-3. Отдельно зайти внутрь папки `assets/web/` **в бакете** и загрузить туда
-   `og-cover.jpg`. Это важно: если бросить его в корень, путь получится
-   `og-cover.jpg` вместо `assets/web/og-cover.jpg`, и картинка не подхватится.
+2. Перетащить из папки `deploy/` **все файлы `.html`** (их 8), а также
+   `style.css`, `robots.txt` и `sitemap.xml`. Они лягут в корень бакета поверх
+   старых — консоль спросит подтверждение перезаписи, согласиться.
+3. Картинки и видео в этот раз не менялись, папки `assets` и `brand_assets`
+   заливать не нужно.
 
 > Альтернатива: перетащить из `deploy/` сразу файлы `index.html`, `style.css`,
 > `robots.txt`, `sitemap.xml` **и папку `assets` целиком** — консоль сохранит
@@ -80,7 +86,7 @@ rm -rf deploy && mkdir -p deploy/assets/web deploy/brand_assets/web && cp index.
 
 | Файл | Должно быть |
 |---|---|
-| `index.html` | `text/html` |
+| любой `*.html` | `text/html` |
 | `style.css` | `text/css` |
 | `robots.txt` | `text/plain` |
 | `sitemap.xml` | `application/xml` |
@@ -98,12 +104,18 @@ rm -rf deploy && mkdir -p deploy/assets/web deploy/brand_assets/web && cp index.
 2. Вкладка **Содержимое** (или кнопка «Очистить кэш» / Purge).
 3. Очистить либо всё содержимое, либо точечно указать пути:
    ```
-   /index.html
    /
+   /index.html
+   /choreo.html
+   /kpop.html
+   /hip-hop.html
+   /blog.html
+   /kuda-poyti-tancevat-v-habarovske.html
+   /kak-vybrat-tancevalnoe-napravlenie.html
+   /pervoe-zanyatie-tancami.html
    /style.css
    /robots.txt
    /sitemap.xml
-   /assets/web/og-cover.jpg
    ```
 4. Сброс занимает от нескольких секунд до пары минут.
 
@@ -117,8 +129,13 @@ rm -rf deploy && mkdir -p deploy/assets/web deploy/brand_assets/web && cp index.
   «15:00–17:00 K-POP»;
 - в направлениях две карточки — Choreo и K-Pop, Breaking нет;
 - в прайсе написано «8 часов в месяц», есть «Индивидуальное занятие 2 000 ₽/час»;
+- внизу главной есть блок «Частые вопросы» и текст «Танцевальная студия
+  в Хабаровске»;
+- в меню появился пункт «Блог», и https://oneofstudio.ru/blog.html открывается;
+- открываются https://oneofstudio.ru/choreo.html, /kpop.html и /hip-hop.html —
+  со стилями, а не «голым» текстом;
 - https://oneofstudio.ru/robots.txt открывается текстом, а не скачивается файлом;
-- https://oneofstudio.ru/sitemap.xml открывается;
+- https://oneofstudio.ru/sitemap.xml открывается и содержит 8 адресов;
 - https://oneofstudio.ru/assets/web/og-cover.jpg показывает картинку со сцены.
 
 Проверка ссылки-превью: отправить `https://oneofstudio.ru` самому себе в Telegram —
