@@ -1271,3 +1271,139 @@ body::before {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============================================================
+   FAQ  (частые вопросы, светлая секция)
+   ============================================================ */
+.section-light .tag { color: var(--light-muted); }
+.section-light .tag::before,
+.section-light .tag::after { color: var(--accent); }
+.section-light .section-lead { color: var(--light-muted); }
+
+.faq-list {
+  max-width: 900px;
+  border-top: 1px solid var(--light-border);
+}
+.faq-item {
+  border-bottom: 1px solid var(--light-border);
+}
+.faq-item > summary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 0;
+  cursor: pointer;
+  list-style: none;
+}
+.faq-item > summary::-webkit-details-marker { display: none; }
+.faq-item > summary::after {
+  content: "+";
+  flex: none;
+  font-family: var(--font-head);
+  font-size: 26px;
+  line-height: 1;
+  color: var(--accent);
+  transform: translateY(1px);
+  transition: transform 0.2s ease;
+}
+.faq-item[open] > summary::after { transform: translateY(1px) rotate(45deg); }
+.faq-item > summary h3 {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: clamp(1.02rem, 1.6vw, 1.3rem);
+  line-height: 1.25;
+  color: var(--light-text);
+  text-transform: uppercase;
+}
+.faq-item > summary:hover h3 { color: var(--accent); }
+.faq-item > summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+.faq-item > p {
+  max-width: 68ch;
+  padding-bottom: 24px;
+  color: var(--light-muted);
+  font-size: 0.98rem;
+}
+.faq-item > p a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.faq-item > p a:hover { color: var(--accent-hover); }
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-item > summary::after { transition: none; }
+}
+
+/* ============================================================
+   SEO-текст  (развёрнутое описание студии внизу страницы)
+   ============================================================ */
+.seo-text {
+  padding-block: clamp(48px, 6vw, 80px);
+  border-top: 1px solid var(--border);
+  background: var(--surface-alt);
+}
+.seo-inner { max-width: 900px; }
+.seo-inner h2 {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+  line-height: 1.15;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+.seo-inner p {
+  color: var(--text-secondary);
+  font-size: 0.96rem;
+  line-height: 1.75;
+}
+.seo-inner p + p { margin-top: 14px; }
+.seo-inner a {
+  color: var(--accent-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.seo-inner a:hover { color: var(--white); }
+.seo-inner a:focus-visible {
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 3px;
+}
+
+/* ---------- links to direction pages ---------- */
+.dir-back-more { margin-top: 10px; }
+.dir-back-more a {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.dir-back-more a:hover { color: var(--white); }
+.dir-back-more a:focus-visible {
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 3px;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin-top: 4px;
+}
+.footer-links a {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.footer-links a:hover { color: var(--text-primary); }
+.footer-links a:focus-visible {
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 3px;
+}

@@ -4,8 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>ONE OF STUDIO — танцевальная студия в Хабаровске</title>
-  <meta name="description" content="ONE OF STUDIO — танцевальная студия в Хабаровске. Choreo (hip-hop, jazz-funk, girly style) от 16 лет и K-Pop cover dance от 12 лет. Занятия по воскресеньям, ул. Комсомольская, 78. Первое занятие бесплатно." />
+  <title>Танцы в Хабаровске — школа танцев ONE OF STUDIO: Choreo и K-Pop</title>
+  <meta name="description" content="Танцевальная студия в Хабаровске: Choreo (hip-hop, jazz-funk, girly style) от 16 лет и K-Pop cover dance от 12 лет. Занятия по воскресеньям на ул. Комсомольская, 78. Абонемент 3 500–4 000 ₽ в месяц, первое занятие бесплатно." />
+
+  <!-- Яндекс.Вебмастер: подтверждение прав на сайт.
+       ЗАМЕНИТЬ значение content на код из Вебмастера (Настройки → Права доступа).
+  <meta name="yandex-verification" content="ЗАМЕНИТЬ_НА_КОД_ИЗ_ВЕБМАСТЕРА" /> -->
 
   <!-- Favicon -->
   <link rel="icon" href="brand_assets/web/favicon.svg" type="image/svg+xml" />
@@ -15,6 +19,13 @@
   <meta name="theme-color" content="#0d0d0d" />
 
   <link rel="canonical" href="https://oneofstudio.ru/" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="geo.region" content="RU-KHA" />
+  <meta name="geo.placename" content="Хабаровск" />
+  <!-- TODO: подставить точные координаты студии из Яндекс.Карт (правый клик по точке →
+       «Что здесь?» → координаты) и раскомментировать. Заодно вписать их в JSON-LD ниже.
+  <meta name="geo.position" content="ШИРОТА;ДОЛГОТА" />
+  <meta name="ICBM" content="ШИРОТА, ДОЛГОТА" /> -->
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
@@ -34,17 +45,23 @@
 
   <link rel="preload" as="image" href="assets/web/hero.webp" />
 
-  <link rel="stylesheet" href="style.css?v=4" />
+  <link rel="stylesheet" href="style.css?v=5" />
 
   <!-- JSON-LD: DanceSchool + расписание групп -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "DanceSchool",
+    "@id": "https://oneofstudio.ru/#studio",
     "name": "ONE OF STUDIO",
+    "alternateName": "ONE OF CREW",
     "url": "https://oneofstudio.ru/",
     "image": "https://oneofstudio.ru/assets/web/og-cover.jpg",
+    "logo": "https://oneofstudio.ru/brand_assets/web/logo.png",
     "description": "Танцевальная студия в Хабаровске. Направления Choreo (hip-hop, jazz-funk, girly style) и K-Pop cover dance. Обучение через постановки и сцену.",
+    "slogan": "Место, где начинается твой танец",
+    "keywords": "танцы Хабаровск, школа танцев Хабаровск, танцевальная студия Хабаровск, k-pop cover dance Хабаровск, хип-хоп Хабаровск, jazz-funk Хабаровск, girly style Хабаровск",
+    "currenciesAccepted": "RUB",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "ул. Комсомольская, 78",
@@ -52,7 +69,10 @@
       "addressRegion": "Хабаровский край",
       "addressCountry": "RU"
     },
-    "areaServed": "Хабаровск",
+    "areaServed": {
+      "@type": "City",
+      "name": "Хабаровск"
+    },
     "telephone": "+79004153763",
     "priceRange": "3500–4000 ₽",
     "openingHoursSpecification": [
@@ -111,6 +131,86 @@
     }
   }
   </script>
+
+  <!-- JSON-LD: сайт целиком -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://oneofstudio.ru/#website",
+    "url": "https://oneofstudio.ru/",
+    "name": "ONE OF STUDIO",
+    "description": "Танцевальная студия в Хабаровске: Choreo и K-Pop cover dance.",
+    "inLanguage": "ru-RU",
+    "publisher": { "@id": "https://oneofstudio.ru/#studio" }
+  }
+  </script>
+
+  <!-- JSON-LD: частые вопросы (соответствует видимому блоку «Частые вопросы») -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Где находится студия танцев в Хабаровске?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "ONE OF STUDIO занимается в Хабаровске по адресу ул. Комсомольская, 78. Занятия проходят по воскресеньям."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Нужна ли подготовка, чтобы начать танцевать?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Нет. Группы набираются без требований к подготовке: мы учимся в процессе работы над постановкой, поэтому начать можно с нуля."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "С какого возраста берут в группы?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "K-Pop cover dance — от 12 лет, Choreo (ONE OF CREW) — от 16 лет. Отдельного деления на детские и взрослые группы нет: группы общие."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Сколько стоят занятия танцами?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Абонемент на месяц — 8 часов занятий: Choreo 4 000 ₽, K-Pop 3 500 ₽. Разовое занятие — 500 ₽, индивидуальное — 2 000 ₽ в час, второе направление — плюс 1 500 ₽. Пробное занятие бесплатное."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Как проходит первое пробное занятие?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Пробное занятие бесплатное и проходит вместе с группой — те же два часа и та же работа над постановкой. Из вещей нужна удобная спортивная одежда, сменная обувь и вода. Записаться можно в Telegram, WhatsApp, ВКонтакте или MAX."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Как часто проходят занятия?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Одно занятие в неделю по два часа, по воскресеньям: Choreo в 13:00–15:00, K-Pop в 15:00–17:00. За месяц это 8 часов в зале."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Обязательно ли выступать на сцене?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Выступления — часть того, как мы учимся, но выход на сцену не обязателен. Можно заниматься, участвовать в постановках и выходить на площадку тогда, когда сам будешь готов."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -124,6 +224,7 @@
       <a href="#why">О студии</a>
       <a href="#directions">Направления</a>
       <a href="#schedule">Расписание</a>
+      <a href="#faq">Вопросы</a>
       <a href="#contacts">Контакты</a>
     </nav>
 
@@ -140,6 +241,7 @@
       <a href="#why">О студии</a>
       <a href="#directions">Направления</a>
       <a href="#schedule">Расписание</a>
+      <a href="#faq">Вопросы</a>
       <a href="#contacts">Контакты</a>
     </nav>
     <a href="#contacts" class="btn btn-accent">Записаться</a>
@@ -167,7 +269,7 @@
       <!-- Style strip — inside hero, above the dark fade -->
       <ul class="hero-styles" aria-label="Направления студии">
         <li><a href="#directions">Choreo</a></li>
-        <li><a href="#directions">Hip-Hop</a></li>
+        <li><a href="hip-hop.html">Hip-Hop</a></li>
         <li><a href="#directions">Jazz-Funk</a></li>
         <li><a href="#directions">Girly Style</a></li>
         <li><a href="#directions">K-Pop</a></li>
@@ -287,6 +389,7 @@
                     <li>Выступления и конкурсы в составе команды ONE OF CREW</li>
                   </ul>
                   <p class="dir-back-fit"><span class="dir-back-fit-label">Кому подходит:</span> тем, кто хочет танцевать на сцене в команде и выступать на конкурсах.</p>
+                  <p class="dir-back-more"><a href="choreo.html">Подробнее о направлении Choreo →</a></p>
                 </div>
                 <div class="dir-actions dir-actions--back">
                   <a href="#contacts" class="btn btn-accent btn-sm">Пробное занятие</a>
@@ -322,6 +425,7 @@
                     <li>Выступления, съёмки и cover-dance проекты на мероприятиях</li>
                   </ul>
                   <p class="dir-back-fit"><span class="dir-back-fit-label">Кому подходит:</span> тем, кто хочет не просто повторять движения, а выступать в команде с полноценными k-pop номерами на сцене.</p>
+                  <p class="dir-back-more"><a href="kpop.html">Подробнее о K-Pop cover dance →</a></p>
                 </div>
                 <div class="dir-actions dir-actions--back">
                   <a href="#contacts" class="btn btn-accent btn-sm">Пробное занятие</a>
@@ -452,7 +556,54 @@
       </div>
     </section>
 
-    <!-- ======================= 7. КОНТАКТЫ ======================= -->
+    <!-- ======================= 7. ЧАСТЫЕ ВОПРОСЫ ======================= -->
+    <section class="faq section section-light" id="faq" aria-labelledby="faq-title">
+      <div class="container">
+        <div class="section-head">
+          <span class="tag">Вопросы</span>
+          <h2 id="faq-title" class="display-h2">Частые вопросы<br /><span class="accent-text">о занятиях</span></h2>
+        </div>
+
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary><h3>Где находится студия танцев в Хабаровске?</h3></summary>
+            <p>ONE OF STUDIO занимается в Хабаровске по адресу ул. Комсомольская, 78. Занятия проходят по воскресеньям.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary><h3>Нужна ли подготовка, чтобы начать танцевать?</h3></summary>
+            <p>Нет. Группы набираются без требований к подготовке: мы учимся в процессе работы над постановкой, поэтому начать можно с нуля.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary><h3>С какого возраста берут в группы?</h3></summary>
+            <p>K-Pop cover dance — от 12 лет, Choreo (ONE OF CREW) — от 16 лет. Отдельного деления на детские и взрослые группы нет: группы общие, а порог входа указан у каждого направления.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary><h3>Сколько стоят занятия танцами?</h3></summary>
+            <p>Абонемент на месяц — это 8 часов занятий: Choreo 4 000 ₽, K-Pop 3 500 ₽. Разовое занятие — 500 ₽, индивидуальное — 2 000 ₽ в час, второе направление — плюс 1 500 ₽. Пробное занятие бесплатное.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary><h3>Как проходит первое пробное занятие?</h3></summary>
+            <p>Пробное занятие бесплатное и проходит вместе с группой — те же два часа и та же работа над постановкой. Из вещей нужна удобная спортивная одежда, сменная обувь и вода. Записаться можно в <a href="https://t.me/one_of_studio_khv" target="_blank" rel="noopener">Telegram</a>, WhatsApp, ВКонтакте или MAX.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary><h3>Как часто проходят занятия?</h3></summary>
+            <p>Одно занятие в неделю по два часа, по воскресеньям: Choreo в 13:00–15:00, K-Pop в 15:00–17:00. За месяц это 8 часов в зале.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary><h3>Обязательно ли выступать на сцене?</h3></summary>
+            <p>Выступления — часть того, как мы учимся, но выход на сцену не обязателен. Можно заниматься, участвовать в постановках и выходить на площадку тогда, когда сам будешь готов.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= 8. КОНТАКТЫ ======================= -->
     <section class="contacts section" id="contacts" aria-labelledby="contacts-title">
       <div class="container contacts-inner">
         <span class="tag">Свяжитесь с нами</span>
@@ -488,6 +639,21 @@
       </div>
     </section>
 
+    <!-- ======================= 9. ТЕКСТ О СТУДИИ (SEO) ======================= -->
+    <section class="seo-text section" aria-labelledby="seo-title">
+      <div class="container seo-inner">
+        <h2 id="seo-title">Танцевальная студия в Хабаровске</h2>
+
+        <p>ONE OF STUDIO — школа танцев в Хабаровске на ул. Комсомольская, 78. Мы не разбираем движения «в стол»: обучение идёт через постановку — с первого занятия ты работаешь над номером, который команда потом выносит на сцену. Такой формат быстрее ставит координацию, чувство музыки и умение держаться перед зрителем, чем разрозненные связки.</p>
+
+        <p>Сейчас в студии два направления. <a href="choreo.html">Choreo — команда ONE OF CREW</a>, от 16 лет: постановочная хореография на стыке hip-hop, jazz-funk и girly style, работа над синхроном и сценической подачей, выступления и конкурсы. <a href="kpop.html">K-Pop cover dance</a>, от 12 лет: проектная группа, которая разбирает и ставит полноценные номера k-pop групп — формации, перестроения, образ, выступления и съёмки. Отдельного деления на детские и взрослые группы нет, порог входа указан у каждого направления.</p>
+
+        <p>Занятия проходят раз в неделю по воскресеньям, по два часа: Choreo в 13:00–15:00, K-Pop в 15:00–17:00 — за месяц это 8 часов в зале. Абонемент стоит 3 500–4 000 ₽ в месяц в зависимости от направления, есть разовые и индивидуальные занятия. Первое пробное занятие бесплатное: приходишь на обычную тренировку с группой и смотришь, твоё это или нет.</p>
+
+        <p>Начать можно с нуля — подготовка не нужна. Если сомневаешься, какое направление выбрать, напиши нам в мессенджер: расскажем про обе группы, текущий состав и ближайшие постановки, и поможем определиться до того, как ты за что-то заплатишь.</p>
+      </div>
+    </section>
+
   </main>
 
   <!-- ======================= FOOTER ======================= -->
@@ -501,7 +667,15 @@
         <a href="#why">О студии</a>
         <a href="#directions">Направления</a>
         <a href="#schedule">Расписание</a>
+        <a href="#faq">Вопросы</a>
         <a href="#contacts">Контакты</a>
+      </nav>
+
+      <nav class="footer-links" aria-label="Страницы направлений">
+        <a href="choreo.html">Choreo в Хабаровске</a>
+        <a href="kpop.html">K-Pop cover dance</a>
+        <a href="hip-hop.html">Хип-хоп</a>
+        <a href="blog.html">Блог студии</a>
       </nav>
 
       <div class="footer-meta">
@@ -647,5 +821,34 @@
     })();
 
   </script>
+  <!-- ============================================================
+       ЯНДЕКС.МЕТРИКА
+       Счётчика пока нет. Что сделать:
+       1. Завести счётчик на https://metrika.yandex.ru (сайт oneofstudio.ru),
+          включить «Вебвизор» и «Карта скроллинга».
+       2. Заменить ЗАМЕНИТЬ_НА_НОМЕР_СЧЁТЧИКА на номер счётчика (7–9 цифр)
+          — в трёх местах ниже.
+       3. Снять комментарий (убрать строку-открывашку и строку-закрывашку).
+       Метрика нужна не только для статистики: через неё Яндекс получает
+       поведенческие данные по сайту, а Вебмастер — подтверждение прав.
+       ============================================================ -->
+  <!--
+  <script type="text/javascript">
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+    m[i].l=1*new Date();
+    for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+    k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+    ym(ЗАМЕНИТЬ_НА_НОМЕР_СЧЁТЧИКА, "init", {
+      clickmap: true,
+      trackLinks: true,
+      accurateTrackBounce: true,
+      webvisor: true
+    });
+  </script>
+  <noscript><div><img src="https://mc.yandex.ru/watch/ЗАМЕНИТЬ_НА_НОМЕР_СЧЁТЧИКА" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+  -->
+
 </body>
 </html>
