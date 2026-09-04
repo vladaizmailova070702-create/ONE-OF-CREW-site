@@ -1681,3 +1681,89 @@ body::before {
   .subhero-media { aspect-ratio: 4 / 3; order: -1; }
   .crumbs { padding-top: 84px; }
 }
+
+/* ============================================================
+   БЛОГ  (список статей и страница статьи)
+   ============================================================ */
+.post-head {
+  position: relative;
+  padding-block: clamp(24px, 3.5vw, 40px) clamp(28px, 4vw, 44px);
+}
+/* разделитель ставим псевдоэлементом, а не border-bottom: у .container есть
+   боковые отступы, и рамка уезжала бы шире, чем текст под ней */
+.post-head::after {
+  content: "";
+  display: block;
+  height: 1px;
+  margin-top: clamp(28px, 4vw, 44px);
+  background: var(--border);
+}
+.post-head h1 {
+  max-width: 24ch;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: clamp(1.85rem, 4.4vw, 3rem);
+  line-height: 1.04;
+  text-transform: uppercase;
+}
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-bottom: 18px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.post-meta .post-meta-accent { color: var(--accent-soft); }
+.post-lead {
+  margin-top: 20px;
+  max-width: 62ch;
+  color: var(--text-secondary);
+  font-size: clamp(1rem, 1.3vw, 1.1rem);
+  line-height: 1.65;
+}
+
+.post-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+.post-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 26px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-alt);
+  transition: transform 0.18s ease, border-color 0.18s ease;
+}
+.post-card:hover { transform: translateY(-2px); border-color: var(--accent-hover); }
+.post-card:focus-visible { outline: 2px solid var(--accent-soft); outline-offset: 3px; }
+.post-card time {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-soft);
+}
+.post-card h2 {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+.post-card p {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .post-card { transition: none; }
+  .post-card:hover { transform: none; }
+}
