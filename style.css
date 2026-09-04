@@ -1407,3 +1407,277 @@ body::before {
   outline: 2px solid var(--accent-soft);
   outline-offset: 3px;
 }
+
+/* ============================================================
+   ВНУТРЕННИЕ СТРАНИЦЫ
+   (направления, блог, статьи) — общий каркас
+   ============================================================ */
+
+/* ---------- хлебные крошки ---------- */
+.crumbs {
+  padding-top: 96px;
+  padding-bottom: 4px;
+}
+.crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+.crumbs li { display: flex; align-items: center; gap: 10px; }
+.crumbs li + li::before { content: "/"; color: var(--accent-soft); }
+.crumbs a { text-decoration: underline; text-underline-offset: 3px; }
+.crumbs a:hover { color: var(--text-primary); }
+.crumbs a:focus-visible { outline: 2px solid var(--accent-soft); outline-offset: 3px; }
+.crumbs [aria-current="page"] { color: var(--text-primary); }
+
+/* ---------- компактный герой внутренней страницы ---------- */
+.subhero {
+  position: relative;
+  padding-block: clamp(28px, 4vw, 44px) clamp(48px, 6vw, 76px);
+  overflow: hidden;
+}
+.subhero-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+}
+.subhero h1 {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: clamp(2rem, 5.2vw, 3.5rem);
+  line-height: 1.02;
+  text-transform: uppercase;
+}
+.subhero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.subhero-lead {
+  margin-top: 20px;
+  max-width: 54ch;
+  color: var(--text-secondary);
+  font-size: clamp(1rem, 1.3vw, 1.1rem);
+}
+.subhero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+.subhero-media {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  background: var(--surface);
+}
+.subhero-media img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- «чипы» фактов ---------- */
+.chip {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.chip-accent {
+  border-color: transparent;
+  background: var(--accent);
+  color: var(--white);
+}
+
+/* ---------- таблица фактов ---------- */
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-top: clamp(28px, 4vw, 44px);
+}
+.fact {
+  background: var(--surface-alt);
+  padding: 20px 22px;
+}
+.fact dt {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.fact dd {
+  margin: 8px 0 0;
+  font-family: var(--font-head);
+  font-size: 1.28rem;
+  line-height: 1.15;
+  color: var(--text-primary);
+  text-transform: uppercase;
+}
+.fact dd small {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text-secondary);
+}
+
+/* ---------- текстовые блоки внутренних страниц ---------- */
+/* .prose живёт внутри .container, поэтому ширину задаём ему, а не контейнеру —
+   иначе текст центрируется и уезжает от левого края остальных секций */
+.prose { max-width: 74ch; }
+.subhero + .container > .facts { margin-top: 0; }
+.subhero-actions .btn-lg { padding-inline: 26px; }
+.prose h2 {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: clamp(1.35rem, 2.6vw, 2rem);
+  line-height: 1.12;
+  text-transform: uppercase;
+  margin-top: clamp(40px, 5vw, 60px);
+}
+.prose h2:first-child { margin-top: 0; }
+.prose h3 {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: clamp(1.05rem, 1.8vw, 1.28rem);
+  line-height: 1.2;
+  text-transform: uppercase;
+  margin-top: 30px;
+}
+.prose p,
+.prose li {
+  color: var(--text-secondary);
+  font-size: 0.98rem;
+  line-height: 1.75;
+}
+.prose p { margin-top: 14px; }
+.prose ul { margin-top: 14px; }
+.prose ul li {
+  position: relative;
+  padding-left: 20px;
+  margin-top: 8px;
+}
+.prose ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 11px;
+  width: 7px;
+  height: 2px;
+  background: var(--accent-soft);
+}
+.prose a {
+  color: var(--accent-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose a:hover { color: var(--white); }
+.prose a:focus-visible { outline: 2px solid var(--accent-soft); outline-offset: 3px; }
+.prose strong { color: var(--text-primary); font-weight: 600; }
+
+/* ---------- финальный призыв на внутренней странице ---------- */
+.cta-band {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-alt);
+  padding-block: clamp(44px, 6vw, 72px);
+}
+.cta-band-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.cta-band h2 {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 3.2vw, 2.4rem);
+  line-height: 1.05;
+  text-transform: uppercase;
+  max-width: 20ch;
+}
+.cta-band p {
+  margin-top: 12px;
+  max-width: 46ch;
+  color: var(--text-secondary);
+  font-size: 0.96rem;
+}
+
+/* ---------- «читайте также» ---------- */
+.related { padding-block: clamp(44px, 6vw, 72px); }
+.related h2 {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  text-transform: uppercase;
+  margin-bottom: 22px;
+}
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+.related-card {
+  display: block;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-alt);
+  transition: transform 0.18s ease, border-color 0.18s ease;
+}
+.related-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-hover);
+}
+.related-card:focus-visible { outline: 2px solid var(--accent-soft); outline-offset: 3px; }
+.related-card .related-kicker {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-soft);
+}
+.related-card h3 {
+  margin-top: 10px;
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 1.12rem;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+.related-card p {
+  margin-top: 8px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .related-card { transition: none; }
+  .related-card:hover { transform: none; }
+}
+
+@media (max-width: 860px) {
+  .subhero-inner { grid-template-columns: 1fr; }
+  .subhero-media { aspect-ratio: 4 / 3; order: -1; }
+  .crumbs { padding-top: 84px; }
+}
