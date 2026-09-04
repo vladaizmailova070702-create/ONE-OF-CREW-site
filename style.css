@@ -1308,6 +1308,16 @@ body::before {
 }
 .soc-tile.is-playing .soc-cap { display: none; }
 
+/* Длинная подпись («Choreo ~ Jazz-Funk») при базовом трекинге 0.2em не влезает
+   в плитку рилса на мобильном и рвётся на две строки по дефису. Жмём кегль и
+   трекинг, чтобы она осталась одной строкой. */
+.soc-cap--long {
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  max-width: calc(100% - 24px);
+}
+
 .soc-play {
   position: absolute;
   inset: 0;
