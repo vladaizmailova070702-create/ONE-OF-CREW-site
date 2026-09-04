@@ -35,8 +35,18 @@ Telegram-канал. В контактах Telegram теперь ведёт в �
 | `index.html` | изменён — раздел `#social`, пункт «Соцсети» в меню, новые контакты |
 | `style.css` | изменён — стили ленты соцсетей |
 | `assets/web/social/` | **новая папка** — 11 роликов MP4, 11 постеров и 10 фото (29 МБ) |
+| `choreo.html` | **новая страница** |
+| `kpop.html` | **новая страница** |
+| `hip-hop.html` | **новая страница** |
+| `robots.txt` | изменён — добавлен `Clean-param`, закрыт `/promo/` |
+| `sitemap.xml` | изменён — 4 адреса |
 
-Остальные страницы и старые картинки не менялись — заливать их заново не нужно.
+Блог (`blog.html` и три статьи) был сделан и убран в тот же день, 04.09.2026:
+вести его при одном занятии в неделю нереалистично, а брошенный блог выглядит
+хуже, чем его отсутствие. В бакет он не заливался — удалять оттуда нечего.
+
+Старые картинки (hero, why-*, направления, видео-карточка) не менялись —
+заливать их заново не нужно.
 Всё, что нужно, лежит в папке `deploy/`: HTML и CSS весят около 300 КБ,
 папка `assets/web/social/` — 29 МБ.
 
@@ -106,10 +116,6 @@ rm -rf deploy && mkdir -p deploy/assets/web/social deploy/brand_assets/web && cp
    /choreo.html
    /kpop.html
    /hip-hop.html
-   /blog.html
-   /kuda-poyti-tancevat-v-habarovske.html
-   /kak-vybrat-tancevalnoe-napravlenie.html
-   /pervoe-zanyatie-tancami.html
    /style.css
    /robots.txt
    /sitemap.xml
@@ -128,11 +134,10 @@ rm -rf deploy && mkdir -p deploy/assets/web/social deploy/brand_assets/web && cp
 - в прайсе написано «8 часов в месяц», есть «Индивидуальное занятие 2 000 ₽/час»;
 - внизу главной есть блок «Частые вопросы» и текст «Танцевальная студия
   в Хабаровске»;
-- в меню появился пункт «Блог», и https://oneofstudio.ru/blog.html открывается;
 - открываются https://oneofstudio.ru/choreo.html, /kpop.html и /hip-hop.html —
   со стилями, а не «голым» текстом;
 - https://oneofstudio.ru/robots.txt открывается текстом, а не скачивается файлом;
-- https://oneofstudio.ru/sitemap.xml открывается и содержит 8 адресов;
+- https://oneofstudio.ru/sitemap.xml открывается и содержит 4 адреса;
 - https://oneofstudio.ru/assets/web/og-cover.jpg показывает картинку со сцены.
 
 Проверка ссылки-превью: отправить `https://oneofstudio.ru` самому себе в Telegram —
