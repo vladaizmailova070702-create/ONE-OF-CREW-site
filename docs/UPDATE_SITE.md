@@ -25,25 +25,20 @@
 
 ## Что нужно залить в этот раз
 
-Обновление от 04.09.2026 — SEO-оптимизация под Яндекс. Сайт из одностраничника
-стал восьмистраничным (подробности и что делать дальше — в `YANDEX_SEO.md`).
+Обновление от 04.09.2026 — раздел «Соцсети студии» на главной: лента из 21 видео
+и фото (выступления, репетиции, съёмки, дипломы) плюс ссылки на TikTok и
+Telegram-канал. В контактах Telegram теперь ведёт в личные сообщения
+(`@E_D_Khiro`), а не в канал студии.
 
 | Файл | Статус |
 |---|---|
-| `index.html` | изменён — новые title/description, блок FAQ, текст внизу, разметка |
-| `style.css` | изменён — стили FAQ, внутренних страниц и блога |
-| `robots.txt` | изменён — добавлен `Clean-param`, закрыт `/promo/` |
-| `sitemap.xml` | изменён — все 8 адресов |
-| `choreo.html` | новый |
-| `kpop.html` | новый |
-| `hip-hop.html` | новый |
-| `blog.html` | новый |
-| `kuda-poyti-tancevat-v-habarovske.html` | новый |
-| `kak-vybrat-tancevalnoe-napravlenie.html` | новый |
-| `pervoe-zanyatie-tancami.html` | новый |
+| `index.html` | изменён — раздел `#social`, пункт «Соцсети» в меню, новые контакты |
+| `style.css` | изменён — стили ленты соцсетей |
+| `assets/web/social/` | **новая папка** — 11 роликов MP4, 11 постеров и 10 фото (29 МБ) |
 
-Картинки и видео не менялись — заново заливать 22 МБ не нужно.
-Всё перечисленное лежит в папке `deploy/` (около 240 КБ вместе).
+Остальные страницы и старые картинки не менялись — заливать их заново не нужно.
+Всё, что нужно, лежит в папке `deploy/`: HTML и CSS весят около 300 КБ,
+папка `assets/web/social/` — 29 МБ.
 
 ---
 
@@ -53,7 +48,7 @@
 Иначе, из корня проекта:
 
 ```bash
-rm -rf deploy && mkdir -p deploy/assets/web deploy/brand_assets/web && cp *.html style.css robots.txt sitemap.xml deploy/ && cp assets/web/*.webp assets/web/*.jpg assets/web/*.mp4 deploy/assets/web/ && cp brand_assets/web/logo.png brand_assets/web/favicon.* brand_assets/web/apple-touch-icon.png deploy/brand_assets/web/
+rm -rf deploy && mkdir -p deploy/assets/web/social deploy/brand_assets/web && cp *.html style.css robots.txt sitemap.xml deploy/ && cp assets/web/*.webp assets/web/*.jpg assets/web/*.mp4 deploy/assets/web/ && cp assets/web/social/* deploy/assets/web/social/ && cp brand_assets/web/logo.png brand_assets/web/favicon.* brand_assets/web/apple-touch-icon.png deploy/brand_assets/web/
 ```
 
 ## Шаг 2. Открыть бакет в консоли Yandex Cloud
@@ -68,16 +63,18 @@ rm -rf deploy && mkdir -p deploy/assets/web deploy/brand_assets/web && cp *.html
 ## Шаг 3. Залить изменённые файлы
 
 1. В бакете нажать **Загрузить**.
-2. Перетащить из папки `deploy/` **все файлы `.html`** (их 8), а также
-   `style.css`, `robots.txt` и `sitemap.xml`. Они лягут в корень бакета поверх
-   старых — консоль спросит подтверждение перезаписи, согласиться.
-3. Картинки и видео в этот раз не менялись, папки `assets` и `brand_assets`
-   заливать не нужно.
+2. Перетащить из папки `deploy/` файлы `index.html` и `style.css`. Они лягут в
+   корень бакета поверх старых — консоль спросит подтверждение перезаписи,
+   согласиться.
+3. Отдельно перетащить папку `deploy/assets/web/social` — консоль сохранит
+   вложенность, файлы должны оказаться по пути `assets/web/social/...`.
+   Это 29 МБ, заливка идёт несколько минут.
+4. Остальные страницы, старые картинки, `robots.txt` и `sitemap.xml` не
+   менялись — заливать их не нужно.
 
-> Альтернатива: перетащить из `deploy/` сразу файлы `index.html`, `style.css`,
-> `robots.txt`, `sitemap.xml` **и папку `assets` целиком** — консоль сохранит
-> вложенность. Дольше (перезальются и видео на 21 МБ), но ошибиться с путём
-> невозможно.
+> Альтернатива: перетащить из `deploy/` сразу `index.html`, `style.css`
+> **и папку `assets` целиком** — консоль сохранит вложенность. Дольше
+> (перезальются и старые видео), но ошибиться с путём невозможно.
 
 ## Шаг 4. Проверить Content-Type у новых файлов
 
