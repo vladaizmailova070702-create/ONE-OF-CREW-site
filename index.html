@@ -22,10 +22,9 @@
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <meta name="geo.region" content="RU-KHA" />
   <meta name="geo.placename" content="Хабаровск" />
-  <!-- TODO: подставить точные координаты студии из Яндекс.Карт (правый клик по точке →
-       «Что здесь?» → координаты) и раскомментировать. Заодно вписать их в JSON-LD ниже.
-  <meta name="geo.position" content="ШИРОТА;ДОЛГОТА" />
-  <meta name="ICBM" content="ШИРОТА, ДОЛГОТА" /> -->
+  <!-- Координаты взяты из подтверждённой карточки организации на Яндекс.Картах -->
+  <meta name="geo.position" content="48.472841;135.060733" />
+  <meta name="ICBM" content="48.472841, 135.060733" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
@@ -67,8 +66,15 @@
       "streetAddress": "ул. Комсомольская, 78",
       "addressLocality": "Хабаровск",
       "addressRegion": "Хабаровский край",
+      "postalCode": "680000",
       "addressCountry": "RU"
     },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 48.472841,
+      "longitude": 135.060733
+    },
+    "hasMap": "https://yandex.ru/maps/org/one_of_studio/126776741866/",
     "areaServed": {
       "@type": "City",
       "name": "Хабаровск"
@@ -84,7 +90,9 @@
       }
     ],
     "sameAs": [
+      "https://yandex.ru/maps/org/one_of_studio/126776741866/",
       "https://t.me/one_of_studio_khv",
+      "https://www.tiktok.com/@one.of.crew",
       "https://wa.me/79004153763",
       "https://vk.com/vladislavandreevna",
       "https://max.ru/u/f9LHodD0cOLn3SlAJWYa4_-fZzZDwelDAIgd1G3CEeoWNyKy9dZ7q0JIsmI"
@@ -181,7 +189,7 @@
         "name": "Сколько стоят занятия танцами?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Абонемент на месяц — 8 часов занятий: Choreo 4 000 ₽, K-Pop 3 500 ₽. Разовое занятие — 500 ₽, индивидуальное — 2 000 ₽ в час, второе направление — плюс 1 500 ₽. Пробное занятие бесплатное."
+          "text": "Абонемент на месяц — 8 часов занятий: Choreo 4 000 ₽, K-Pop 3 500 ₽. Индивидуальное занятие — 2 000 ₽ в час, второе направление — плюс 1 500 ₽. Пробное занятие бесплатное."
         }
       },
       {
@@ -224,6 +232,7 @@
       <a href="#why">О студии</a>
       <a href="#directions">Направления</a>
       <a href="#schedule">Расписание</a>
+      <a href="#social">Соцсети</a>
       <a href="blog.html">Блог</a>
       <a href="#contacts">Контакты</a>
     </nav>
@@ -241,6 +250,7 @@
       <a href="#why">О студии</a>
       <a href="#directions">Направления</a>
       <a href="#schedule">Расписание</a>
+      <a href="#social">Соцсети</a>
       <a href="blog.html">Блог</a>
       <a href="#contacts">Контакты</a>
     </nav>
@@ -508,10 +518,6 @@
             <span class="addon-price">Бесплатно</span>
           </div>
           <div class="addon-row">
-            <span class="addon-name">Разовое занятие</span>
-            <span class="addon-price">500&nbsp;₽</span>
-          </div>
-          <div class="addon-row">
             <span class="addon-name">Абонемент на 8 часов (месяц)</span>
             <span class="addon-price">3 500 – 4 000&nbsp;₽</span>
           </div>
@@ -556,7 +562,228 @@
       </div>
     </section>
 
-    <!-- ======================= 7. ЧАСТЫЕ ВОПРОСЫ ======================= -->
+    <!-- ======================= 7. СОЦСЕТИ СТУДИИ =======================
+         Лента студии: видео и фото с выступлений, съёмок и репетиций.
+         Как добавить новый материал:
+         1. Положить исходник в assets/originals/Для раздела соцсетей/.
+         2. Сжать: фото → WebP (ширина ≤1400, q80) в assets/web/social/,
+            видео → MP4 H.264 (ширина ≤1280, crf 27–30, кусок до 30 секунд)
+            плюс постер-кадр WebP с суффиксом -poster.
+         3. Скопировать одну карточку ниже (.soc-tile) и поменять пути,
+            alt, подпись и width/height. Видео грузится только по клику,
+            поэтому длина ленты почти не влияет на скорость страницы.
+         ================================================================= -->
+    <section class="social section" id="social" aria-labelledby="social-title">
+      <div class="container">
+        <div class="section-head social-head">
+          <div class="social-head-text">
+            <span class="tag">Соцсети студии</span>
+            <h2 id="social-title" class="display-h2">Как это<br /><span class="accent-text">выглядит вживую</span></h2>
+            <p class="section-lead">Видео с выступлений, репетиций и съёмок — то, что мы выкладываем в TikTok и Telegram. Здесь же собираем фото с концертов и работу групп в зале.</p>
+          </div>
+
+          <div class="social-links">
+            <a class="social-link" href="https://www.tiktok.com/@one.of.crew" target="_blank" rel="noopener">
+              <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path fill="currentColor" d="M16.5 2h-3v13.2a2.7 2.7 0 1 1-2.2-2.65V9.4a5.9 5.9 0 1 0 5.2 5.85V8.9a6.9 6.9 0 0 0 4 1.27V7.1a4 4 0 0 1-4-4.02V2Z" />
+              </svg>
+              <span class="social-link-text">
+                <span class="social-link-name">TikTok</span>
+                <span class="social-link-handle">@one.of.crew</span>
+              </span>
+            </a>
+            <a class="social-link" href="https://t.me/one_of_studio_khv" target="_blank" rel="noopener">
+              <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path fill="currentColor" d="M21.6 4.2 18.9 19c-.2 1-.8 1.2-1.6.75l-4.4-3.25-2.13 2.05c-.24.24-.44.44-.9.44l.32-4.5 8.2-7.4c.36-.32-.08-.5-.55-.18l-10.1 6.36-4.36-1.36c-.95-.3-.97-.95.2-1.4l17.05-6.57c.79-.29 1.48.18 1.22 1.4Z" />
+              </svg>
+              <span class="social-link-text">
+                <span class="social-link-name">Telegram-канал</span>
+                <span class="social-link-handle">@one_of_studio_khv</span>
+              </span>
+            </a>
+          </div>
+        </div>
+
+        <div class="social-grid">
+
+          <figure class="soc-tile soc-tile--video">
+            <div class="soc-media" style="aspect-ratio: 576 / 488;">
+              <img class="soc-poster" src="assets/web/social/wide-05-poster.webp" alt="Команда ONE OF CREW на сцене во время выступления" width="576" height="488" loading="lazy" />
+              <video class="soc-video" preload="none" playsinline controls data-src="assets/web/social/wide-05.mp4"></video>
+              <button class="soc-play" type="button" aria-label="Смотреть видео: выступление команды на сцене">
+                <span class="soc-play-icon" aria-hidden="true"></span>
+              </button>
+            </div>
+            <figcaption class="soc-cap">Сцена</figcaption>
+          </figure>
+
+          <figure class="soc-tile">
+            <img class="soc-photo" src="assets/web/social/photo-team-1.webp" alt="Группа студии ONE OF STUDIO после выступления" width="1400" height="934" loading="lazy" />
+            <figcaption class="soc-cap">Команда</figcaption>
+          </figure>
+
+          <figure class="soc-tile soc-tile--video">
+            <div class="soc-media" style="aspect-ratio: 9 / 16;">
+              <img class="soc-poster" src="assets/web/social/reel-02-poster.webp" alt="Съёмка танцевального ролика на крыше на закате" width="427" height="760" loading="lazy" />
+              <video class="soc-video" preload="none" playsinline controls data-src="assets/web/social/reel-02.mp4"></video>
+              <button class="soc-play" type="button" aria-label="Смотреть видео: съёмка танца на крыше">
+                <span class="soc-play-icon" aria-hidden="true"></span>
+              </button>
+            </div>
+            <figcaption class="soc-cap">Съёмка</figcaption>
+          </figure>
+
+          <figure class="soc-tile soc-tile--video">
+            <div class="soc-media" style="aspect-ratio: 16 / 9;">
+              <img class="soc-poster" src="assets/web/social/wide-03-poster.webp" alt="Номер студии на сцене в сценическом свете" width="760" height="427" loading="lazy" />
+              <video class="soc-video" preload="none" playsinline controls data-src="assets/web/social/wide-03.mp4"></video>
+              <button class="soc-play" type="button" aria-label="Смотреть видео: номер на сцене">
+                <span class="soc-play-icon" aria-hidden="true"></span>
+              </button>
+            </div>
+            <figcaption class="soc-cap">Сцена</figcaption>
+          </figure>
+
+          <figure class="soc-tile">
+            <img class="soc-photo" src="assets/web/social/photo-contest-1.webp" alt="Выступление группы ONE OF STUDIO на площадке" width="1400" height="791" loading="lazy" />
+            <figcaption class="soc-cap">Выступление</figcaption>
+          </figure>
+
+          <figure class="soc-tile soc-tile--video">
+            <div class="soc-media" style="aspect-ratio: 9 / 16;">
+              <img class="soc-poster" src="assets/web/social/reel-03-poster.webp" alt="Группа разбирает связку в зале" width="427" height="760" loading="lazy" />
+              <video class="soc-video" preload="none" playsinline controls data-src="assets/web/social/reel-03.mp4"></video>
+              <button class="soc-play" type="button" aria-label="Смотреть видео: связка в зале">
+                <span class="soc-play-icon" aria-hidden="true"></span>
+              </button>
+            </div>
+            <figcaption class="soc-cap">Зал</figcaption>
+          </figure>
+
+          <figure class="soc-tile">
+            <img class="soc-photo" src="assets/web/social/photo-portrait-1.webp" alt="Танцовщица студии в сценическом образе" width="508" height="900" loading="lazy" />
+            <figcaption class="soc-cap">Образ</figcaption>
+          </figure>
+
+          <figure class="soc-tile soc-tile--video">
+            <div class="soc-media" style="aspect-ratio: 9 / 16;">
+              <img class="soc-poster" src="assets/web/social/reel-04-poster.webp" alt="Соло в зале, чёрно-белая съёмка" width="427" height="760" loading="lazy" />
+              <video class="soc-video" preload="none" playsinline controls data-src="assets/web/social/reel-04.mp4"></video>
+              <button class="soc-play" type="button" aria-label="Смотреть видео: соло в зале">
+                <span class="soc-play-icon" aria-hidden="true"></span>
+              </button>
+            </div>
+            <figcaption class="soc-cap">Соло</figcaption>
+          </figure>
+
+          <figure class="soc-tile soc-tile--video">
+            <div class="soc-media" style="aspect-ratio: 16 / 9;">
+              <img class="soc-poster" src="assets/web/social/wide-04-poster.webp" alt="Команда ONE OF CREW на съёмке на набережной" width="760" height="427" loading="lazy" />
+              <video class="soc-video" preload="none" playsinline controls data-src="assets/web/social/wide-04.mp4"></video>
+              <button class="soc-play" type="button" aria-label="Смотреть видео: съёмка команды на улице">
+                <span class="soc-play-icon" aria-hidden="true"></span>
+              </button>
+            </div>
+            <figcaption class="soc-cap">Съёмка</figcaption>
+          </figure>
+
+          <figure class="soc-tile">
+            <img class="soc-photo" src="assets/web/social/photo-team-2.webp" alt="Участницы студии на площадке перед выступлением" width="1400" height="934" loading="lazy" />
+            <figcaption class="soc-cap">Команда</figcaption>
+          </figure>
+
+          <figure class="soc-tile soc-tile--video">
+            <div class="soc-media" style="aspect-ratio: 9 / 16;">
+              <img class="soc-poster" src="assets/web/social/reel-07-poster.webp" alt="Брейкинг: фриз на полу в зале" width="427" height="760" loading="lazy" />
+              <video class="soc-video" preload="none" playsinline controls data-src="assets/web/social/reel-07.mp4"></video>
+              <button class="soc-play" type="button" aria-label="Смотреть видео: брейкинг-фриз в зале">
+                <span class="soc-play-icon" aria-hidden="true"></span>
+              </button>
+            </div>
+            <figcaption class="soc-cap">Зал</figcaption>
+          </figure>
+
+          <figure class="soc-tile">
+            <img class="soc-photo" src="assets/web/social/photo-stage-wide.webp" alt="Студия ONE OF STUDIO на большой сцене" width="1100" height="683" loading="lazy" />
+            <figcaption class="soc-cap">Сцена</figcaption>
+          </figure>
+
+          <figure class="soc-tile soc-tile--video">
+            <div class="soc-media" style="aspect-ratio: 16 / 9;">
+              <img class="soc-poster" src="assets/web/social/wide-01-poster.webp" alt="Репетиция группы в зале студии" width="760" height="427" loading="lazy" />
+              <video class="soc-video" preload="none" playsinline controls data-src="assets/web/social/wide-01.mp4"></video>
+              <button class="soc-play" type="button" aria-label="Смотреть видео: репетиция группы в зале">
+                <span class="soc-play-icon" aria-hidden="true"></span>
+              </button>
+            </div>
+            <figcaption class="soc-cap">Репетиция</figcaption>
+          </figure>
+
+          <figure class="soc-tile">
+            <img class="soc-photo" src="assets/web/social/photo-crew-stage.webp" alt="Команда ONE OF CREW на сцене" width="1400" height="934" loading="lazy" />
+            <figcaption class="soc-cap">Сцена</figcaption>
+          </figure>
+
+          <figure class="soc-tile soc-tile--video">
+            <div class="soc-media" style="aspect-ratio: 9 / 16;">
+              <img class="soc-poster" src="assets/web/social/reel-05-poster.webp" alt="Работа над постановкой в зале студии" width="427" height="760" loading="lazy" />
+              <video class="soc-video" preload="none" playsinline controls data-src="assets/web/social/reel-05.mp4"></video>
+              <button class="soc-play" type="button" aria-label="Смотреть видео: работа над постановкой">
+                <span class="soc-play-icon" aria-hidden="true"></span>
+              </button>
+            </div>
+            <figcaption class="soc-cap">Постановка</figcaption>
+          </figure>
+
+          <figure class="soc-tile">
+            <img class="soc-photo" src="assets/web/social/photo-portrait-2.webp" alt="Участница студии в зале" width="675" height="900" loading="lazy" />
+            <figcaption class="soc-cap">Зал</figcaption>
+          </figure>
+
+          <figure class="soc-tile soc-tile--video">
+            <div class="soc-media" style="aspect-ratio: 16 / 9;">
+              <img class="soc-poster" src="assets/web/social/wide-02-poster.webp" alt="Групповая репетиция в большом зале" width="760" height="438" loading="lazy" />
+              <video class="soc-video" preload="none" playsinline controls data-src="assets/web/social/wide-02.mp4"></video>
+              <button class="soc-play" type="button" aria-label="Смотреть видео: групповая репетиция">
+                <span class="soc-play-icon" aria-hidden="true"></span>
+              </button>
+            </div>
+            <figcaption class="soc-cap">Репетиция</figcaption>
+          </figure>
+
+          <figure class="soc-tile">
+            <img class="soc-photo" src="assets/web/social/photo-contest-2.webp" alt="Номер студии на сцене перед зрителями" width="1400" height="791" loading="lazy" />
+            <figcaption class="soc-cap">Выступление</figcaption>
+          </figure>
+
+          <figure class="soc-tile soc-tile--video">
+            <div class="soc-media" style="aspect-ratio: 9 / 16;">
+              <img class="soc-poster" src="assets/web/social/reel-06-poster.webp" alt="Выход команды на сцену в сценическом свете" width="427" height="760" loading="lazy" />
+              <video class="soc-video" preload="none" playsinline controls data-src="assets/web/social/reel-06.mp4"></video>
+              <button class="soc-play" type="button" aria-label="Смотреть видео: выход команды на сцену">
+                <span class="soc-play-icon" aria-hidden="true"></span>
+              </button>
+            </div>
+            <figcaption class="soc-cap">Сцена</figcaption>
+          </figure>
+
+          <figure class="soc-tile">
+            <img class="soc-photo" src="assets/web/social/photo-team-3.webp" alt="Участницы студии на площадке" width="1400" height="934" loading="lazy" />
+            <figcaption class="soc-cap">Команда</figcaption>
+          </figure>
+
+          <figure class="soc-tile">
+            <img class="soc-photo" src="assets/web/social/photo-team-4.webp" alt="Общая фотография команды студии" width="1400" height="934" loading="lazy" />
+            <figcaption class="soc-cap">Команда</figcaption>
+          </figure>
+
+        </div>
+
+        <p class="social-foot">Новые ролики выкладываем в <a href="https://www.tiktok.com/@one.of.crew" target="_blank" rel="noopener">TikTok</a> и <a href="https://t.me/one_of_studio_khv" target="_blank" rel="noopener">Telegram-канал</a> студии.</p>
+      </div>
+    </section>
+
+    <!-- ======================= 8. ЧАСТЫЕ ВОПРОСЫ ======================= -->
     <section class="faq section section-light" id="faq" aria-labelledby="faq-title">
       <div class="container">
         <div class="section-head">
@@ -582,12 +809,12 @@
 
           <details class="faq-item">
             <summary><h3>Сколько стоят занятия танцами?</h3></summary>
-            <p>Абонемент на месяц — это 8 часов занятий: Choreo 4 000 ₽, K-Pop 3 500 ₽. Разовое занятие — 500 ₽, индивидуальное — 2 000 ₽ в час, второе направление — плюс 1 500 ₽. Пробное занятие бесплатное.</p>
+            <p>Абонемент на месяц — это 8 часов занятий: Choreo 4 000 ₽, K-Pop 3 500 ₽. Индивидуальное занятие — 2 000 ₽ в час, второе направление — плюс 1 500 ₽. Пробное занятие бесплатное.</p>
           </details>
 
           <details class="faq-item">
             <summary><h3>Как проходит первое пробное занятие?</h3></summary>
-            <p>Пробное занятие бесплатное и проходит вместе с группой — те же два часа и та же работа над постановкой. Из вещей нужна удобная спортивная одежда, сменная обувь и вода. Записаться можно в <a href="https://t.me/one_of_studio_khv" target="_blank" rel="noopener">Telegram</a>, WhatsApp, ВКонтакте или MAX.</p>
+            <p>Пробное занятие бесплатное и проходит вместе с группой — те же два часа и та же работа над постановкой. Из вещей нужна удобная спортивная одежда, сменная обувь и вода. Записаться можно в <a href="https://t.me/E_D_Khiro" target="_blank" rel="noopener">Telegram</a>, WhatsApp, ВКонтакте или MAX.</p>
           </details>
 
           <details class="faq-item">
@@ -603,17 +830,17 @@
       </div>
     </section>
 
-    <!-- ======================= 8. КОНТАКТЫ ======================= -->
+    <!-- ======================= 9. КОНТАКТЫ ======================= -->
     <section class="contacts section" id="contacts" aria-labelledby="contacts-title">
       <div class="container contacts-inner">
         <span class="tag">Свяжитесь с нами</span>
         <h2 id="contacts-title" class="display-h2">Запишись на<br />пробное занятие</h2>
-        <p class="section-lead">Напиши удобным способом, и мы расскажем про группы, расписание и стоимость.</p>
+        <p class="section-lead">Напиши напрямую — расскажем про группы, расписание и стоимость. Telegram ведёт в личные сообщения, а не в канал студии.</p>
 
         <div class="contact-links">
-          <a class="contact-btn" href="https://t.me/one_of_studio_khv" target="_blank" rel="noopener">
+          <a class="contact-btn" href="https://t.me/E_D_Khiro" target="_blank" rel="noopener">
             <span class="contact-kicker">Telegram</span>
-            <span class="contact-value">@one_of_studio_khv</span>
+            <span class="contact-value">@E_D_Khiro</span>
           </a>
           <a class="contact-btn" href="https://wa.me/79004153763" target="_blank" rel="noopener">
             <span class="contact-kicker">WhatsApp</span>
@@ -635,11 +862,16 @@
           <li><span class="contact-address-label">Остальные направления</span> · ул. Комсомольская, 78</li>
           -->
           <li><span class="contact-address-label">Адрес студии</span> · ул. Комсомольская, 78</li>
+          <li class="contact-map">
+            <a href="https://yandex.ru/maps/org/one_of_studio/126776741866/" target="_blank" rel="noopener">
+              Посмотреть студию на Яндекс Картах
+            </a>
+          </li>
         </ul>
       </div>
     </section>
 
-    <!-- ======================= 9. ТЕКСТ О СТУДИИ (SEO) ======================= -->
+    <!-- ======================= 10. ТЕКСТ О СТУДИИ (SEO) ======================= -->
     <section class="seo-text section" aria-labelledby="seo-title">
       <div class="container seo-inner">
         <h2 id="seo-title">Танцевальная студия в Хабаровске</h2>
@@ -648,7 +880,7 @@
 
         <p>Сейчас в студии два направления. <a href="choreo.html">Choreo — команда ONE OF CREW</a>, от 16 лет: постановочная хореография на стыке hip-hop, jazz-funk и girly style, работа над синхроном и сценической подачей, выступления и конкурсы. <a href="kpop.html">K-Pop cover dance</a>, от 12 лет: проектная группа, которая разбирает и ставит полноценные номера k-pop групп — формации, перестроения, образ, выступления и съёмки. Отдельного деления на детские и взрослые группы нет, порог входа указан у каждого направления.</p>
 
-        <p>Занятия проходят раз в неделю по воскресеньям, по два часа: Choreo в 13:00–15:00, K-Pop в 15:00–17:00 — за месяц это 8 часов в зале. Абонемент стоит 3 500–4 000 ₽ в месяц в зависимости от направления, есть разовые и индивидуальные занятия. Первое пробное занятие бесплатное: приходишь на обычную тренировку с группой и смотришь, твоё это или нет.</p>
+        <p>Занятия проходят раз в неделю по воскресеньям, по два часа: Choreo в 13:00–15:00, K-Pop в 15:00–17:00 — за месяц это 8 часов в зале. Абонемент стоит 3 500–4 000 ₽ в месяц в зависимости от направления, есть индивидуальные занятия. Первое пробное занятие бесплатное: приходишь на обычную тренировку с группой и смотришь, твоё это или нет.</p>
 
         <p>Начать можно с нуля — подготовка не нужна. Если сомневаешься, какое направление выбрать, напиши нам в мессенджер: расскажем про обе группы, текущий состав и ближайшие постановки, и поможем определиться до того, как ты за что-то заплатишь.</p>
       </div>
@@ -667,6 +899,7 @@
         <a href="#why">О студии</a>
         <a href="#directions">Направления</a>
         <a href="#schedule">Расписание</a>
+        <a href="#social">Соцсети</a>
         <a href="#faq">Вопросы</a>
         <a href="#contacts">Контакты</a>
       </nav>
@@ -772,6 +1005,33 @@
       // Escape key also exits
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && band.classList.contains('is-playing')) closeVideo();
+      });
+    })();
+
+    // Соцсети — видео грузится и стартует только по клику на постер,
+    // одновременно играет не больше одного ролика.
+    (function () {
+      var tiles = document.querySelectorAll('.soc-tile--video');
+      if (!tiles.length) return;
+      var current = null;
+
+      tiles.forEach(function (tile) {
+        var btn = tile.querySelector('.soc-play');
+        var video = tile.querySelector('.soc-video');
+        if (!btn || !video) return;
+
+        btn.addEventListener('click', function () {
+          if (current && current !== video) {
+            current.pause();
+            var prev = current.closest('.soc-tile');
+            if (prev) prev.classList.remove('is-playing');
+          }
+          if (!video.src) video.src = video.dataset.src;
+          tile.classList.add('is-playing');
+          current = video;
+          var play = video.play();
+          if (play && play.catch) play.catch(function () {});
+        });
       });
     })();
 
