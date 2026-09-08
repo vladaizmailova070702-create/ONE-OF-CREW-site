@@ -935,7 +935,7 @@ body.video-open { overflow: hidden; }
 }
 .addon-row:last-child { border-bottom: none; }
 .addon-name { color: var(--text-primary); font-size: 1rem; }
-.addon-hint { color: var(--text-secondary); font-size: 0.82rem; }
+.addon-hint { display: block; margin-top: 4px; color: var(--text-secondary); font-size: 0.82rem; }
 .addon-unit { font-family: var(--font-body); font-size: 0.72em; font-weight: 500; color: var(--text-secondary); }
 .addon-price {
   font-family: var(--font-head);
