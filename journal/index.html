@@ -190,6 +190,20 @@ input[type=month]{min-width:148px}
 .block{margin-bottom:26px}
 .block h3{font-family:var(--head);font-weight:500;font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
 
+/* расчёт «сколько остаётся»: приход, вычеты, итог */
+.calc{border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.calc-row{display:flex;align-items:baseline;gap:10px;padding:12px 14px;background:var(--surface);border-bottom:1px solid var(--line)}
+.calc-row:last-child{border-bottom:0}
+.calc-row .cap{flex:1;min-width:0}
+.calc-row .cap b{display:block;font-weight:600;font-size:14px}
+.calc-row .cap span{display:block;font-size:12px;color:var(--faint);margin-top:2px}
+.calc-row .val{font-family:var(--head);font-size:17px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.calc-row.minus .val{color:var(--accent-soft)}
+.calc-row.total{background:var(--surface-2)}
+.calc-row.total .cap b{font-family:var(--head);font-size:15px;letter-spacing:.08em;text-transform:uppercase;font-weight:500}
+.calc-row.total .val{font-size:22px}
+.calc-row.total.good .val{color:var(--ok-soft)}
+
 .bars{display:flex;flex-direction:column;gap:10px}
 .bar{display:grid;grid-template-columns:minmax(58px,auto) 1fr minmax(74px,auto);align-items:center;gap:10px}
 .bar .cap{font-size:13px;color:var(--muted)}
@@ -283,8 +297,8 @@ input[type=month]{min-width:148px}
    ============================================================ */
 
 var GROUPS = [
-  {id:"choreo", name:"Choreo", meta:"ONE OF CREW · 16–30 лет", time:"Вс 13:00–15:00", fee:4000},
-  {id:"kpop",   name:"K-Pop",  meta:"Cover Dance · 12–25 лет",  time:"Вс 15:00–17:00", fee:3500},
+  {id:"choreo", name:"Choreo", meta:"ONE OF CREW · 16–30 лет", time:"Вс 13:00–15:00", fee:4000, hours:2},
+  {id:"kpop",   name:"K-Pop",  meta:"Cover Dance · 12–25 лет",  time:"Вс 15:00–17:00", fee:3500, hours:2},
   // индивидуальные: не группа с расписанием, а отдельные занятия по записи —
   // fee здесь ставка за час
   {id:"solo",   name:"Индивидуальные", meta:"по записи", time:"время по договорённости", fee:2000, solo:true}
@@ -300,7 +314,9 @@ var D = {
   sessions: {},          // "2026-09-06__choreo" -> {date, group, present:[id]}
   solo: [],              // индивидуальные: {id, date, studentId, hours, rate, note}
   payments: [],
-  settings: {lockMoney:false, pin:"", syncUrl:"", syncKey:""},
+  settings: {lockMoney:false, pin:"", syncUrl:"", syncKey:"",
+             rentPerHour:800,   // аренда зала за час
+             taxPercent:4},     // налог самозанятого с поступлений
   updatedAt: 0
 };
 
@@ -334,6 +350,14 @@ function sundaysOf(ym){
 }
 function dayLabel(iso){ var p=String(iso).split("-"); return p.length>2 ? p[2]+"."+p[1] : iso; }
 function num(n){ return String(Math.round(+n||0)).replace(/\B(?=(\d{3})+(?!\d))/g," "); }
+// 1 занятие / 2 занятия / 5 занятий
+function plural(n, one, few, many){
+  var a=Math.abs(n)%100, b=a%10;
+  if(a>10 && a<20) return many;
+  if(b>1 && b<5) return few;
+  if(b===1) return one;
+  return many;
+}
 function money(n){ return num(n)+" ₽"; }
 function uid(){ return Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,7); }
 function makeToken(){
@@ -510,6 +534,17 @@ function soloHours(list){
   return list.reduce(function(a,r){ return a+(+r.hours||0); },0);
 }
 function soloChargeOf(studentId, ym){ return soloSum(soloOf(ym, studentId)); }
+
+// сколько часов зала занято за месяц: групповые по длительности занятия,
+// индивидуальные — по фактическим часам
+function hallHours(ym){
+  var h=0;
+  sessionsOf(ym).forEach(function(s){ h += (+group(s.group).hours || 2); });
+  h += soloHours(soloOf(ym));
+  return h;
+}
+function rentOf(ym){ return hallHours(ym) * (+D.settings.rentPerHour||0); }
+function taxOf(ym){ return Math.round(incomeOf(ym) * (+D.settings.taxPercent||0) / 100); }
 
 function chargeOf(st, ym){
   // индивидуальные начисляются поверх любого тарифа — их берут и те,
@@ -736,6 +771,9 @@ function viewTotals(){
   debts.sort(function(a,b){ return b.left-a.left; });
   var debtSum=debts.reduce(function(a,d){ return a+d.left; },0);
 
+  var hours=hallHours(S.month), rent=rentOf(S.month), tax=taxOf(S.month);
+  var net=total-rent-tax;
+
   var months=lastMonths(S.month,6);
   var maxM=Math.max.apply(null,months.map(function(m){ return incomeOf(m); }).concat([1]));
 
@@ -743,13 +781,30 @@ function viewTotals(){
     '<div class="vhead"><h2>Итоги</h2><span class="sub">'+monthLabel(S.month)+'</span></div>'+
     '<div class="stat-lead"><div class="lab">Поступило за месяц</div>'+
       '<div class="big">'+money(total)+'</div>'+
-      '<div class="note">'+sess.length+' групповых занятий · '+visits+' посещений'+
-        (soloList.length?' · '+soloList.length+' индивидуальных ('+num(soloHours(soloList))+' ч)':'')+'</div></div>'+
+      '<div class="note">'+sess.length+' '+plural(sess.length,"групповое занятие","групповых занятия","групповых занятий")+
+        ' · '+visits+' '+plural(visits,"посещение","посещения","посещений")+
+        (soloList.length?' · '+soloList.length+' '+plural(soloList.length,"индивидуальное","индивидуальных","индивидуальных")+
+          ' ('+num(soloHours(soloList))+' ч)':'')+'</div></div>'+
     '<div class="stat-grid">'+
       '<div class="stat"><div class="lab">Средняя явка</div><div class="val">'+avg+'</div></div>'+
       '<div class="stat"><div class="lab">Занимаются</div><div class="val">'+activeStudents().length+'</div></div>'+
       '<div class="stat"><div class="lab">Ожидается ещё</div><div class="val">'+money(debtSum)+'</div></div>'+
     '</div>'+
+    '<div class="block"><h3>Сколько остаётся</h3><div class="calc">'+
+      '<div class="calc-row"><span class="cap"><b>Поступило</b>'+
+        '<span>оплаты за '+esc(monthLabel(S.month))+'</span></span>'+
+        '<span class="val">'+money(total)+'</span></div>'+
+      '<div class="calc-row minus"><span class="cap"><b>Аренда зала</b>'+
+        '<span>'+num(hours)+' ч × '+money(D.settings.rentPerHour)+' — за проведённые занятия, оплачены они или нет</span></span>'+
+        '<span class="val">−'+money(rent)+'</span></div>'+
+      '<div class="calc-row minus"><span class="cap"><b>Налог '+num(D.settings.taxPercent)+'%</b>'+
+        '<span>самозанятость, с того, что фактически поступило</span></span>'+
+        '<span class="val">−'+money(tax)+'</span></div>'+
+      '<div class="calc-row total'+(net>=0?' good':'')+'"><span class="cap"><b>Остаётся</b></span>'+
+        '<span class="val">'+money(net)+'</span></div>'+
+    '</div>'+
+    '<p class="hint" style="margin-top:8px">Ставки правятся в разделе «Ещё».</p></div>'+
+
     '<div class="block"><h3>По направлениям</h3><div class="bars">'+
       byGroup.map(function(x){
         return '<div class="bar"><span class="cap">'+esc(x.g.name)+'</span>'+
@@ -812,6 +867,16 @@ function viewSettings(){
     '<div class="actions"><button class="btn primary" data-act="save-sync">Сохранить</button>'+
     '<button class="btn" data-act="sync-now"'+(syncOn()?"":" disabled")+'>Синхронизировать сейчас</button></div></div>';
 
+  var costBlock =
+    '<div class="card"><h3>Аренда и налог</h3>'+
+    '<p class="lede">Из этих двух ставок считается строка «Сколько остаётся» в «Итогах».</p>'+
+    '<div class="field-2">'+
+      '<div class="field"><label for="s-rent">Аренда зала, ₽ за час</label><input type="number" id="s-rent" min="0" step="50" value="'+(+s.rentPerHour||0)+'"></div>'+
+      '<div class="field"><label for="s-tax">Налог, %</label><input type="number" id="s-tax" min="0" max="100" step="0.5" value="'+(+s.taxPercent||0)+'"></div>'+
+    '</div>'+
+    '<p class="hint">Аренда считается за все проведённые часы — групповые занятия по их длительности плюс часы индивидуальных. Налог — с фактически поступивших денег.</p>'+
+    '<div class="actions"><button class="btn primary" data-act="save-costs">Сохранить</button></div></div>';
+
   var lockBlock =
     '<div class="card"><h3>Код на деньги</h3>'+
     '<p class="lede">Скрывает разделы «Оплаты» и «Итоги», если телефон окажется в чужих руках. Это защита от случайного взгляда, а не шифрование: записи в браузере остаются как есть.</p>'+
@@ -839,7 +904,7 @@ function viewSettings(){
       '</div>';
 
   return '<section class="view"><div class="vhead"><h2>Ещё</h2></div>'+
-    installBlock+storeBlock+syncBlock+lockBlock+dataBlock+
+    installBlock+storeBlock+syncBlock+costBlock+lockBlock+dataBlock+
     '<p class="hint" style="text-align:center">Журнал ONE OF · версия 1.0</p></section>';
 }
 
@@ -916,10 +981,15 @@ function soloModal(rec){
           esc(st.name)+(st.group!=="solo"?' · '+esc(group(st.group).name):'')+'</option>';
       }).join("")+
     '</select></div>'+
-    '<div class="field-2">'+
-      '<div class="field"><label for="i-date">Дата</label><input type="date" id="i-date" value="'+esc(rec.date)+'"></div>'+
-      '<div class="field"><label for="i-hours">Часов</label><input type="number" id="i-hours" min="0.5" step="0.5" value="'+(+rec.hours||1)+'"></div>'+
+    '<div class="field"><label for="i-date">Дата занятия</label>'+
+      '<input type="date" id="i-date" value="'+esc(rec.date)+'">'+
+      '<div class="chips" style="margin:8px 0 0">'+
+        '<button type="button" class="chip" data-act="solo-date" data-id="0">сегодня</button>'+
+        '<button type="button" class="chip" data-act="solo-date" data-id="1">вчера</button>'+
+        '<button type="button" class="chip" data-act="solo-date" data-id="2">позавчера</button>'+
+      '</div>'+
     '</div>'+
+    '<div class="field"><label for="i-hours">Часов</label><input type="number" id="i-hours" min="0.5" step="0.5" value="'+(+rec.hours||1)+'"></div>'+
     '<div class="field"><label for="i-rate">Ставка за час, ₽</label><input type="number" id="i-rate" min="0" step="100" value="'+(+rec.rate||0)+'"></div>'+
     '<p class="hint">Сумма посчитается сама: часы × ставка. Начисление прибавится к тому, что ученик должен за месяц.</p>'+
     '<div class="field"><label for="i-note">Заметка</label><input type="text" id="i-note" value="'+esc(rec.note||"")+'"></div>'+
@@ -1129,6 +1199,13 @@ document.addEventListener("click",function(e){
     if(rec) soloModal(rec);
     return;
   }
+  if(act==="solo-date"){
+    var back=+id||0;
+    var dd=new Date();
+    dd.setDate(dd.getDate()-back);
+    document.getElementById("i-date").value=dd.getFullYear()+"-"+pad2(dd.getMonth()+1)+"-"+pad2(dd.getDate());
+    return;
+  }
   if(act==="save-solo"){
     var sid=document.getElementById("i-student").value;
     var hours=+document.getElementById("i-hours").value||0;
@@ -1202,6 +1279,17 @@ document.addEventListener("click",function(e){
     return;
   }
   if(act==="sync-now"){ pull(); return; }
+  if(act==="save-costs"){
+    var rent=+document.getElementById("s-rent").value;
+    var tax=+document.getElementById("s-tax").value;
+    if(!(rent>=0)){ toast("Аренда не может быть отрицательной."); return; }
+    if(!(tax>=0 && tax<=100)){ toast("Налог укажите в процентах, от 0 до 100."); return; }
+    D.settings.rentPerHour=rent;
+    D.settings.taxPercent=tax;
+    persist(); render();
+    toast("Ставки сохранены.");
+    return;
+  }
   if(act==="save-lock"){
     var on=document.getElementById("s-lock").checked;
     var pin=document.getElementById("s-pin").value.trim();
