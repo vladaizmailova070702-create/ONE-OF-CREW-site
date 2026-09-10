@@ -49,6 +49,10 @@ class Handler(SimpleHTTPRequestHandler):
         127.0.0.1: это разные адреса, и на втором журнал выглядит
         пустым. Поэтому со второго уводим на первый.
         """
+        # ?keep — не уводить: нужен, чтобы заглянуть в записи, случайно
+        # оставшиеся на старом адресе, и выгрузить их копией
+        if "keep" in self.path:
+            return False
         host = (self.headers.get("Host") or "").split(":")[0]
         if host in ("127.0.0.1", "::1", "[::1]"):
             self.send_response(302)
