@@ -307,7 +307,9 @@ var S = {
   group: GROUPS[0].id,
   date: nearestSunday(),
   unlocked: false,
-  sync: {state:"off", msg:"Синхронизация выключена", at:0},
+  sync: {state:"off", msg:"Записи хранятся в этом браузере", at:0},
+  autoUrl: "",      // локальный сервер хранит записи файлом
+  storeFile: "",    // путь к этому файлу — показываем в «Ещё»
   installPrompt: null
 };
 
@@ -373,7 +375,32 @@ function commit(){
 
 /* ---------------- синхронизация ---------------- */
 var pushTimer=null;
-function syncOn(){ return !!(D.settings.syncUrl && D.settings.syncKey); }
+function syncTarget(){
+  if(D.settings.syncUrl && D.settings.syncKey){
+    return {url:D.settings.syncUrl, key:D.settings.syncKey, local:false};
+  }
+  if(S.autoUrl) return {url:S.autoUrl, key:"", local:true};
+  return null;
+}
+function syncOn(){ return !!syncTarget(); }
+
+// Журнал открыт со своего локального сервера? Тогда записи хранит он —
+// файлом на диске, и настраивать ничего не нужно.
+function findLocalStore(){
+  if(D.settings.syncUrl) return Promise.resolve(false);
+  if(!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) return Promise.resolve(false);
+  return fetch(location.origin+"/sync", {method:"GET"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(o){
+      if(o && o.ok){
+        S.autoUrl = location.origin+"/sync";
+        S.storeFile = o.file || "";
+        return true;
+      }
+      return false;
+    })
+    .catch(function(){ return false; });
+}
 function setSync(state,msg){
   S.sync.state=state; S.sync.msg=msg; if(state==="ok") S.sync.at=Date.now();
   var dot=document.getElementById("syncdot");
@@ -396,26 +423,29 @@ function schedulePush(){
   pushTimer=setTimeout(push, 1200);
 }
 function push(){
-  if(!syncOn()) return Promise.resolve();
-  setSync("busy","Отправляю…");
-  return fetch(D.settings.syncUrl, {
+  var t=syncTarget();
+  if(!t) return Promise.resolve();
+  setSync("busy", t.local ? "Сохраняю в файл…" : "Отправляю…");
+  var headers={"Content-Type":"application/json"};
+  if(t.key) headers["X-Journal-Key"]=t.key;
+  return fetch(t.url, {
     method:"POST",
-    headers:{"Content-Type":"application/json","X-Journal-Key":D.settings.syncKey},
+    headers:headers,
     body:JSON.stringify({updatedAt:D.updatedAt, data:{students:D.students, sessions:D.sessions, payments:D.payments, groups:GROUPS}})
   }).then(function(r){
     if(!r.ok) throw new Error("HTTP "+r.status);
-    setSync("ok","Отправлено в "+timeLabel(Date.now()));
+    setSync("ok", (t.local?"Сохранено в файл в ":"Отправлено в ")+timeLabel(Date.now()));
   }).catch(function(e){
-    setSync("error","Не отправилось — "+syncProblem(e)+". Записи сохранены на устройстве.");
+    setSync("error", (t.local?"Не записалось в файл — ":"Не отправилось — ")+syncProblem(e)+". Записи сохранены на устройстве.");
   });
 }
 function pull(silent){
-  if(!syncOn()) return Promise.resolve();
-  setSync("busy","Проверяю сервер…");
-  return fetch(D.settings.syncUrl, {
-    method:"GET",
-    headers:{"X-Journal-Key":D.settings.syncKey}
-  }).then(function(r){
+  var t=syncTarget();
+  if(!t) return Promise.resolve();
+  setSync("busy", t.local ? "Читаю файл…" : "Проверяю сервер…");
+  var headers={};
+  if(t.key) headers["X-Journal-Key"]=t.key;
+  return fetch(t.url, {method:"GET", headers:headers}).then(function(r){
     if(!r.ok) throw new Error("HTTP "+r.status);
     return r.json();
   }).then(function(o){
@@ -423,16 +453,16 @@ function pull(silent){
     if(remote && rt>D.updatedAt){
       D.students=remote.students||[]; D.sessions=remote.sessions||{}; D.payments=remote.payments||[];
       D.updatedAt=rt; persist();
-      setSync("ok","Загружено с сервера в "+timeLabel(Date.now()));
+      setSync("ok",(t.local?"Загружено из файла в ":"Загружено с сервера в ")+timeLabel(Date.now()));
       render();
-      if(!silent) toast("Взяты записи с сервера — они новее.");
+      if(!silent) toast(t.local?"Взяты записи из файла — они новее.":"Взяты записи с сервера — они новее.");
     } else if(!remote || rt<D.updatedAt){
       return push();
     } else {
-      setSync("ok","Совпадает с сервером");
+      setSync("ok", t.local ? "Совпадает с файлом" : "Совпадает с сервером");
     }
   }).catch(function(e){
-    setSync("error","Не загрузилось — "+syncProblem(e)+". Записи на устройстве целы.");
+    setSync("error",(t.local?"Файл не прочитался — ":"Не загрузилось — ")+syncProblem(e)+". Записи на устройстве целы.");
     if(!silent) toast("Не получилось связаться: "+syncProblem(e)+".");
   });
 }
@@ -692,9 +722,19 @@ function viewLock(title){
 function viewSettings(){
   var s=D.settings;
   var installed = window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+  var storeBlock = S.autoUrl
+    ? '<div class="card"><h3>Где лежат записи</h3>'+
+      '<p class="lede">Не в браузере, а файлом на диске — чистка истории Chrome им не страшна. Чтобы сделать копию, просто скопируйте этот файл куда угодно.</p>'+
+      (S.storeFile?'<div class="field"><label>Файл</label><input type="text" readonly value="'+esc(S.storeFile)+'"></div>':'')+
+      '<p class="hint" style="margin-bottom:0">Состояние: '+esc(S.sync.msg)+'. Рядом, в папке backups, сервер держит по снимку на каждый день за последний месяц.</p>'+
+      '</div>'
+    : '';
+
   var syncBlock =
-    '<div class="card"><h3>Синхронизация</h3>'+
-    '<p class="lede">Пока адрес не указан, записи живут только в этом браузере. С адресом телефон и компьютер видят одно и то же.</p>'+
+    '<div class="card"><h3>Синхронизация'+(S.autoUrl?' с телефоном':'')+'</h3>'+
+    '<p class="lede">'+(S.autoUrl
+      ? 'Записи уже хранятся файлом на этом компьютере. Облако нужно, только если те же записи должны открываться на телефоне.'
+      : 'Пока адрес не указан, записи живут только в этом браузере. С адресом телефон и компьютер видят одно и то же.')+'</p>'+
     '<div class="field"><label for="s-url">Адрес сервера</label><input type="url" id="s-url" value="'+esc(s.syncUrl)+'" placeholder="https://…" autocomplete="off"></div>'+
     '<div class="field"><label for="s-key">Ключ доступа</label><input type="password" id="s-key" value="'+esc(s.syncKey)+'" autocomplete="off"></div>'+
     '<p class="hint">Состояние: '+esc(S.sync.msg)+'</p>'+
@@ -728,7 +768,7 @@ function viewSettings(){
       '</div>';
 
   return '<section class="view"><div class="vhead"><h2>Ещё</h2></div>'+
-    installBlock+syncBlock+lockBlock+dataBlock+
+    installBlock+storeBlock+syncBlock+lockBlock+dataBlock+
     '<p class="hint" style="text-align:center">Журнал ONE OF · версия 1.0</p></section>';
 }
 
@@ -1009,7 +1049,8 @@ document.addEventListener("click",function(e){
     D.settings.syncKey=document.getElementById("s-key").value.trim();
     persist();
     if(syncOn()){ setSync("busy","Проверяю…"); pull(); }
-    else setSync("off","Синхронизация выключена");
+    else if(S.autoUrl) pull();
+    else setSync("off","Записи хранятся в этом браузере");
     toast(syncOn()?"Адрес сохранён.":"Синхронизация выключена — записи только на этом устройстве.");
     render();
     return;
@@ -1060,7 +1101,11 @@ window.addEventListener("online",function(){ if(syncOn()) pull(true); });
 load();
 if(D.settings.lockMoney && D.settings.pin) S.unlocked=false; else S.unlocked=true;
 render();
-if(syncOn()){ pull(true); } else { setSync("off","Синхронизация выключена"); }
+findLocalStore().then(function(found){
+  if(found){ render(); pull(true); }
+  else if(syncOn()){ pull(true); }
+  else setSync("off","Записи хранятся в этом браузере");
+});
 
 if("serviceWorker" in navigator){
   window.addEventListener("load",function(){

@@ -3,7 +3,7 @@
    При изменении файлов приложения поднимите VERSION — иначе у уже
    установленных копий останется старый кэш. */
 
-var VERSION = "journal-v2";
+var VERSION = "journal-v3";
 var SHELL = [
   "./",
   "./index.html",
@@ -45,6 +45,9 @@ self.addEventListener("fetch", function (e) {
   // кабинет родителей кэшировать нельзя: он показывает живые долги,
   // а его настройка (config.js) должна читаться свежей
   if (url.pathname.indexOf("/journal/me/") >= 0) return;
+
+  // /sync — сами записи журнала, всегда с сервера
+  if (url.pathname === "/sync" || url.pathname === "/sync/") return;
 
   // страница: сеть вперёд, кэш как запасной вариант
   if (req.mode === "navigate") {
