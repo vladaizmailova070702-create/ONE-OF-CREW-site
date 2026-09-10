@@ -284,7 +284,10 @@ input[type=month]{min-width:148px}
 
 var GROUPS = [
   {id:"choreo", name:"Choreo", meta:"ONE OF CREW · 16–30 лет", time:"Вс 13:00–15:00", fee:4000},
-  {id:"kpop",   name:"K-Pop",  meta:"Cover Dance · 12–25 лет",  time:"Вс 15:00–17:00", fee:3500}
+  {id:"kpop",   name:"K-Pop",  meta:"Cover Dance · 12–25 лет",  time:"Вс 15:00–17:00", fee:3500},
+  // индивидуальные: не группа с расписанием, а отдельные занятия по записи —
+  // fee здесь ставка за час
+  {id:"solo",   name:"Индивидуальные", meta:"по записи", time:"время по договорённости", fee:2000, solo:true}
 ];
 var METHODS = ["Перевод", "Наличные"];
 var KINDS = ["Абонемент", "Разовое занятие", "Индивидуальное", "Второе направление"];
@@ -295,6 +298,7 @@ var LKEY = "oneof-journal-v1";
 var D = {
   students: [],
   sessions: {},          // "2026-09-06__choreo" -> {date, group, present:[id]}
+  solo: [],              // индивидуальные: {id, date, studentId, hours, rate, note}
   payments: [],
   settings: {lockMoney:false, pin:"", syncUrl:"", syncKey:""},
   updatedAt: 0
@@ -358,6 +362,7 @@ function load(){
   try{
     var o=JSON.parse(raw);
     D.students=o.students||[]; D.sessions=o.sessions||{}; D.payments=o.payments||[];
+    D.solo=o.solo||[];
     D.settings=Object.assign(D.settings, o.settings||{});
     D.updatedAt=o.updatedAt||0;
   }catch(e){}
@@ -431,7 +436,7 @@ function push(){
   return fetch(t.url, {
     method:"POST",
     headers:headers,
-    body:JSON.stringify({updatedAt:D.updatedAt, data:{students:D.students, sessions:D.sessions, payments:D.payments, groups:GROUPS}})
+    body:JSON.stringify({updatedAt:D.updatedAt, data:{students:D.students, sessions:D.sessions, solo:D.solo, payments:D.payments, groups:GROUPS}})
   }).then(function(r){
     if(!r.ok) throw new Error("HTTP "+r.status);
     setSync("ok", (t.local?"Сохранено в файл в ":"Отправлено в ")+timeLabel(Date.now()));
@@ -452,6 +457,7 @@ function pull(silent){
     var remote=o&&o.data, rt=(o&&o.updatedAt)||0;
     if(remote && rt>D.updatedAt){
       D.students=remote.students||[]; D.sessions=remote.sessions||{}; D.payments=remote.payments||[];
+      D.solo=remote.solo||[];
       D.updatedAt=rt; persist();
       setSync("ok",(t.local?"Загружено из файла в ":"Загружено с сервера в ")+timeLabel(Date.now()));
       render();
@@ -490,9 +496,28 @@ function sessionsOf(ym,g){
   }
   return out;
 }
+// индивидуальные за месяц: все записи или записи одного ученика
+function soloOf(ym, studentId){
+  return D.solo.filter(function(r){
+    if(!r || !r.date || String(r.date).slice(0,7)!==ym) return false;
+    return !studentId || r.studentId===studentId;
+  }).sort(function(a,b){ return String(a.date).localeCompare(String(b.date)); });
+}
+function soloSum(list){
+  return list.reduce(function(a,r){ return a+(+r.hours||0)*(+r.rate||0); },0);
+}
+function soloHours(list){
+  return list.reduce(function(a,r){ return a+(+r.hours||0); },0);
+}
+function soloChargeOf(studentId, ym){ return soloSum(soloOf(ym, studentId)); }
+
 function chargeOf(st, ym){
-  if(st.plan==="single") return visitsOf(st.id, ym)*(+st.fee||0);
-  return +st.fee||0;
+  // индивидуальные начисляются поверх любого тарифа — их берут и те,
+  // кто ходит в группу, и те, кто занимается только один на один
+  var solo = soloChargeOf(st.id, ym);
+  if(st.group==="solo") return solo;
+  if(st.plan==="single") return visitsOf(st.id, ym)*(+st.fee||0) + solo;
+  return (+st.fee||0) + solo;
 }
 function paidOf(studentId, ym){
   return D.payments.reduce(function(a,p){ return a+(p.studentId===studentId&&p.month===ym?(+p.amount||0):0); },0);
@@ -500,7 +525,12 @@ function paidOf(studentId, ym){
 function incomeOf(ym,g){
   return D.payments.reduce(function(a,p){
     if(p.month!==ym) return a;
-    if(g&&p.group!==g) return a;
+    if(g){
+      var isSolo = p.kind==="Индивидуальное";
+      // ученик может быть из Choreo, но платить за индивидуальное —
+      // такие деньги относим к индивидуальным, а не к его группе
+      if(g==="solo" ? !isSolo : (p.group!==g || isSolo)) return a;
+    }
     return a+(+p.amount||0);
   },0);
 }
@@ -528,13 +558,47 @@ function render(){
 
 function groupChips(){
   return '<div class="chips">'+GROUPS.map(function(g){
+    var count = g.solo ? soloOf(S.month).length : activeStudents(g.id).length;
     return '<button class="chip" data-act="group" data-id="'+g.id+'" aria-pressed="'+(S.group===g.id)+'">'+
-      esc(g.name)+'<span class="n">'+activeStudents(g.id).length+'</span></button>';
+      esc(g.name)+'<span class="n">'+count+'</span></button>';
   }).join("")+'</div>';
+}
+
+/* ---- Индивидуальные ---- */
+function viewSolo(){
+  var list=soloOf(S.month);
+  var hours=soloHours(list), sum=soloSum(list);
+
+  var body = list.length
+    ? '<div class="list">'+list.map(function(r){
+        var st=D.students.filter(function(x){ return x.id===r.studentId; })[0];
+        return '<button class="rowb" data-act="edit-solo" data-id="'+r.id+'">'+
+          '<span class="grow"><span class="nm">'+esc(st?st.name:"—")+'</span>'+
+          '<span class="mt">'+esc(dayLabel(r.date))+' · '+num(r.hours)+' ч × '+money(r.rate)+
+          (r.note?' · '+esc(r.note):'')+'</span></span>'+
+          '<span class="num">'+money((+r.hours||0)*(+r.rate||0))+'</span>'+
+          '<span class="chev" aria-hidden="true">›</span></button>';
+      }).join("")+'</div>'
+    : '<div class="empty"><b>Занятий пока нет</b>Нажмите «Записать занятие» после того, как проведёте индивидуальное.</div>';
+
+  var totals = list.length
+    ? '<div class="stat-grid" style="margin-bottom:18px">'+
+        '<div class="stat"><div class="lab">Занятий</div><div class="val">'+list.length+'</div></div>'+
+        '<div class="stat"><div class="lab">Часов</div><div class="val">'+num(hours)+'</div></div>'+
+        '<div class="stat"><div class="lab">На сумму</div><div class="val">'+money(sum)+'</div></div>'+
+      '</div>'
+    : '';
+
+  return '<section class="view">'+
+    '<div class="vhead"><h2>Индивидуальные</h2><span class="sub">'+monthLabel(S.month)+'</span></div>'+
+    groupChips()+totals+body+
+    '<div class="actions"><button class="btn primary" data-act="add-solo">Записать занятие</button></div>'+
+    '</section>';
 }
 
 /* ---- Занятие ---- */
 function viewLesson(){
+  if(group(S.group).solo) return viewSolo();
   var g=group(S.group), key=sessionKey(S.date,S.group);
   var sess=D.sessions[key]||{date:S.date,group:S.group,present:[]};
   var present=sess.present||[];
@@ -590,8 +654,11 @@ function viewStudents(){
             pill+'<span class="chev" aria-hidden="true">›</span>'+
           '</button>';
         }).join("")+'</div>'
-      : '<div class="empty">В группе пока нет учеников.</div>';
-    return '<div class="block"><h3>'+esc(g.name)+' · '+esc(g.time)+'</h3>'+inner+'</div>';
+      : (g.solo
+          ? '<div class="empty">Пока никого. Сюда попадают те, кто ходит <em>только</em> на индивидуальные — остальным занятия записываются во вкладке «Занятие».</div>'
+          : '<div class="empty">В группе пока нет учеников.</div>');
+    var head = g.solo ? esc(g.name)+' · только эти занятия' : esc(g.name)+' · '+esc(g.time);
+    return '<div class="block"><h3>'+head+'</h3>'+inner+'</div>';
   }).join("");
 
   var archived=D.students.filter(function(s){ return s.active===false; });
@@ -621,9 +688,11 @@ function viewMoney(){
         : left<=0 ? '<span class="pill paid">оплачено</span>'
         : paid>0 ? '<span class="pill part">долг '+money(left)+'</span>'
         : '<span class="pill debt">'+money(charge)+'</span>';
+      var solo=soloChargeOf(st.id,S.month);
       return '<button class="rowb" data-act="add-payment" data-id="'+st.id+'">'+
         '<span class="grow"><span class="nm">'+esc(st.name)+'</span>'+
-        '<span class="mt">внесено '+num(paid)+' из '+money(charge)+'</span></span>'+
+        '<span class="mt">внесено '+num(paid)+' из '+money(charge)+
+        (solo>0?' · из них '+money(solo)+' за индивидуальные':'')+'</span></span>'+
         pill+'<span class="chev" aria-hidden="true">+</span>'+
       '</button>';
     }).join("")+'</div></div>';
@@ -656,6 +725,7 @@ function viewTotals(){
 
   var sess=sessionsOf(S.month);
   var visits=sess.reduce(function(a,s){ return a+((s.present||[]).length); },0);
+  var soloList=soloOf(S.month);
   var avg=sess.length?Math.round(visits/sess.length*10)/10:0;
 
   var debts=[];
@@ -673,7 +743,8 @@ function viewTotals(){
     '<div class="vhead"><h2>Итоги</h2><span class="sub">'+monthLabel(S.month)+'</span></div>'+
     '<div class="stat-lead"><div class="lab">Поступило за месяц</div>'+
       '<div class="big">'+money(total)+'</div>'+
-      '<div class="note">'+sess.length+' проведённых занятий · '+visits+' посещений</div></div>'+
+      '<div class="note">'+sess.length+' групповых занятий · '+visits+' посещений'+
+        (soloList.length?' · '+soloList.length+' индивидуальных ('+num(soloHours(soloList))+' ч)':'')+'</div></div>'+
     '<div class="stat-grid">'+
       '<div class="stat"><div class="lab">Средняя явка</div><div class="val">'+avg+'</div></div>'+
       '<div class="stat"><div class="lab">Занимаются</div><div class="val">'+activeStudents().length+'</div></div>'+
@@ -826,8 +897,45 @@ function studentModal(st){
     '</div>'
   );
 }
+function soloModal(rec){
+  var isNew=!rec;
+  rec = rec || {id:uid(), date:todayISO(), studentId:"", hours:1, rate:group("solo").fee, note:""};
+  var people=activeStudents();
+  if(!people.length){
+    openModal('<h3>Некого записать</h3>'+
+      '<p class="hint">Сначала заведите ученика в разделе «Ученики». Индивидуальные можно записывать и тем, кто ходит в группу.</p>'+
+      '<div class="actions"><button class="btn" data-act="close">Понятно</button></div>');
+    return;
+  }
+  openModal(
+    '<h3>'+(isNew?"Индивидуальное занятие":"Занятие")+'</h3>'+
+    '<input type="hidden" id="i-id" value="'+esc(rec.id)+'">'+
+    '<div class="field"><label for="i-student">Ученик</label><select id="i-student">'+
+      people.map(function(st){
+        return '<option value="'+esc(st.id)+'"'+(rec.studentId===st.id?" selected":"")+'>'+
+          esc(st.name)+(st.group!=="solo"?' · '+esc(group(st.group).name):'')+'</option>';
+      }).join("")+
+    '</select></div>'+
+    '<div class="field-2">'+
+      '<div class="field"><label for="i-date">Дата</label><input type="date" id="i-date" value="'+esc(rec.date)+'"></div>'+
+      '<div class="field"><label for="i-hours">Часов</label><input type="number" id="i-hours" min="0.5" step="0.5" value="'+(+rec.hours||1)+'"></div>'+
+    '</div>'+
+    '<div class="field"><label for="i-rate">Ставка за час, ₽</label><input type="number" id="i-rate" min="0" step="100" value="'+(+rec.rate||0)+'"></div>'+
+    '<p class="hint">Сумма посчитается сама: часы × ставка. Начисление прибавится к тому, что ученик должен за месяц.</p>'+
+    '<div class="field"><label for="i-note">Заметка</label><input type="text" id="i-note" value="'+esc(rec.note||"")+'"></div>'+
+    '<div class="actions">'+
+      '<button class="btn primary" data-act="save-solo">Сохранить</button>'+
+      '<button class="btn" data-act="close">Отмена</button>'+
+      (isNew?"":'<button class="btn ghost" data-act="del-solo" data-id="'+esc(rec.id)+'">Удалить</button>')+
+    '</div>'
+  );
+}
+
 function paymentModal(st){
   var charge=chargeOf(st,S.month), left=Math.max(0,charge-paidOf(st.id,S.month));
+  // если весь долг — за индивидуальные, вид оплаты подставляем сразу
+  var soloPart=soloChargeOf(st.id,S.month);
+  var onlySolo = soloPart>0 && soloPart>=charge;
   openModal(
     '<h3>Оплата · '+esc(st.name)+'</h3>'+
     '<input type="hidden" id="p-student" value="'+esc(st.id)+'">'+
@@ -836,7 +944,10 @@ function paymentModal(st){
       '<div class="field"><label for="p-date">Дата</label><input type="date" id="p-date" value="'+todayISO()+'"></div></div>'+
     '<div class="field-2">'+
       '<div class="field"><label for="p-kind">За что</label><select id="p-kind">'+
-        KINDS.map(function(k){ return '<option'+(k==="Абонемент"&&st.plan!=="single"?" selected":"")+'>'+esc(k)+'</option>'; }).join("")+
+        KINDS.map(function(k){
+          var pick = onlySolo ? (k==="Индивидуальное") : (k==="Абонемент" && st.plan!=="single");
+          return '<option'+(pick?" selected":"")+'>'+esc(k)+'</option>';
+        }).join("")+
       '</select></div>'+
       '<div class="field"><label for="p-method">Способ</label><select id="p-method">'+
         METHODS.map(function(m){ return '<option>'+esc(m)+'</option>'; }).join("")+
@@ -906,6 +1017,7 @@ function importJson(file){
     if(!o || !("students" in o)){ toast("В файле нет записей журнала."); return; }
     if(!confirm("Заменить все текущие записи содержимым файла? Отменить это будет нельзя.")) return;
     D.students=o.students||[]; D.sessions=o.sessions||{}; D.payments=o.payments||[];
+    D.solo=o.solo||[];
     if(o.settings) D.settings=Object.assign(D.settings,{lockMoney:!!o.settings.lockMoney,pin:o.settings.pin||""});
     commit();
     toast("Записи загружены из файла.");
@@ -1001,10 +1113,44 @@ document.addEventListener("click",function(e){
   if(act==="delete-student"){
     if(confirm("Удалить ученика и его отметки о посещениях? Записи об оплатах останутся.")){
       D.students=D.students.filter(function(s){ return s.id!==id; });
+      D.solo=D.solo.filter(function(r){ return r.studentId!==id; });
       for(var k3 in D.sessions){
         var ss=D.sessions[k3];
         if(ss&&ss.present) ss.present=ss.present.filter(function(x){ return x!==id; });
       }
+      closeModal(); commit();
+    }
+    return;
+  }
+
+  if(act==="add-solo"){ soloModal(null); return; }
+  if(act==="edit-solo"){
+    var rec=D.solo.filter(function(r){ return r.id===id; })[0];
+    if(rec) soloModal(rec);
+    return;
+  }
+  if(act==="save-solo"){
+    var sid=document.getElementById("i-student").value;
+    var hours=+document.getElementById("i-hours").value||0;
+    var rate=+document.getElementById("i-rate").value||0;
+    if(!sid){ toast("Выберите ученика."); return; }
+    if(hours<=0){ toast("Впишите, сколько часов длилось занятие."); return; }
+    var obj={
+      id:document.getElementById("i-id").value,
+      date:document.getElementById("i-date").value||todayISO(),
+      studentId:sid, hours:hours, rate:rate,
+      note:document.getElementById("i-note").value.trim()
+    };
+    var at=-1;
+    for(var si=0;si<D.solo.length;si++) if(D.solo[si].id===obj.id) at=si;
+    if(at>=0) D.solo[at]=obj; else D.solo.push(obj);
+    S.month=obj.date.slice(0,7);
+    closeModal(); commit();
+    return;
+  }
+  if(act==="del-solo"){
+    if(confirm("Удалить запись об индивидуальном занятии?")){
+      D.solo=D.solo.filter(function(r){ return r.id!==id; });
       closeModal(); commit();
     }
     return;
