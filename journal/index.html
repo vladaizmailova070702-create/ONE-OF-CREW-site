@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Журнал ONE OF</title>
+<meta name="description" content="Учёт посещений, оплат и дохода студии ONE OF.">
+<meta name="theme-color" content="#0d0d0d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Журнал">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="../brand_assets/web/journal-icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="../brand_assets/web/journal-icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Montserrat:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  color-scheme: dark;
+  --bg:#0d0d0d;
+  --surface:#191313;
+  --surface-2:#221a1a;
+  --line:rgba(242,240,239,.10);
+  --line-strong:rgba(242,240,239,.20);
+  --text:#f2f0ef;
+  --muted:#a09a99;
+  --faint:#6f6867;
+  --accent:#7a1c1c;
+  --accent-deep:#591515;
+  --accent-soft:#c96a66;
+  --ok:#5f9e6a;
+  --ok-soft:#8ec897;
+  --warn:#c2933f;
+  --head:"Oswald", system-ui, sans-serif;
+  --body:"Montserrat", system-ui, -apple-system, sans-serif;
+  --r:8px;
+  --r-lg:12px;
+  --pad:clamp(14px,4vw,28px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:var(--body);font-size:15px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:calc(76px + env(safe-area-inset-bottom));
+  overflow-x:hidden;
+}
+h1,h2,h3,p{margin:0}
+ul{margin:0;padding:0;list-style:none}
+button{font:inherit;color:inherit}
+a{color:var(--accent-soft)}
+:focus-visible{outline:2px solid var(--accent-soft);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+.wrap{width:100%;max-width:1080px;margin:0 auto;padding-inline:var(--pad)}
+
+/* ---------- шапка ---------- */
+.topbar{
+  position:sticky;top:0;z-index:20;
+  background:rgba(13,13,13,.94);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding-top:env(safe-area-inset-top);
+}
+.topbar-in{display:flex;align-items:center;gap:12px;padding-block:11px;flex-wrap:wrap}
+.mark{font-family:var(--head);font-weight:600;font-size:17px;letter-spacing:.06em;text-transform:uppercase;line-height:1}
+.mark span{color:var(--accent-soft)}
+.mark small{display:block;font-family:var(--body);font-size:10px;font-weight:500;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;margin-top:3px}
+.month-pick{margin-left:auto;display:flex;align-items:center;gap:8px}
+.month-pick label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+input,select,textarea{
+  background:var(--surface-2);color:var(--text);border:1px solid var(--line-strong);
+  border-radius:var(--r);padding:9px 11px;font-family:var(--body);font-size:14px;max-width:100%;
+}
+input[type=month]{min-width:148px}
+.syncdot{width:7px;height:7px;border-radius:50%;background:var(--faint);flex:none}
+.syncdot.ok{background:var(--ok)}
+.syncdot.busy{background:var(--warn)}
+.syncdot.err{background:var(--accent-soft)}
+
+/* ---------- сообщения ---------- */
+.banner{
+  display:flex;gap:10px;align-items:flex-start;
+  margin-top:14px;padding:11px 14px;border-radius:var(--r);
+  background:var(--surface);border:1px solid var(--line);
+  font-size:13px;color:var(--muted);
+}
+.banner b{color:var(--warn);font-weight:600}
+.toast{
+  position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));
+  transform:translateX(-50%);z-index:80;
+  background:var(--surface-2);border:1px solid var(--line-strong);
+  border-radius:var(--r);padding:10px 16px;font-size:13px;max-width:90vw;
+  box-shadow:0 8px 24px rgba(0,0,0,.5);
+}
+@media(min-width:900px){.toast{bottom:24px}}
+
+/* ---------- заголовки разделов ---------- */
+.view{padding-top:20px}
+.vhead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.vhead h2{font-family:var(--head);font-weight:500;font-size:26px;letter-spacing:.02em;text-transform:uppercase;text-wrap:balance}
+.vhead .sub{font-size:13px;color:var(--muted)}
+
+/* ---------- чипы ---------- */
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.chip{
+  background:transparent;border:1px solid var(--line-strong);color:var(--muted);
+  border-radius:999px;padding:7px 14px;font-size:13px;font-weight:500;cursor:pointer;
+  transition:background .15s ease,color .15s ease,border-color .15s ease;
+}
+.chip:hover{border-color:var(--accent-soft);color:var(--text)}
+.chip[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip .n{font-variant-numeric:tabular-nums;opacity:.7;margin-left:6px}
+.chip-date{display:inline-flex;align-items:center;gap:6px}
+.chip-date input{border:0;background:none;padding:0;width:20px;font-size:13px;
+  color:transparent;text-shadow:none;cursor:pointer}
+.chip-date input::-webkit-calendar-picker-indicator{opacity:.85;cursor:pointer;filter:invert(58%) sepia(19%) saturate(1180%) hue-rotate(313deg) brightness(94%)}
+
+/* ---------- отметка посещения ---------- */
+.meterline{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.meter{flex:1;height:4px;background:var(--surface-2);border-radius:2px;overflow:hidden}
+.meter i{display:block;height:100%;width:100%;background:var(--accent-soft);border-radius:2px;transform-origin:left center;transition:transform .2s ease}
+.meterline .cnt{font-family:var(--head);font-size:15px;letter-spacing:.04em;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+.roster{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.rrow{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  background:var(--surface);border:0;padding:14px;cursor:pointer;
+  transition:background .15s ease;
+}
+.rrow:hover{background:var(--surface-2)}
+.rrow .tick{
+  flex:none;width:22px;height:22px;border-radius:6px;border:1.5px solid var(--line-strong);
+  display:grid;place-items:center;font-size:13px;color:transparent;
+  transition:background .15s ease,border-color .15s ease,color .15s ease;
+}
+.rrow[aria-pressed=true] .tick{background:var(--accent);border-color:var(--accent);color:#fff}
+.rrow .nm{display:block;font-weight:600;font-size:15px}
+.rrow .mt{display:block;font-size:12px;color:var(--faint);margin-top:1px}
+.rrow .right{margin-left:auto;text-align:right;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* ---------- списки ---------- */
+.list{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.row,.rowb{display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+  background:var(--surface);border:0;padding:13px 14px}
+.rowb{cursor:pointer;transition:background .15s ease}
+.rowb:hover{background:var(--surface-2)}
+.chev{flex:none;color:var(--faint);font-size:17px;line-height:1}
+.row .nm,.rowb .nm{display:block;font-weight:600}
+.row .mt,.rowb .mt{display:block;font-size:12px;color:var(--faint);margin-top:2px;overflow-wrap:anywhere}
+.row .grow,.rowb .grow{flex:1;min-width:0}
+.row .num,.rowb .num{font-family:var(--head);font-size:16px;letter-spacing:.03em;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+.pill{display:inline-block;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;letter-spacing:.04em;white-space:nowrap}
+.pill.paid{background:rgba(95,158,106,.16);color:var(--ok-soft)}
+.pill.debt{background:rgba(122,28,28,.35);color:#e39b97}
+.pill.part{background:rgba(194,147,63,.16);color:#dcb469}
+.pill.quiet{background:var(--surface-2);color:var(--muted)}
+
+/* ---------- кнопки ---------- */
+.btn{
+  border:1px solid var(--line-strong);background:transparent;border-radius:var(--r);
+  padding:9px 15px;font-size:13px;font-weight:600;cursor:pointer;
+  transition:background .15s ease,border-color .15s ease,color .15s ease;
+}
+.btn:hover{border-color:var(--accent-soft)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{background:#8f2222;border-color:#8f2222}
+.btn.sm{padding:6px 11px;font-size:12px}
+.btn.ghost{border-color:transparent;color:var(--muted)}
+.btn.ghost:hover{color:var(--accent-soft);border-color:transparent}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+
+/* ---------- показатели ---------- */
+.stat-lead{border:1px solid var(--line);border-radius:var(--r);background:linear-gradient(160deg,var(--surface-2),var(--surface));padding:20px;margin-bottom:16px}
+.stat-lead .lab{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.stat-lead .big{font-family:var(--head);font-size:clamp(36px,9vw,52px);line-height:1;font-variant-numeric:tabular-nums;margin-top:8px}
+.stat-lead .note{font-size:13px;color:var(--muted);margin-top:8px}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:8px;margin-bottom:22px}
+@media(min-width:560px){.stat-grid{grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px}}
+.stat{border:1px solid var(--line);border-radius:var(--r);padding:12px 10px}
+@media(min-width:560px){.stat{padding:14px}}
+.stat .lab{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+@media(min-width:560px){.stat .lab{font-size:11px;letter-spacing:.1em}}
+.stat .val{font-family:var(--head);font-size:20px;margin-top:6px;font-variant-numeric:tabular-nums}
+@media(min-width:560px){.stat .val{font-size:24px}}
+.block{margin-bottom:26px}
+.block h3{font-family:var(--head);font-weight:500;font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+
+.bars{display:flex;flex-direction:column;gap:10px}
+.bar{display:grid;grid-template-columns:minmax(58px,auto) 1fr minmax(74px,auto);align-items:center;gap:10px}
+.bar .cap{font-size:13px;color:var(--muted)}
+.bar .track{height:10px;background:var(--surface-2);border-radius:2px;overflow:hidden}
+.bar .track i{display:block;height:100%;width:100%;background:var(--accent);border-radius:2px;transform-origin:left center}
+.bar .track i.alt{background:var(--accent-soft)}
+.bar .amt{text-align:right;font-family:var(--head);font-size:14px;font-variant-numeric:tabular-nums}
+
+/* ---------- пусто / замок ---------- */
+.empty{border:1px dashed var(--line-strong);border-radius:var(--r);padding:26px 20px;text-align:center;color:var(--muted);font-size:14px}
+.empty b{display:block;color:var(--text);font-family:var(--head);font-size:18px;font-weight:500;letter-spacing:.03em;text-transform:uppercase;margin-bottom:6px}
+.lock{max-width:320px;margin:0 auto;text-align:center}
+.lock input{width:130px;text-align:center;font-family:var(--head);font-size:22px;letter-spacing:.4em;margin-block:14px 4px}
+
+/* ---------- настройки ---------- */
+.card{border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:14px;background:var(--surface)}
+.card h3{font-family:var(--head);font-weight:500;font-size:15px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.card p.lede{font-size:13px;color:var(--muted);margin-bottom:12px}
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.field label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.field input,.field select,.field textarea{width:100%}
+.field-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:420px){.field-2{grid-template-columns:1fr}}
+.hint{font-size:12px;color:var(--faint);margin-top:-4px;margin-bottom:12px}
+.switch{display:flex;align-items:center;gap:10px;font-size:14px;margin-bottom:10px}
+.switch input{width:18px;height:18px;accent-color:var(--accent);padding:0}
+
+/* ---------- модальные окна ---------- */
+.backdrop{position:fixed;inset:0;background:rgba(5,4,4,.72);display:grid;place-items:end center;z-index:60}
+.modal{width:100%;max-width:520px;background:var(--surface);border:1px solid var(--line-strong);border-radius:var(--r-lg) var(--r-lg) 0 0;padding:20px var(--pad) calc(24px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto}
+.modal h3{font-family:var(--head);font-weight:500;font-size:20px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:14px}
+@media(min-width:640px){
+  .backdrop{place-items:center}
+  .modal{border-radius:var(--r-lg);padding-bottom:24px}
+}
+
+/* ---------- навигация ---------- */
+.nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:30;
+  background:rgba(13,13,13,.96);backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);
+  display:flex;padding:4px 2px calc(4px + env(safe-area-inset-bottom));
+}
+.nav button{
+  flex:1;background:none;border:0;padding:9px 2px 8px;cursor:pointer;min-width:0;
+  font-family:var(--head);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--faint);border-top:2px solid transparent;transition:color .15s ease;
+}
+.nav button[aria-current=page]{color:var(--text);border-top-color:var(--accent)}
+@media(min-width:900px){
+  body{padding-bottom:0}
+  .nav{position:sticky;top:56px;bottom:auto;border-top:0;border-bottom:1px solid var(--line);max-width:1080px;margin:0 auto;padding:0 var(--pad)}
+  .nav button{flex:none;padding:12px 18px;font-size:13px;letter-spacing:.08em;border-top:0;border-bottom:2px solid transparent}
+  .nav button[aria-current=page]{border-bottom-color:var(--accent)}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <div class="mark">ONE OF <span>·</span> журнал<small>учёт занятий и оплат</small></div>
+    <div class="month-pick">
+      <span class="syncdot" id="syncdot" title="Синхронизация выключена"></span>
+      <label for="month">Месяц</label>
+      <input type="month" id="month">
+    </div>
+  </div>
+</header>
+
+<nav class="nav" id="nav" aria-label="Разделы">
+  <button data-view="lesson" aria-current="page">Занятие</button>
+  <button data-view="students">Ученики</button>
+  <button data-view="money">Оплаты</button>
+  <button data-view="totals">Итоги</button>
+  <button data-view="settings">Ещё</button>
+</nav>
+
+<main class="wrap" id="main"></main>
+<div id="modal-root"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   Журнал ONE OF — автономное приложение.
+   Данные лежат в этом браузере (localStorage). Если задан адрес
+   синхронизации, копия отправляется на ваш сервер, чтобы телефон
+   и компьютер видели одно и то же.
+   ============================================================ */
+
+var GROUPS = [
+  {id:"choreo", name:"Choreo", meta:"ONE OF CREW · 16–30 лет", time:"Вс 13:00–15:00", fee:4000},
+  {id:"kpop",   name:"K-Pop",  meta:"Cover Dance · 12–25 лет",  time:"Вс 15:00–17:00", fee:3500}
+];
+var METHODS = ["Перевод", "Наличные"];
+var KINDS = ["Абонемент", "Разовое занятие", "Индивидуальное", "Второе направление"];
+var MONTH_NAMES = ["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"];
+var LKEY = "oneof-journal-v1";
+
+/* ---------------- данные ---------------- */
+var D = {
+  students: [],
+  sessions: {},          // "2026-09-06__choreo" -> {date, group, present:[id]}
+  payments: [],
+  settings: {lockMoney:false, pin:"", syncUrl:"", syncKey:""},
+  updatedAt: 0
+};
+
+/* ---------------- состояние экрана ---------------- */
+var S = {
+  view: "lesson",
+  month: ymNow(),
+  group: GROUPS[0].id,
+  date: nearestSunday(),
+  unlocked: false,
+  sync: {state:"off", msg:"Синхронизация выключена", at:0},
+  installPrompt: null
+};
+
+/* ---------------- мелкие утилиты ---------------- */
+function pad2(n){ return (n<10?"0":"")+n; }
+function ymNow(){ var d=new Date(); return d.getFullYear()+"-"+pad2(d.getMonth()+1); }
+function todayISO(){ var d=new Date(); return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate()); }
+function nearestSunday(){
+  var d=new Date(), diff=(7-d.getDay())%7;
+  d.setDate(d.getDate()+diff);
+  return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate());
+}
+function monthLabel(ym){ var p=String(ym).split("-"); return MONTH_NAMES[parseInt(p[1],10)-1]+" "+p[0]; }
+function sundaysOf(ym){
+  var p=ym.split("-"), y=+p[0], m=+p[1]-1, out=[], d=new Date(y,m,1);
+  while(d.getMonth()===m){ if(d.getDay()===0) out.push(y+"-"+pad2(m+1)+"-"+pad2(d.getDate())); d.setDate(d.getDate()+1); }
+  return out;
+}
+function dayLabel(iso){ var p=String(iso).split("-"); return p.length>2 ? p[2]+"."+p[1] : iso; }
+function num(n){ return String(Math.round(+n||0)).replace(/\B(?=(\d{3})+(?!\d))/g," "); }
+function money(n){ return num(n)+" ₽"; }
+function uid(){ return Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,7); }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]; }); }
+function group(id){ for(var i=0;i<GROUPS.length;i++) if(GROUPS[i].id===id) return GROUPS[i]; return GROUPS[0]; }
+function sessionKey(date,g){ return date+"__"+g; }
+function timeLabel(ts){ var d=new Date(ts); return pad2(d.getHours())+":"+pad2(d.getMinutes()); }
+
+/* ---------------- хранение ---------------- */
+function load(){
+  var raw;
+  try{ raw=localStorage.getItem(LKEY); }catch(e){ raw=null; }
+  if(!raw) return;
+  try{
+    var o=JSON.parse(raw);
+    D.students=o.students||[]; D.sessions=o.sessions||{}; D.payments=o.payments||[];
+    D.settings=Object.assign(D.settings, o.settings||{});
+    D.updatedAt=o.updatedAt||0;
+  }catch(e){}
+}
+function persist(){
+  try{ localStorage.setItem(LKEY, JSON.stringify(D)); }
+  catch(e){ toast("Не удалось сохранить: в браузере кончилось место."); }
+}
+function commit(){
+  D.updatedAt=Date.now();
+  persist();
+  render();
+  schedulePush();
+}
+
+/* ---------------- синхронизация ---------------- */
+var pushTimer=null;
+function syncOn(){ return !!(D.settings.syncUrl && D.settings.syncKey); }
+function setSync(state,msg){
+  S.sync.state=state; S.sync.msg=msg; if(state==="ok") S.sync.at=Date.now();
+  var dot=document.getElementById("syncdot");
+  if(dot){
+    dot.className="syncdot"+(state==="ok"?" ok":state==="busy"?" busy":state==="error"?" err":"");
+    dot.title=msg;
+  }
+  if(S.view==="settings") render();
+}
+function schedulePush(){
+  if(!syncOn()) return;
+  clearTimeout(pushTimer);
+  pushTimer=setTimeout(push, 1200);
+}
+function push(){
+  if(!syncOn()) return Promise.resolve();
+  setSync("busy","Отправляю…");
+  return fetch(D.settings.syncUrl, {
+    method:"POST",
+    headers:{"Content-Type":"application/json","X-Journal-Key":D.settings.syncKey},
+    body:JSON.stringify({updatedAt:D.updatedAt, data:{students:D.students, sessions:D.sessions, payments:D.payments}})
+  }).then(function(r){
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    setSync("ok","Отправлено в "+timeLabel(Date.now()));
+  }).catch(function(e){
+    setSync("error","Не отправилось: "+e.message+". Записи сохранены на устройстве.");
+  });
+}
+function pull(silent){
+  if(!syncOn()) return Promise.resolve();
+  setSync("busy","Проверяю сервер…");
+  return fetch(D.settings.syncUrl, {
+    method:"GET",
+    headers:{"X-Journal-Key":D.settings.syncKey}
+  }).then(function(r){
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    return r.json();
+  }).then(function(o){
+    var remote=o&&o.data, rt=(o&&o.updatedAt)||0;
+    if(remote && rt>D.updatedAt){
+      D.students=remote.students||[]; D.sessions=remote.sessions||{}; D.payments=remote.payments||[];
+      D.updatedAt=rt; persist();
+      setSync("ok","Загружено с сервера в "+timeLabel(Date.now()));
+      render();
+      if(!silent) toast("Взяты записи с сервера — они новее.");
+    } else if(!remote || rt<D.updatedAt){
+      return push();
+    } else {
+      setSync("ok","Совпадает с сервером");
+    }
+  }).catch(function(e){
+    setSync("error","Нет связи с сервером: "+e.message);
+    if(!silent) toast("Не получилось связаться: "+e.message);
+  });
+}
+
+/* ---------------- выборки и расчёты ---------------- */
+function activeStudents(g){
+  return D.students.filter(function(s){ return s.active!==false && (!g || s.group===g); })
+    .sort(function(a,b){ return String(a.name||"").localeCompare(String(b.name||""),"ru"); });
+}
+function visitsOf(studentId, ym, g){
+  var n=0;
+  for(var k in D.sessions){
+    var s=D.sessions[k];
+    if(!s||!s.date||String(s.date).slice(0,7)!==ym) continue;
+    if(g && s.group!==g) continue;
+    if((s.present||[]).indexOf(studentId)>=0) n++;
+  }
+  return n;
+}
+function sessionsOf(ym,g){
+  var out=[];
+  for(var k in D.sessions){
+    var s=D.sessions[k];
+    if(s&&s.date&&String(s.date).slice(0,7)===ym&&(!g||s.group===g)) out.push(s);
+  }
+  return out;
+}
+function chargeOf(st, ym){
+  if(st.plan==="single") return visitsOf(st.id, ym)*(+st.fee||0);
+  return +st.fee||0;
+}
+function paidOf(studentId, ym){
+  return D.payments.reduce(function(a,p){ return a+(p.studentId===studentId&&p.month===ym?(+p.amount||0):0); },0);
+}
+function incomeOf(ym,g){
+  return D.payments.reduce(function(a,p){
+    if(p.month!==ym) return a;
+    if(g&&p.group!==g) return a;
+    return a+(+p.amount||0);
+  },0);
+}
+function moneyVisible(){ return !D.settings.lockMoney || S.unlocked; }
+
+/* ---------------- рендер ---------------- */
+var main=document.getElementById("main");
+var monthInput=document.getElementById("month");
+
+function render(){
+  Array.prototype.forEach.call(document.querySelectorAll("#nav button"),function(b){
+    if(b.getAttribute("data-view")===S.view) b.setAttribute("aria-current","page");
+    else b.removeAttribute("aria-current");
+  });
+  if(monthInput.value!==S.month) monthInput.value=S.month;
+
+  var html="";
+  if(S.view==="lesson") html=viewLesson();
+  else if(S.view==="students") html=viewStudents();
+  else if(S.view==="money") html=moneyVisible()?viewMoney():viewLock("Оплаты");
+  else if(S.view==="totals") html=moneyVisible()?viewTotals():viewLock("Итоги");
+  else html=viewSettings();
+  main.innerHTML=html;
+}
+
+function groupChips(){
+  return '<div class="chips">'+GROUPS.map(function(g){
+    return '<button class="chip" data-act="group" data-id="'+g.id+'" aria-pressed="'+(S.group===g.id)+'">'+
+      esc(g.name)+'<span class="n">'+activeStudents(g.id).length+'</span></button>';
+  }).join("")+'</div>';
+}
+
+/* ---- Занятие ---- */
+function viewLesson(){
+  var g=group(S.group), key=sessionKey(S.date,S.group);
+  var sess=D.sessions[key]||{date:S.date,group:S.group,present:[]};
+  var present=sess.present||[];
+  var roster=activeStudents(S.group);
+  var ratio=roster.length?present.length/roster.length:0;
+
+  var dateChips='<div class="chips">'+sundaysOf(S.month).map(function(d){
+    var s=D.sessions[sessionKey(d,S.group)], n=s&&s.present?s.present.length:0;
+    return '<button class="chip" data-act="date" data-id="'+d+'" aria-pressed="'+(S.date===d)+'">'+
+      dayLabel(d)+(n?'<span class="n">'+n+'</span>':'')+'</button>';
+  }).join("")+
+  '<label class="chip chip-date">другая дата<input type="date" data-act="date-input" value="'+S.date+'" aria-label="Выбрать дату занятия"></label></div>';
+
+  var body;
+  if(!roster.length){
+    body='<div class="empty"><b>В группе пока никого</b>Добавьте учеников в разделе «Ученики» — и здесь появится список для отметок.</div>';
+  } else {
+    body='<div class="meterline"><span class="cnt">'+present.length+' / '+roster.length+'</span>'+
+      '<span class="meter"><i style="transform:scaleX('+ratio.toFixed(3)+')"></i></span></div>'+
+      '<div class="roster">'+roster.map(function(st){
+        var on=present.indexOf(st.id)>=0;
+        return '<button class="rrow" data-act="toggle" data-id="'+st.id+'" aria-pressed="'+on+'">'+
+          '<span class="tick" aria-hidden="true">✓</span>'+
+          '<span><span class="nm">'+esc(st.name)+'</span>'+
+          (st.plan==="single"?'<span class="mt">разовые</span>':'')+'</span>'+
+          '<span class="right">'+visitsOf(st.id,S.month,S.group)+' в месяце</span></button>';
+      }).join("")+'</div>';
+  }
+
+  return '<section class="view">'+
+    '<div class="vhead"><h2>Занятие</h2><span class="sub">'+esc(g.time)+' · '+esc(g.meta)+'</span></div>'+
+    groupChips()+dateChips+body+
+    (roster.length?'<div class="actions"><button class="btn ghost" data-act="clear-day">Снять все отметки</button></div>':'')+
+    '</section>';
+}
+
+/* ---- Ученики ---- */
+function viewStudents(){
+  var blocks=GROUPS.map(function(g){
+    var list=activeStudents(g.id);
+    var inner = list.length
+      ? '<div class="list">'+list.map(function(st){
+          var pill="";
+          if(moneyVisible()){
+            var charge=chargeOf(st,S.month), paid=paidOf(st.id,S.month);
+            pill = (charge>0 && paid>=charge) ? '<span class="pill paid">оплачено</span>'
+              : paid>0 ? '<span class="pill part">частично</span>'
+              : charge>0 ? '<span class="pill debt">не оплачено</span>' : '';
+          }
+          return '<button class="rowb" data-act="edit-student" data-id="'+st.id+'">'+
+            '<span class="grow"><span class="nm">'+esc(st.name)+'</span>'+
+            '<span class="mt">'+(st.plan==="single"?"разовые · "+money(st.fee)+" за занятие":"абонемент · "+money(st.fee)+"/мес")+'</span></span>'+
+            pill+'<span class="chev" aria-hidden="true">›</span>'+
+          '</button>';
+        }).join("")+'</div>'
+      : '<div class="empty">В группе пока нет учеников.</div>';
+    return '<div class="block"><h3>'+esc(g.name)+' · '+esc(g.time)+'</h3>'+inner+'</div>';
+  }).join("");
+
+  var archived=D.students.filter(function(s){ return s.active===false; });
+  var arch = archived.length ? '<div class="block"><h3>Не занимаются</h3><div class="list">'+
+    archived.map(function(st){
+      return '<button class="rowb" data-act="edit-student" data-id="'+st.id+'">'+
+        '<span class="grow"><span class="nm">'+esc(st.name)+'</span>'+
+        '<span class="mt">'+esc(group(st.group).name)+'</span></span>'+
+        '<span class="chev" aria-hidden="true">›</span></button>';
+    }).join("")+'</div></div>' : "";
+
+  return '<section class="view">'+
+    '<div class="vhead"><h2>Ученики</h2><span class="sub">'+activeStudents().length+' занимаются</span></div>'+
+    blocks+arch+
+    '<div class="actions"><button class="btn primary" data-act="add-student">Добавить ученика</button></div>'+
+    '</section>';
+}
+
+/* ---- Оплаты ---- */
+function viewMoney(){
+  var blocks=GROUPS.map(function(g){
+    var list=activeStudents(g.id);
+    if(!list.length) return "";
+    return '<div class="block"><h3>'+esc(g.name)+'</h3><div class="list">'+list.map(function(st){
+      var charge=chargeOf(st,S.month), paid=paidOf(st.id,S.month), left=charge-paid;
+      var pill = charge<=0 ? '<span class="pill quiet">нет начислений</span>'
+        : left<=0 ? '<span class="pill paid">оплачено</span>'
+        : paid>0 ? '<span class="pill part">долг '+money(left)+'</span>'
+        : '<span class="pill debt">'+money(charge)+'</span>';
+      return '<button class="rowb" data-act="add-payment" data-id="'+st.id+'">'+
+        '<span class="grow"><span class="nm">'+esc(st.name)+'</span>'+
+        '<span class="mt">внесено '+num(paid)+' из '+money(charge)+'</span></span>'+
+        pill+'<span class="chev" aria-hidden="true">+</span>'+
+      '</button>';
+    }).join("")+'</div></div>';
+  }).join("");
+
+  var hist=D.payments.filter(function(p){ return p.month===S.month; })
+    .sort(function(a,b){ return String(b.date||"").localeCompare(String(a.date||"")); });
+  var histBlock='<div class="block"><h3>Поступления за '+monthLabel(S.month)+'</h3>'+
+    (hist.length
+      ? '<div class="list">'+hist.map(function(p){
+          return '<div class="row">'+
+            '<span class="grow"><span class="nm">'+esc(p.studentName||"—")+'</span>'+
+            '<span class="mt">'+dayLabel(p.date||"")+' · '+esc(p.kind||"")+' · '+esc(p.method||"")+'</span></span>'+
+            '<span class="num">'+money(p.amount)+'</span>'+
+            '<button class="btn sm ghost" data-act="del-payment" data-id="'+p.id+'" aria-label="Удалить запись об оплате">✕</button>'+
+          '</div>';
+        }).join("")+'</div>'
+      : '<div class="empty">Оплат пока нет.</div>')+'</div>';
+
+  return '<section class="view">'+
+    '<div class="vhead"><h2>Оплаты</h2><span class="sub">'+monthLabel(S.month)+' · внесено '+money(incomeOf(S.month))+'</span></div>'+
+    (blocks||'<div class="empty">Сначала добавьте учеников.</div>')+histBlock+'</section>';
+}
+
+/* ---- Итоги ---- */
+function viewTotals(){
+  var total=incomeOf(S.month);
+  var byGroup=GROUPS.map(function(g){ return {g:g, sum:incomeOf(S.month,g.id)}; });
+  var maxG=Math.max.apply(null,byGroup.map(function(x){ return x.sum; }).concat([1]));
+
+  var sess=sessionsOf(S.month);
+  var visits=sess.reduce(function(a,s){ return a+((s.present||[]).length); },0);
+  var avg=sess.length?Math.round(visits/sess.length*10)/10:0;
+
+  var debts=[];
+  activeStudents().forEach(function(st){
+    var left=chargeOf(st,S.month)-paidOf(st.id,S.month);
+    if(left>0) debts.push({st:st,left:left});
+  });
+  debts.sort(function(a,b){ return b.left-a.left; });
+  var debtSum=debts.reduce(function(a,d){ return a+d.left; },0);
+
+  var months=lastMonths(S.month,6);
+  var maxM=Math.max.apply(null,months.map(function(m){ return incomeOf(m); }).concat([1]));
+
+  return '<section class="view">'+
+    '<div class="vhead"><h2>Итоги</h2><span class="sub">'+monthLabel(S.month)+'</span></div>'+
+    '<div class="stat-lead"><div class="lab">Поступило за месяц</div>'+
+      '<div class="big">'+money(total)+'</div>'+
+      '<div class="note">'+sess.length+' проведённых занятий · '+visits+' посещений</div></div>'+
+    '<div class="stat-grid">'+
+      '<div class="stat"><div class="lab">Средняя явка</div><div class="val">'+avg+'</div></div>'+
+      '<div class="stat"><div class="lab">Занимаются</div><div class="val">'+activeStudents().length+'</div></div>'+
+      '<div class="stat"><div class="lab">Ожидается ещё</div><div class="val">'+money(debtSum)+'</div></div>'+
+    '</div>'+
+    '<div class="block"><h3>По направлениям</h3><div class="bars">'+
+      byGroup.map(function(x){
+        return '<div class="bar"><span class="cap">'+esc(x.g.name)+'</span>'+
+          '<span class="track"><i style="transform:scaleX('+(x.sum/maxG).toFixed(3)+')"></i></span>'+
+          '<span class="amt">'+money(x.sum)+'</span></div>';
+      }).join("")+'</div></div>'+
+    '<div class="block"><h3>Последние месяцы</h3><div class="bars">'+
+      months.map(function(m){
+        var v=incomeOf(m);
+        return '<div class="bar"><span class="cap">'+monthLabel(m).split(" ")[0].slice(0,3)+'</span>'+
+          '<span class="track"><i class="alt" style="transform:scaleX('+(v/maxM).toFixed(3)+')"></i></span>'+
+          '<span class="amt">'+money(v)+'</span></div>';
+      }).join("")+'</div></div>'+
+    '<div class="block"><h3>Не оплачено</h3>'+
+      (debts.length
+        ? '<div class="list">'+debts.map(function(d){
+            return '<div class="row"><span class="grow"><span class="nm">'+esc(d.st.name)+'</span>'+
+              '<span class="mt">'+esc(group(d.st.group).name)+'</span></span>'+
+              '<span class="num">'+money(d.left)+'</span></div>';
+          }).join("")+'</div>'
+        : '<div class="empty">Все оплатили.</div>')+
+    '</div></section>';
+}
+function lastMonths(ym,n){
+  var p=ym.split("-"), y=+p[0], m=+p[1]-1, out=[];
+  for(var i=n-1;i>=0;i--){ var d=new Date(y,m-i,1); out.push(d.getFullYear()+"-"+pad2(d.getMonth()+1)); }
+  return out;
+}
+
+/* ---- замок на деньги ---- */
+function viewLock(title){
+  return '<section class="view"><div class="vhead"><h2>'+esc(title)+'</h2></div>'+
+    '<div class="empty lock"><b>Раздел под кодом</b>'+
+    '<label for="pin-in" style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)">Код</label>'+
+    '<div><input type="password" inputmode="numeric" id="pin-in" autocomplete="off" maxlength="8"></div>'+
+    '<div class="actions" style="justify-content:center"><button class="btn primary" data-act="unlock">Открыть</button></div>'+
+    '</div></section>';
+}
+
+/* ---- Ещё ---- */
+function viewSettings(){
+  var s=D.settings;
+  var installed = window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+  var syncBlock =
+    '<div class="card"><h3>Синхронизация</h3>'+
+    '<p class="lede">Пока адрес не указан, записи живут только в этом браузере. С адресом телефон и компьютер видят одно и то же.</p>'+
+    '<div class="field"><label for="s-url">Адрес сервера</label><input type="url" id="s-url" value="'+esc(s.syncUrl)+'" placeholder="https://…" autocomplete="off"></div>'+
+    '<div class="field"><label for="s-key">Ключ доступа</label><input type="password" id="s-key" value="'+esc(s.syncKey)+'" autocomplete="off"></div>'+
+    '<p class="hint">Состояние: '+esc(S.sync.msg)+'</p>'+
+    '<div class="actions"><button class="btn primary" data-act="save-sync">Сохранить</button>'+
+    '<button class="btn" data-act="sync-now"'+(syncOn()?"":" disabled")+'>Синхронизировать сейчас</button></div></div>';
+
+  var lockBlock =
+    '<div class="card"><h3>Код на деньги</h3>'+
+    '<p class="lede">Скрывает разделы «Оплаты» и «Итоги», если телефон окажется в чужих руках. Это защита от случайного взгляда, а не шифрование: записи в браузере остаются как есть.</p>'+
+    '<label class="switch"><input type="checkbox" id="s-lock"'+(s.lockMoney?" checked":"")+'> Прятать оплаты и итоги под кодом</label>'+
+    '<div class="field"><label for="s-pin">Код (от 4 знаков)</label><input type="password" inputmode="numeric" id="s-pin" value="'+esc(s.pin)+'" maxlength="8" autocomplete="off"></div>'+
+    '<div class="actions"><button class="btn primary" data-act="save-lock">Сохранить</button></div></div>';
+
+  var dataBlock =
+    '<div class="card"><h3>Копия данных</h3>'+
+    '<p class="lede">'+D.students.length+' учеников · '+Object.keys(D.sessions).length+' занятий · '+D.payments.length+' оплат.'+
+    (D.updatedAt?' Последнее изменение — '+dayLabel(new Date(D.updatedAt).toISOString().slice(0,10))+' в '+timeLabel(D.updatedAt)+'.':'')+'</p>'+
+    '<div class="actions">'+
+      '<button class="btn" data-act="export-json">Сохранить копию</button>'+
+      '<button class="btn" data-act="import-json">Загрузить копию</button>'+
+      '<button class="btn" data-act="export-csv">Выгрузить в CSV</button>'+
+    '</div>'+
+    '<input type="file" id="file-in" accept="application/json,.json" hidden></div>';
+
+  var installBlock = installed
+    ? '<div class="card"><h3>Приложение установлено</h3><p class="lede">Журнал запущен как приложение — значок на экране, работает и без интернета.</p></div>'
+    : '<div class="card"><h3>Поставить на экран</h3>'+
+      '<p class="lede">Android и компьютер: кнопка ниже или меню браузера → «Установить приложение». iPhone: Safari → «Поделиться» → «На экран „Домой“».</p>'+
+      '<div class="actions"><button class="btn primary" data-act="install"'+(S.installPrompt?"":" disabled")+'>Установить</button></div>'+
+      (S.installPrompt?'':'<p class="hint" style="margin-top:10px;margin-bottom:0">Кнопка оживает, когда браузер разрешит установку. На iPhone её не бывает — там только через «Поделиться».</p>')+
+      '</div>';
+
+  return '<section class="view"><div class="vhead"><h2>Ещё</h2></div>'+
+    installBlock+syncBlock+lockBlock+dataBlock+
+    '<p class="hint" style="text-align:center">Журнал ONE OF · версия 1.0</p></section>';
+}
+
+/* ---------------- модальные окна ---------------- */
+var modalRoot=document.getElementById("modal-root");
+function closeModal(){ modalRoot.innerHTML=""; }
+function openModal(html){
+  modalRoot.innerHTML='<div class="backdrop" data-act="backdrop"><div class="modal" role="dialog" aria-modal="true">'+html+'</div></div>';
+  var f=modalRoot.querySelector("input,select,textarea"); if(f) f.focus();
+}
+function studentModal(st){
+  var isNew=!st;
+  st=st||{id:uid(),name:"",group:S.group,phone:"",plan:"month",fee:group(S.group).fee,active:true,note:""};
+  openModal(
+    '<h3>'+(isNew?"Новый ученик":"Ученик")+'</h3>'+
+    '<input type="hidden" id="f-id" value="'+esc(st.id)+'">'+
+    '<div class="field"><label for="f-name">Имя и фамилия</label><input type="text" id="f-name" value="'+esc(st.name)+'" autocomplete="off"></div>'+
+    '<div class="field-2">'+
+      '<div class="field"><label for="f-group">Группа</label><select id="f-group">'+
+        GROUPS.map(function(g){ return '<option value="'+g.id+'"'+(st.group===g.id?" selected":"")+'>'+esc(g.name)+'</option>'; }).join("")+
+      '</select></div>'+
+      '<div class="field"><label for="f-plan">Тариф</label><select id="f-plan">'+
+        '<option value="month"'+(st.plan!=="single"?" selected":"")+'>Абонемент за месяц</option>'+
+        '<option value="single"'+(st.plan==="single"?" selected":"")+'>Разовые занятия</option>'+
+      '</select></div></div>'+
+    '<div class="field-2">'+
+      '<div class="field"><label for="f-fee">Сумма, ₽</label><input type="number" id="f-fee" min="0" step="100" value="'+(+st.fee||0)+'"></div>'+
+      '<div class="field"><label for="f-phone">Телефон</label><input type="tel" id="f-phone" value="'+esc(st.phone)+'"></div></div>'+
+    '<p class="hint">Для абонемента — плата за месяц. Для разовых — цена одного занятия, начисление считается по посещениям.</p>'+
+    '<div class="field"><label for="f-note">Заметка</label><input type="text" id="f-note" value="'+esc(st.note)+'"></div>'+
+    '<div class="field"><label for="f-active">Статус</label><select id="f-active">'+
+      '<option value="1"'+(st.active!==false?" selected":"")+'>Занимается</option>'+
+      '<option value="0"'+(st.active===false?" selected":"")+'>Не занимается</option>'+
+    '</select></div>'+
+    '<div class="actions">'+
+      '<button class="btn primary" data-act="save-student">Сохранить</button>'+
+      '<button class="btn" data-act="close">Отмена</button>'+
+      (isNew?"":'<button class="btn ghost" data-act="delete-student" data-id="'+esc(st.id)+'">Удалить</button>')+
+    '</div>'
+  );
+}
+function paymentModal(st){
+  var charge=chargeOf(st,S.month), left=Math.max(0,charge-paidOf(st.id,S.month));
+  openModal(
+    '<h3>Оплата · '+esc(st.name)+'</h3>'+
+    '<input type="hidden" id="p-student" value="'+esc(st.id)+'">'+
+    '<div class="field-2">'+
+      '<div class="field"><label for="p-amount">Сумма, ₽</label><input type="number" id="p-amount" min="0" step="100" value="'+(left>0?left:"")+'" placeholder="0"></div>'+
+      '<div class="field"><label for="p-date">Дата</label><input type="date" id="p-date" value="'+todayISO()+'"></div></div>'+
+    '<div class="field-2">'+
+      '<div class="field"><label for="p-kind">За что</label><select id="p-kind">'+
+        KINDS.map(function(k){ return '<option'+(k==="Абонемент"&&st.plan!=="single"?" selected":"")+'>'+esc(k)+'</option>'; }).join("")+
+      '</select></div>'+
+      '<div class="field"><label for="p-method">Способ</label><select id="p-method">'+
+        METHODS.map(function(m){ return '<option>'+esc(m)+'</option>'; }).join("")+
+      '</select></div></div>'+
+    '<p class="hint">Запись отнесётся к месяцу «'+monthLabel(S.month)+'».</p>'+
+    '<div class="actions"><button class="btn primary" data-act="save-payment">Записать оплату</button>'+
+    '<button class="btn" data-act="close">Отмена</button></div>'
+  );
+}
+
+/* ---------------- уведомление ---------------- */
+var toastTimer=null;
+function toast(msg){
+  var el=document.querySelector(".toast");
+  if(!el){ el=document.createElement("div"); el.className="toast"; el.setAttribute("role","status"); document.body.appendChild(el); }
+  el.textContent=msg;
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); },4000);
+}
+
+/* ---------------- файлы ---------------- */
+function download(name, text, mime){
+  var blob=new Blob([text],{type:mime||"application/json;charset=utf-8"});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement("a");
+  a.href=url; a.download=name;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); },1000);
+}
+function exportJson(){
+  download("one-of-journal-"+todayISO()+".json", JSON.stringify(D,null,2));
+  toast("Копия сохранена в загрузки.");
+}
+function exportCsv(){
+  var rows=[["Месяц","Дата","Ученик","Группа","За что","Способ","Сумма"]];
+  D.payments.slice().sort(function(a,b){ return String(a.date).localeCompare(String(b.date)); })
+    .forEach(function(p){
+      rows.push([monthLabel(p.month), p.date, p.studentName||"", group(p.group).name, p.kind||"", p.method||"", Math.round(+p.amount||0)]);
+    });
+  rows.push([]);
+  rows.push(["Посещения"]);
+  rows.push(["Дата","Группа","Пришли","Кто"]);
+  Object.keys(D.sessions).sort().forEach(function(k){
+    var s=D.sessions[k];
+    var names=(s.present||[]).map(function(id){
+      var st=D.students.filter(function(x){ return x.id===id; })[0];
+      return st?st.name:id;
+    });
+    rows.push([s.date, group(s.group).name, names.length, names.join(", ")]);
+  });
+  var csv=rows.map(function(r){
+    return r.map(function(c){
+      var v=String(c==null?"":c);
+      return /[";\n]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v;
+    }).join(";");
+  }).join("\r\n");
+  download("one-of-journal-"+todayISO()+".csv", "﻿"+csv, "text/csv;charset=utf-8");
+  toast("Таблица сохранена — открывается в Excel.");
+}
+function importJson(file){
+  var fr=new FileReader();
+  fr.onload=function(){
+    var o;
+    try{ o=JSON.parse(fr.result); }
+    catch(e){ toast("Это не файл журнала — не читается."); return; }
+    if(!o || !("students" in o)){ toast("В файле нет записей журнала."); return; }
+    if(!confirm("Заменить все текущие записи содержимым файла? Отменить это будет нельзя.")) return;
+    D.students=o.students||[]; D.sessions=o.sessions||{}; D.payments=o.payments||[];
+    if(o.settings) D.settings=Object.assign(D.settings,{lockMoney:!!o.settings.lockMoney,pin:o.settings.pin||""});
+    commit();
+    toast("Записи загружены из файла.");
+  };
+  fr.readAsText(file);
+}
+
+/* ---------------- события ---------------- */
+monthInput.value=S.month;
+monthInput.addEventListener("change",function(){ S.month=monthInput.value||ymNow(); render(); });
+
+document.getElementById("nav").addEventListener("click",function(e){
+  var b=e.target.closest("button[data-view]"); if(!b) return;
+  S.view=b.getAttribute("data-view"); render(); window.scrollTo(0,0);
+});
+
+document.addEventListener("click",function(e){
+  var el=e.target.closest("[data-act]"); if(!el) return;
+  var act=el.getAttribute("data-act"), id=el.getAttribute("data-id");
+
+  if(act==="backdrop"){ if(e.target===el) closeModal(); return; }
+  if(act==="close"){ closeModal(); return; }
+  if(act==="group"){ S.group=id; render(); return; }
+  if(act==="date"){ S.date=id; render(); return; }
+
+  if(act==="toggle"){
+    var key=sessionKey(S.date,S.group);
+    var sess=D.sessions[key]||{date:S.date,group:S.group,present:[]};
+    var list=(sess.present||[]).slice();
+    var i=list.indexOf(id);
+    if(i>=0) list.splice(i,1); else list.push(id);
+    D.sessions[key]={date:S.date,group:S.group,present:list};
+    commit();
+    return;
+  }
+  if(act==="clear-day"){
+    var k2=sessionKey(S.date,S.group);
+    if(D.sessions[k2]&&(D.sessions[k2].present||[]).length&&confirm("Снять все отметки за "+dayLabel(S.date)+"?")){
+      D.sessions[k2]={date:S.date,group:S.group,present:[]};
+      commit();
+    }
+    return;
+  }
+
+  if(act==="add-student"){ studentModal(null); return; }
+  if(act==="edit-student"){
+    var st=D.students.filter(function(s){ return s.id===id; })[0];
+    if(st) studentModal(st);
+    return;
+  }
+  if(act==="save-student"){
+    var name=document.getElementById("f-name").value.trim();
+    if(!name){ toast("Впишите имя ученика."); return; }
+    var obj={
+      id:document.getElementById("f-id").value,
+      name:name,
+      group:document.getElementById("f-group").value,
+      plan:document.getElementById("f-plan").value,
+      fee:+document.getElementById("f-fee").value||0,
+      phone:document.getElementById("f-phone").value.trim(),
+      note:document.getElementById("f-note").value.trim(),
+      active:document.getElementById("f-active").value==="1"
+    };
+    var found=-1;
+    for(var j=0;j<D.students.length;j++) if(D.students[j].id===obj.id) found=j;
+    if(found>=0) D.students[found]=obj; else D.students.push(obj);
+    closeModal(); commit();
+    return;
+  }
+  if(act==="delete-student"){
+    if(confirm("Удалить ученика и его отметки о посещениях? Записи об оплатах останутся.")){
+      D.students=D.students.filter(function(s){ return s.id!==id; });
+      for(var k3 in D.sessions){
+        var ss=D.sessions[k3];
+        if(ss&&ss.present) ss.present=ss.present.filter(function(x){ return x!==id; });
+      }
+      closeModal(); commit();
+    }
+    return;
+  }
+
+  if(act==="add-payment"){
+    var s2=D.students.filter(function(s){ return s.id===id; })[0];
+    if(s2) paymentModal(s2);
+    return;
+  }
+  if(act==="save-payment"){
+    var sid=document.getElementById("p-student").value;
+    var stu=D.students.filter(function(s){ return s.id===sid; })[0];
+    var amount=+document.getElementById("p-amount").value||0;
+    if(amount<=0){ toast("Впишите сумму больше нуля."); return; }
+    D.payments.push({
+      id:uid(), studentId:sid, studentName:stu?stu.name:"",
+      group:stu?stu.group:"", month:S.month, amount:amount,
+      date:document.getElementById("p-date").value||todayISO(),
+      kind:document.getElementById("p-kind").value,
+      method:document.getElementById("p-method").value
+    });
+    closeModal(); commit();
+    return;
+  }
+  if(act==="del-payment"){
+    if(confirm("Удалить запись об оплате?")){
+      D.payments=D.payments.filter(function(p){ return p.id!==id; });
+      commit();
+    }
+    return;
+  }
+
+  if(act==="unlock"){
+    var v=document.getElementById("pin-in").value;
+    if(v && v===D.settings.pin){ S.unlocked=true; render(); }
+    else toast("Код не подошёл.");
+    return;
+  }
+  if(act==="save-sync"){
+    D.settings.syncUrl=document.getElementById("s-url").value.trim();
+    D.settings.syncKey=document.getElementById("s-key").value.trim();
+    persist();
+    if(syncOn()){ setSync("busy","Проверяю…"); pull(); }
+    else setSync("off","Синхронизация выключена");
+    toast(syncOn()?"Адрес сохранён.":"Синхронизация выключена — записи только на этом устройстве.");
+    render();
+    return;
+  }
+  if(act==="sync-now"){ pull(); return; }
+  if(act==="save-lock"){
+    var on=document.getElementById("s-lock").checked;
+    var pin=document.getElementById("s-pin").value.trim();
+    if(on && pin.length<4){ toast("Код должен быть хотя бы из 4 знаков."); return; }
+    D.settings.lockMoney=on; D.settings.pin=pin;
+    S.unlocked=true;
+    persist(); render();
+    toast(on?"Оплаты и итоги теперь под кодом.":"Код снят.");
+    return;
+  }
+  if(act==="export-json"){ exportJson(); return; }
+  if(act==="export-csv"){ exportCsv(); return; }
+  if(act==="import-json"){ document.getElementById("file-in").click(); return; }
+  if(act==="install"){
+    if(!S.installPrompt) return;
+    S.installPrompt.prompt();
+    S.installPrompt.userChoice.then(function(){ S.installPrompt=null; render(); });
+    return;
+  }
+});
+
+document.addEventListener("change",function(e){
+  var d=e.target.closest("[data-act='date-input']");
+  if(d&&d.value){ S.date=d.value; S.month=d.value.slice(0,7); render(); return; }
+  if(e.target.id==="file-in" && e.target.files && e.target.files[0]){
+    importJson(e.target.files[0]);
+    e.target.value="";
+  }
+});
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape") closeModal();
+  if(e.key==="Enter" && e.target.id==="pin-in"){
+    var btn=document.querySelector("[data-act='unlock']"); if(btn) btn.click();
+  }
+});
+window.addEventListener("beforeinstallprompt",function(e){
+  e.preventDefault(); S.installPrompt=e;
+  if(S.view==="settings") render();
+});
+window.addEventListener("online",function(){ if(syncOn()) pull(true); });
+
+/* ---------------- запуск ---------------- */
+load();
+if(D.settings.lockMoney && D.settings.pin) S.unlocked=false; else S.unlocked=true;
+render();
+if(syncOn()){ pull(true); } else { setSync("off","Синхронизация выключена"); }
+
+if("serviceWorker" in navigator){
+  window.addEventListener("load",function(){
+    navigator.serviceWorker.register("sw.js").catch(function(){});
+  });
+}
+})();
+</script>
+</body>
+</html>

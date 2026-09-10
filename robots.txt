@@ -2,6 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /docs/
 Disallow: /promo/
+Disallow: /journal/
 Disallow: /temporary%20screenshots/
 Clean-param: utm_source&utm_medium&utm_campaign&utm_term&utm_content&yclid&from
 

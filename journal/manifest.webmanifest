@@ -1,0 +1,28 @@
+{
+  "name": "Журнал ONE OF",
+  "short_name": "Журнал",
+  "description": "Учёт посещений, оплат и дохода студии ONE OF.",
+  "lang": "ru",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0d0d0d",
+  "theme_color": "#0d0d0d",
+  "categories": ["productivity", "business"],
+  "icons": [
+    {
+      "src": "../brand_assets/web/journal-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "../brand_assets/web/journal-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
