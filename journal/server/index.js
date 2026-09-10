@@ -32,7 +32,7 @@ function cors() {
   return {
     "Access-Control-Allow-Origin": ALLOW_ORIGIN,
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, X-Journal-Key",
+    "Access-Control-Allow-Headers": "Content-Type, X-Journal-Key, X-Student-Token",
     "Access-Control-Max-Age": "86400",
     "Cache-Control": "no-store"
   };
@@ -77,6 +77,131 @@ async function readStored() {
   }
 }
 
+/* ---------- кабинет ученика ----------
+ * Родитель открывает /journal/me/ со своей ссылкой. Токен из неё
+ * приходит заголовком X-Student-Token и НЕ попадает в адрес запроса,
+ * поэтому не оседает в логах хранилища и CDN.
+ *
+ * В ответ уходит срез по одному ученику: посещения и деньги за месяц.
+ * Ни других учеников, ни телефонов, ни заметок — сюда не попадает
+ * ничего, кроме того, что родитель и так знает про своего ребёнка.
+ */
+
+const MONTH_NAMES = ["январь","февраль","март","апрель","май","июнь",
+                     "июль","август","сентябрь","октябрь","ноябрь","декабрь"];
+// предложный падеж — для «в сентябре», а не «в сентябрь»
+const MONTH_IN = ["январе","феврале","марте","апреле","мае","июне",
+                  "июле","августе","сентябре","октябре","ноябре","декабре"];
+
+// журнал ведут в Хабаровске (UTC+10), функция считает в UTC —
+// без сдвига первые часы нового месяца отнеслись бы к прошлому
+const TZ_OFFSET_HOURS = Number(process.env.TZ_OFFSET_HOURS || 10);
+
+function pad2(n) { return (n < 10 ? "0" : "") + n; }
+
+function currentMonth() {
+  const d = new Date(Date.now() + TZ_OFFSET_HOURS * 3600 * 1000);
+  return d.getUTCFullYear() + "-" + pad2(d.getUTCMonth() + 1);
+}
+
+function monthLabel(ym) {
+  const p = String(ym).split("-");
+  return MONTH_NAMES[parseInt(p[1], 10) - 1] + " " + p[0];
+}
+
+function monthIn(ym) {
+  const p = String(ym).split("-");
+  return MONTH_IN[parseInt(p[1], 10) - 1] + " " + p[0];
+}
+
+function shiftMonth(ym, back) {
+  const p = String(ym).split("-");
+  const d = new Date(Date.UTC(+p[0], +p[1] - 1 - back, 1));
+  return d.getUTCFullYear() + "-" + pad2(d.getUTCMonth() + 1);
+}
+
+function visitDates(sessions, studentId, ym) {
+  const out = [];
+  for (const k of Object.keys(sessions || {})) {
+    const s = sessions[k];
+    if (!s || !s.date || String(s.date).slice(0, 7) !== ym) continue;
+    if ((s.present || []).indexOf(studentId) >= 0) out.push(s.date);
+  }
+  return out.sort();
+}
+
+function paidIn(payments, studentId, ym) {
+  return (payments || []).reduce(function (a, p) {
+    return a + (p.studentId === studentId && p.month === ym ? (Number(p.amount) || 0) : 0);
+  }, 0);
+}
+
+// то же правило, что в приложении: абонемент — фиксированная сумма,
+// разовые — цена занятия, умноженная на число посещений
+function chargeIn(data, student, ym) {
+  const fee = Number(student.fee) || 0;
+  if (student.plan === "single") return visitDates(data.sessions, student.id, ym).length * fee;
+  return fee;
+}
+
+function studentView(data, student) {
+  const ym = currentMonth();
+  const groups = Array.isArray(data.groups) ? data.groups : [];
+  const g = groups.filter(function (x) { return x.id === student.group; })[0] || null;
+
+  const visits = visitDates(data.sessions, student.id, ym);
+  const charge = chargeIn(data, student, ym);
+  const paid = paidIn(data.payments, student.id, ym);
+
+  const history = [];
+  for (let back = 1; back <= 3; back++) {
+    const m = shiftMonth(ym, back);
+    const c = chargeIn(data, student, m);
+    const p = paidIn(data.payments, student.id, m);
+    if (c > 0 || p > 0) {
+      history.push({ month: m, monthLabel: monthLabel(m), charge: c, paid: p });
+    }
+  }
+
+  const payments = (data.payments || [])
+    .filter(function (p) { return p.studentId === student.id && p.month === ym; })
+    .map(function (p) { return { date: p.date, amount: Number(p.amount) || 0, kind: p.kind || "" }; })
+    .sort(function (a, b) { return String(a.date).localeCompare(String(b.date)); });
+
+  return {
+    ok: true,
+    name: student.name || "",
+    plan: student.plan === "single" ? "single" : "month",
+    group: g ? { name: g.name, time: g.time, meta: g.meta } : null,
+    month: ym,
+    monthLabel: monthLabel(ym),
+    monthIn: monthIn(ym),
+    visits: visits,
+    charge: charge,
+    paid: paid,
+    left: Math.max(0, charge - paid),
+    payments: payments,
+    history: history
+  };
+}
+
+async function handleStudent(token) {
+  // короткий токен — заведомо не наш, отвечаем как на любой неверный
+  if (!token || token.length < 16) {
+    return reply(404, { ok: false, error: "Ссылка не действует." });
+  }
+  const stored = await readStored();
+  const data = stored && stored.data;
+  if (!data || !Array.isArray(data.students)) {
+    return reply(404, { ok: false, error: "Ссылка не действует." });
+  }
+  const student = data.students.filter(function (s) { return s.token && s.token === token; })[0];
+  if (!student) {
+    return reply(404, { ok: false, error: "Ссылка не действует." });
+  }
+  return reply(200, studentView(data, student));
+}
+
 module.exports.handler = async function (event) {
   const method = (event && (event.httpMethod || event.method) || "GET").toUpperCase();
 
@@ -86,6 +211,20 @@ module.exports.handler = async function (event) {
 
   if (!BUCKET || !JOURNAL_KEY) {
     return reply(500, { ok: false, error: "Функция не настроена: задайте BUCKET и JOURNAL_KEY." });
+  }
+
+  // кабинет родителя — до проверки хозяйского ключа, у него свой
+  const studentToken = header(event.headers, "X-Student-Token");
+  if (studentToken) {
+    if (method !== "GET") {
+      return reply(405, { ok: false, error: "Кабинет только читает." });
+    }
+    try {
+      return await handleStudent(String(studentToken));
+    } catch (e) {
+      console.error(e);
+      return reply(500, { ok: false, error: "Не удалось прочитать данные." });
+    }
   }
 
   if (!keyMatches(header(event.headers, "X-Journal-Key"))) {

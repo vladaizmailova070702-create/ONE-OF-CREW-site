@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Занятия и оплата — ONE OF</title>
+<meta name="theme-color" content="#0d0d0d">
+<link rel="icon" href="../../brand_assets/web/journal-icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="../../brand_assets/web/journal-icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Montserrat:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  color-scheme: dark;
+  --bg:#0d0d0d;
+  --surface:#191313;
+  --surface-2:#221a1a;
+  --line:rgba(242,240,239,.10);
+  --line-strong:rgba(242,240,239,.20);
+  --text:#f2f0ef;
+  --muted:#a09a99;
+  --faint:#6f6867;
+  --accent:#7a1c1c;
+  --accent-soft:#c96a66;
+  --ok:#5f9e6a;
+  --ok-soft:#8ec897;
+  --head:"Oswald", system-ui, sans-serif;
+  --body:"Montserrat", system-ui, -apple-system, sans-serif;
+  --r:8px;
+  --pad:clamp(16px,5vw,28px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:var(--body);font-size:15px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+h1,h2,h3,p{margin:0}
+ul{margin:0;padding:0;list-style:none}
+a{color:var(--accent-soft)}
+:focus-visible{outline:2px solid var(--accent-soft);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+.wrap{width:100%;max-width:640px;margin:0 auto;padding:0 var(--pad) 48px}
+
+header{border-bottom:1px solid var(--line);margin-bottom:24px;padding-top:env(safe-area-inset-top)}
+header .wrap{padding-bottom:0}
+.mark{
+  font-family:var(--head);font-weight:600;font-size:16px;letter-spacing:.08em;
+  text-transform:uppercase;padding-block:16px;line-height:1;
+}
+.mark span{color:var(--accent-soft)}
+.mark small{
+  display:block;font-family:var(--body);font-size:10px;font-weight:500;
+  letter-spacing:.14em;color:var(--faint);text-transform:uppercase;margin-top:4px;
+}
+
+.who h1{font-family:var(--head);font-weight:500;font-size:clamp(26px,7vw,34px);letter-spacing:.02em;text-transform:uppercase;text-wrap:balance}
+.who p{color:var(--muted);font-size:14px;margin-top:4px}
+
+/* главная плашка — к оплате или всё закрыто */
+.due{border-radius:var(--r);padding:20px;margin:22px 0;border:1px solid var(--line)}
+.due.owed{background:linear-gradient(160deg,#2b1414,var(--surface));border-color:rgba(201,106,102,.35)}
+.due.clear{background:linear-gradient(160deg,#16211a,var(--surface));border-color:rgba(95,158,106,.3)}
+.due .lab{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.due .sum{font-family:var(--head);font-size:clamp(38px,11vw,52px);line-height:1.05;margin-top:6px;font-variant-numeric:tabular-nums}
+.due.clear .sum{color:var(--ok-soft)}
+.due .note{font-size:13px;color:var(--muted);margin-top:8px}
+
+section{margin-bottom:26px}
+section h2{
+  font-family:var(--head);font-weight:500;font-size:14px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:10px;
+}
+
+.list{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.row{display:flex;align-items:center;gap:10px;background:var(--surface);padding:12px 14px}
+.row .grow{flex:1;min-width:0}
+.row .num{font-family:var(--head);font-size:15px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.row .sub{font-size:12px;color:var(--faint)}
+
+.dates{display:flex;flex-wrap:wrap;gap:8px}
+.date{
+  border:1px solid var(--line-strong);border-radius:999px;padding:6px 13px;
+  font-size:13px;font-variant-numeric:tabular-nums;color:var(--text);
+}
+.count{font-family:var(--head);font-size:15px;letter-spacing:.03em;color:var(--muted);margin-bottom:10px}
+
+.pay{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.pay a{
+  display:inline-block;border:1px solid var(--line-strong);border-radius:var(--r);
+  padding:11px 18px;font-size:14px;font-weight:600;color:var(--text);text-decoration:none;
+  transition:border-color .15s ease,color .15s ease;
+}
+.pay a:hover{border-color:var(--accent-soft);color:var(--accent-soft)}
+.pay a.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.pay a.primary:hover{background:#8f2222;border-color:#8f2222;color:#fff}
+
+.msg{border:1px dashed var(--line-strong);border-radius:var(--r);padding:28px 20px;text-align:center;color:var(--muted);font-size:14px;margin-top:30px}
+.msg b{display:block;color:var(--text);font-family:var(--head);font-size:19px;font-weight:500;letter-spacing:.03em;text-transform:uppercase;margin-bottom:8px}
+
+footer{border-top:1px solid var(--line);margin-top:30px;padding-top:16px;font-size:12px;color:var(--faint)}
+footer a{color:var(--faint)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="mark">ONE OF <span>·</span> занятия и оплата<small>для родителей и учеников</small></div>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+  <p class="msg">Загружаю…</p>
+</main>
+
+<script src="config.js"></script>
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   Кабинет ученика.
+   Токен берётся из #якоря — он не уходит на сервер в адресе
+   запроса, поэтому не оседает в логах хранилища и CDN.
+
+   Адрес функции задаётся в соседнем файле config.js — так он
+   переживает обновление этой страницы.
+   ============================================================ */
+var API = (window.JOURNAL_API || "").trim();
+
+var TELEGRAM = "https://t.me/E_D_Khiro";
+var WHATSAPP = "https://wa.me/79004153763";
+
+var main = document.getElementById("main");
+
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]; }); }
+function money(n){ return String(Math.round(+n||0)).replace(/\B(?=(\d{3})+(?!\d))/g," ")+" ₽"; }
+function dayLabel(iso){ var p=String(iso).split("-"); return p.length>2 ? p[2]+"."+p[1] : iso; }
+function plural(n, one, few, many){
+  var a=Math.abs(n)%100, b=a%10;
+  if(a>10 && a<20) return many;
+  if(b>1 && b<5) return few;
+  if(b===1) return one;
+  return many;
+}
+
+function show(html){ main.innerHTML = html; }
+function problem(title, text){
+  show('<p class="msg"><b>'+esc(title)+'</b>'+esc(text)+'</p>');
+}
+
+function contacts(lead){
+  return '<div class="pay">'+
+    '<a class="primary" href="'+TELEGRAM+'" target="_blank" rel="noopener">Написать в Telegram</a>'+
+    '<a href="'+WHATSAPP+'" target="_blank" rel="noopener">WhatsApp</a>'+
+  '</div>'+
+  (lead?'<p class="sub" style="font-size:13px;color:var(--faint);margin-top:10px">'+esc(lead)+'</p>':'');
+}
+
+function render(d){
+  var owed = d.left > 0;
+
+  var due = '<div class="due '+(owed?'owed':'clear')+'">'+
+    '<div class="lab">'+(owed?'К оплате за '+esc(d.monthLabel):'Оплачено за '+esc(d.monthLabel))+'</div>'+
+    '<div class="sum">'+(owed?money(d.left):money(d.paid))+'</div>'+
+    '<div class="note">'+
+      (owed
+        ? (d.paid>0 ? 'Внесено '+money(d.paid)+' из '+money(d.charge)+'.' : 'Начислено '+money(d.charge)+'.')
+        : (d.charge>0 ? 'Всё закрыто, спасибо.' : 'Начислений за этот месяц нет.'))+
+    '</div></div>';
+
+  var inMonth = d.monthIn || d.monthLabel;
+
+  var visits = '<section><h2>Посещения в '+esc(inMonth)+'</h2>'+
+    (d.visits.length
+      ? '<p class="count">'+d.visits.length+' '+plural(d.visits.length,"занятие","занятия","занятий")+'</p><div class="dates">'+
+        d.visits.map(function(v){ return '<span class="date">'+esc(dayLabel(v))+'</span>'; }).join("")+'</div>'
+      : '<p style="color:var(--muted);font-size:14px">Отметок пока нет.</p>')+
+    '</section>';
+
+  var pays = d.payments.length
+    ? '<section><h2>Оплаты в '+esc(inMonth)+'</h2><div class="list">'+
+      d.payments.map(function(p){
+        return '<div class="row"><span class="grow">'+esc(dayLabel(p.date))+
+          (p.kind?' <span class="sub">· '+esc(p.kind)+'</span>':'')+'</span>'+
+          '<span class="num">'+money(p.amount)+'</span></div>';
+      }).join("")+'</div></section>'
+    : '';
+
+  var hist = d.history && d.history.length
+    ? '<section><h2>Прошлые месяцы</h2><div class="list">'+
+      d.history.map(function(h){
+        var left=h.charge-h.paid;
+        return '<div class="row"><span class="grow">'+esc(h.monthLabel)+
+          '<span class="sub" style="display:block">внесено '+money(h.paid)+' из '+money(h.charge)+'</span></span>'+
+          '<span class="num" style="color:'+(left>0?'var(--accent-soft)':'var(--ok-soft)')+'">'+
+            (left>0?money(left):'закрыт')+'</span></div>';
+      }).join("")+'</div></section>'
+    : '';
+
+  var groupLine = d.group
+    ? esc(d.group.name)+(d.group.time?' · '+esc(d.group.time):'')
+    : '';
+
+  show(
+    '<div class="who"><h1>'+esc(d.name)+'</h1>'+
+    (groupLine?'<p>'+groupLine+'</p>':'')+'</div>'+
+    due + visits + pays + hist +
+    '<section><h2>Вопросы по оплате</h2>'+
+      contacts('Ссылка личная — она показывает только вашего ребёнка. Не пересылайте её посторонним.')+
+    '</section>'+
+    '<footer>Студия ONE OF · <a href="https://oneofstudio.ru/">oneofstudio.ru</a></footer>'
+  );
+}
+
+function start(){
+  var token = (location.hash || "").replace(/^#/, "").trim();
+
+  if (!API) {
+    problem("Кабинет пока не настроен", "Впишите адрес функции в файл journal/me/config.js — как описано в инструкции.");
+    return;
+  }
+  if (!token) {
+    problem("Нужна личная ссылка", "Откройте ту ссылку, которую прислал преподаватель — она заканчивается длинным набором символов.");
+    return;
+  }
+
+  fetch(API, { method: "GET", headers: { "X-Student-Token": token } })
+    .then(function(r){
+      if (r.status === 404) return r.json().then(function(){ throw new Error("gone"); });
+      if (!r.ok) throw new Error("http");
+      return r.json();
+    })
+    .then(function(d){
+      if (!d || !d.ok) throw new Error("bad");
+      render(d);
+    })
+    .catch(function(e){
+      if (e.message === "gone") {
+        problem("Ссылка не действует", "Возможно, её отозвали или заменили. Попросите у преподавателя новую.");
+      } else {
+        show('<p class="msg"><b>Не удалось загрузить</b>Проверьте интернет и обновите страницу. Если не помогает — напишите нам.</p>'+
+             '<div class="wrap" style="padding:0">'+contacts("")+'</div>');
+      }
+    });
+}
+
+window.addEventListener("hashchange", start);
+start();
+})();
+</script>
+</body>
+</html>

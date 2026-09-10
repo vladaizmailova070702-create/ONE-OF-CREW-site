@@ -24,13 +24,14 @@ assets/web/*        (webp, jpg, mp4)
 assets/web/social/* (лента соцсетей: mp4, постеры и фото webp)
 brand_assets/web/*  (logo.png, favicon.*, apple-touch-icon.png, journal-icon-*.png)
 journal/*           (index.html, manifest.webmanifest, sw.js — журнал студии)
+journal/me/index.html (кабинет для родителей; config.js НЕ трогать — см. ниже)
 ```
 НЕ загружай: `assets/originals/`, `brand_assets/originals/`, `docs/`, `promo/`,
 `CLAUDE.md`, `.claude/`, `temporary screenshots/` и прочие служебные файлы.
 
 Пересобрать папку `deploy/` можно одной командой из корня проекта:
 ```
-rm -rf deploy && mkdir -p deploy/assets/web/social deploy/brand_assets/web deploy/journal   && cp *.html style.css robots.txt sitemap.xml deploy/   && cp assets/web/*.webp assets/web/*.jpg assets/web/*.mp4 deploy/assets/web/   && cp assets/web/social/* deploy/assets/web/social/   && cp brand_assets/web/logo.png brand_assets/web/favicon.*         brand_assets/web/apple-touch-icon.png brand_assets/web/journal-icon-*.png deploy/brand_assets/web/   && cp journal/index.html journal/manifest.webmanifest journal/sw.js deploy/journal/
+rm -rf deploy && mkdir -p deploy/assets/web/social deploy/brand_assets/web deploy/journal   && cp *.html style.css robots.txt sitemap.xml deploy/   && cp assets/web/*.webp assets/web/*.jpg assets/web/*.mp4 deploy/assets/web/   && cp assets/web/social/* deploy/assets/web/social/   && cp brand_assets/web/logo.png brand_assets/web/favicon.*         brand_assets/web/apple-touch-icon.png brand_assets/web/journal-icon-*.png deploy/brand_assets/web/   && mkdir -p deploy/journal/me   && cp journal/index.html journal/manifest.webmanifest journal/sw.js deploy/journal/   && cp journal/me/index.html deploy/journal/me/
 ```
 
 Типы контента для новых файлов (шаг 3 ниже): `robots.txt` → `text/plain`,
@@ -41,6 +42,10 @@ rm -rf deploy && mkdir -p deploy/assets/web/social deploy/brand_assets/web deplo
 Про журнал (`/journal/`) — отдельная инструкция: `docs/JOURNAL.md`. Там же
 важное правило: после правки `journal/index.html` нужно поднять `VERSION`
 в `journal/sw.js`, иначе установленные копии останутся на старой версии.
+
+**`journal/me/config.js` не перезаливай.** В бакете лежит твоя версия с
+адресом функции, а в репозитории — пустая заготовка. Перезальёшь — кабинет у
+родителей перестанет открываться. Поэтому команда сборки его и не копирует.
 
 ---
 

@@ -330,6 +330,18 @@ function dayLabel(iso){ var p=String(iso).split("-"); return p.length>2 ? p[2]+"
 function num(n){ return String(Math.round(+n||0)).replace(/\B(?=(\d{3})+(?!\d))/g," "); }
 function money(n){ return num(n)+" ₽"; }
 function uid(){ return Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,7); }
+function makeToken(){
+  var a=new Uint8Array(16);
+  (window.crypto||window.msCrypto).getRandomValues(a);
+  return Array.prototype.map.call(a,function(b){ return ("0"+b.toString(16)).slice(-2); }).join("");
+}
+function cabinetLink(token){
+  // с локального адреса ссылку всё равно выдаём боевую — её отправляют родителям
+  var base = /^(localhost|127\.|\[?::1)/.test(location.hostname)
+    ? "https://oneofstudio.ru/journal/"
+    : location.origin + location.pathname.replace(/index\.html$/, "");
+  return base + "me/#" + token;
+}
 function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){
   return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]; }); }
 function group(id){ for(var i=0;i<GROUPS.length;i++) if(GROUPS[i].id===id) return GROUPS[i]; return GROUPS[0]; }
@@ -389,7 +401,7 @@ function push(){
   return fetch(D.settings.syncUrl, {
     method:"POST",
     headers:{"Content-Type":"application/json","X-Journal-Key":D.settings.syncKey},
-    body:JSON.stringify({updatedAt:D.updatedAt, data:{students:D.students, sessions:D.sessions, payments:D.payments}})
+    body:JSON.stringify({updatedAt:D.updatedAt, data:{students:D.students, sessions:D.sessions, payments:D.payments, groups:GROUPS}})
   }).then(function(r){
     if(!r.ok) throw new Error("HTTP "+r.status);
     setSync("ok","Отправлено в "+timeLabel(Date.now()));
@@ -727,6 +739,20 @@ function openModal(html){
   modalRoot.innerHTML='<div class="backdrop" data-act="backdrop"><div class="modal" role="dialog" aria-modal="true">'+html+'</div></div>';
   var f=modalRoot.querySelector("input,select,textarea"); if(f) f.focus();
 }
+function linkBlock(token){
+  if(!token){
+    return '<button class="btn sm" data-act="make-link">Создать ссылку</button>'+
+      '<p class="hint" style="margin-top:8px;margin-bottom:0">Родитель увидит только своего ребёнка: посещения и оплату за месяц. Ни других учеников, ни телефонов.</p>'+
+      (syncOn()?'':'<p class="hint" style="margin-bottom:0"><b style="color:var(--warn)">Сначала включите синхронизацию</b> — без неё ссылка не откроется.</p>');
+  }
+  return '<input type="text" id="f-link" readonly value="'+esc(cabinetLink(token))+'">'+
+    '<div class="actions" style="margin-top:8px">'+
+      '<button class="btn sm" data-act="copy-link">Скопировать</button>'+
+      '<button class="btn sm ghost" data-act="drop-link">Отозвать</button>'+
+    '</div>'+
+    '<p class="hint" style="margin-top:8px;margin-bottom:0">Ссылка заработает после сохранения карточки. «Отозвать» — если ссылка ушла не туда.</p>'+
+    (syncOn()?'':'<p class="hint" style="margin-bottom:0"><b style="color:var(--warn)">Синхронизация выключена</b> — пока она не включена, эта ссылка у родителя не откроется.</p>');
+}
 function studentModal(st){
   var isNew=!st;
   st=st||{id:uid(),name:"",group:S.group,phone:"",plan:"month",fee:group(S.group).fee,active:true,note:""};
@@ -747,6 +773,8 @@ function studentModal(st){
       '<div class="field"><label for="f-phone">Телефон</label><input type="tel" id="f-phone" value="'+esc(st.phone)+'"></div></div>'+
     '<p class="hint">Для абонемента — плата за месяц. Для разовых — цена одного занятия, начисление считается по посещениям.</p>'+
     '<div class="field"><label for="f-note">Заметка</label><input type="text" id="f-note" value="'+esc(st.note)+'"></div>'+
+    '<input type="hidden" id="f-token" value="'+esc(st.token||"")+'">'+
+    '<div class="field"><label>Ссылка для родителей</label><div id="link-box">'+linkBlock(st.token||"")+'</div></div>'+
     '<div class="field"><label for="f-active">Статус</label><select id="f-active">'+
       '<option value="1"'+(st.active!==false?" selected":"")+'>Занимается</option>'+
       '<option value="0"'+(st.active===false?" selected":"")+'>Не занимается</option>'+
@@ -899,12 +927,35 @@ document.addEventListener("click",function(e){
       fee:+document.getElementById("f-fee").value||0,
       phone:document.getElementById("f-phone").value.trim(),
       note:document.getElementById("f-note").value.trim(),
+      token:document.getElementById("f-token").value||"",
       active:document.getElementById("f-active").value==="1"
     };
     var found=-1;
     for(var j=0;j<D.students.length;j++) if(D.students[j].id===obj.id) found=j;
     if(found>=0) D.students[found]=obj; else D.students.push(obj);
     closeModal(); commit();
+    return;
+  }
+  if(act==="make-link"){
+    var tk=makeToken();
+    document.getElementById("f-token").value=tk;
+    document.getElementById("link-box").innerHTML=linkBlock(tk);
+    return;
+  }
+  if(act==="copy-link"){
+    var inp=document.getElementById("f-link");
+    if(!inp) return;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(inp.value).then(function(){ toast("Ссылка скопирована."); },
+        function(){ inp.select(); toast("Скопируйте ссылку вручную."); });
+    } else { inp.select(); toast("Скопируйте ссылку вручную."); }
+    return;
+  }
+  if(act==="drop-link"){
+    if(confirm("Отозвать ссылку? Старая перестанет открываться, родителю нужно будет отправить новую.")){
+      document.getElementById("f-token").value="";
+      document.getElementById("link-box").innerHTML=linkBlock("");
+    }
     return;
   }
   if(act==="delete-student"){
