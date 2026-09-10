@@ -1,0 +1,10 @@
+{
+  "name": "one-of-journal-sync",
+  "version": "1.0.0",
+  "description": "Синхронизация журнала ONE OF через Yandex Object Storage",
+  "main": "index.js",
+  "private": true,
+  "dependencies": {
+    "@aws-sdk/client-s3": "3.699.0"
+  }
+}
