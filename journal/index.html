@@ -180,7 +180,11 @@ input[type=month]{min-width:148px}
 .stat-lead .big{font-family:var(--head);font-size:clamp(36px,9vw,52px);line-height:1;font-variant-numeric:tabular-nums;margin-top:8px}
 .stat-lead .note{font-size:13px;color:var(--muted);margin-top:8px}
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:8px;margin-bottom:22px}
-@media(min-width:560px){.stat-grid{grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px}}
+.stat-grid.four{grid-template-columns:repeat(2,1fr)}
+@media(min-width:560px){
+  .stat-grid{grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px}
+  .stat-grid.four{grid-template-columns:repeat(4,1fr)}
+}
 .stat{border:1px solid var(--line);border-radius:var(--r);padding:12px 10px}
 @media(min-width:560px){.stat{padding:14px}}
 .stat .lab{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
@@ -349,7 +353,16 @@ function sundaysOf(ym){
   return out;
 }
 function dayLabel(iso){ var p=String(iso).split("-"); return p.length>2 ? p[2]+"."+p[1] : iso; }
-function num(n){ return String(Math.round(+n||0)).replace(/\B(?=(\d{3})+(?!\d))/g," "); }
+function num(n){
+  var v=Math.round(+n||0);
+  var t=String(Math.abs(v)).replace(/\B(?=(\d{3})+(?!\d))/g," ");
+  return (v<0?"−":"")+t;
+}
+// часы показываем как есть: 1,5 ч не должно превращаться в 2 ч
+function hoursLabel(h){
+  var v=Math.round((+h||0)*10)/10;
+  return String(v).replace(".", ",");
+}
 // 1 занятие / 2 занятия / 5 занятий
 function plural(n, one, few, many){
   var a=Math.abs(n)%100, b=a%10;
@@ -546,10 +559,32 @@ function hallHours(ym){
 function rentOf(ym){ return hallHours(ym) * (+D.settings.rentPerHour||0); }
 function taxOf(ym){ return Math.round(incomeOf(ym) * (+D.settings.taxPercent||0) / 100); }
 
+function trialsOf(ym){
+  // кто был на пробном в этом месяце: по дате в карточке, а если её не
+  // указали — по первой отметке посещения
+  return D.students.filter(function(st){
+    if(st.plan!=="trial") return false;
+    if(st.trialDate) return String(st.trialDate).slice(0,7)===ym;
+    return visitsOf(st.id, ym)>0;
+  });
+}
+function trialDayOf(st, ym){
+  if(st.trialDate) return st.trialDate;
+  for(var k in D.sessions){
+    var s=D.sessions[k];
+    if(!s||!s.date) continue;
+    if(ym && String(s.date).slice(0,7)!==ym) continue;
+    if((s.present||[]).indexOf(st.id)>=0) return s.date;
+  }
+  return "";
+}
+
 function chargeOf(st, ym){
   // индивидуальные начисляются поверх любого тарифа — их берут и те,
   // кто ходит в группу, и те, кто занимается только один на один
   var solo = soloChargeOf(st.id, ym);
+  // пробное бесплатное: за групповое занятие ничего не начисляем
+  if(st.plan==="trial") return solo;
   if(st.group==="solo") return solo;
   if(st.plan==="single") return visitsOf(st.id, ym)*(+st.fee||0) + solo;
   return (+st.fee||0) + solo;
@@ -609,7 +644,7 @@ function viewSolo(){
         var st=D.students.filter(function(x){ return x.id===r.studentId; })[0];
         return '<button class="rowb" data-act="edit-solo" data-id="'+r.id+'">'+
           '<span class="grow"><span class="nm">'+esc(st?st.name:"—")+'</span>'+
-          '<span class="mt">'+esc(dayLabel(r.date))+' · '+num(r.hours)+' ч × '+money(r.rate)+
+          '<span class="mt">'+esc(dayLabel(r.date))+' · '+hoursLabel(r.hours)+' ч × '+money(r.rate)+
           (r.note?' · '+esc(r.note):'')+'</span></span>'+
           '<span class="num">'+money((+r.hours||0)*(+r.rate||0))+'</span>'+
           '<span class="chev" aria-hidden="true">›</span></button>';
@@ -619,7 +654,7 @@ function viewSolo(){
   var totals = list.length
     ? '<div class="stat-grid" style="margin-bottom:18px">'+
         '<div class="stat"><div class="lab">Занятий</div><div class="val">'+list.length+'</div></div>'+
-        '<div class="stat"><div class="lab">Часов</div><div class="val">'+num(hours)+'</div></div>'+
+        '<div class="stat"><div class="lab">Часов</div><div class="val">'+hoursLabel(hours)+'</div></div>'+
         '<div class="stat"><div class="lab">На сумму</div><div class="val">'+money(sum)+'</div></div>'+
       '</div>'
     : '';
@@ -658,7 +693,8 @@ function viewLesson(){
         return '<button class="rrow" data-act="toggle" data-id="'+st.id+'" aria-pressed="'+on+'">'+
           '<span class="tick" aria-hidden="true">✓</span>'+
           '<span><span class="nm">'+esc(st.name)+'</span>'+
-          (st.plan==="single"?'<span class="mt">разовые</span>':'')+'</span>'+
+          (st.plan==="trial"?'<span class="mt">пробное — бесплатно</span>'
+            :st.plan==="single"?'<span class="mt">разовые</span>':'')+'</span>'+
           '<span class="right">'+visitsOf(st.id,S.month,S.group)+' в месяце</span></button>';
       }).join("")+'</div>';
   }
@@ -685,7 +721,10 @@ function viewStudents(){
           }
           return '<button class="rowb" data-act="edit-student" data-id="'+st.id+'">'+
             '<span class="grow"><span class="nm">'+esc(st.name)+'</span>'+
-            '<span class="mt">'+(st.plan==="single"?"разовые · "+money(st.fee)+" за занятие":"абонемент · "+money(st.fee)+"/мес")+'</span></span>'+
+            '<span class="mt">'+(
+              st.plan==="trial" ? "пробное"+(trialDayOf(st,"")?" · "+dayLabel(trialDayOf(st,"")):"")+" · бесплатно"
+              : st.plan==="single" ? "разовые · "+money(st.fee)+" за занятие"
+              : "абонемент · "+money(st.fee)+"/мес")+'</span></span>'+
             pill+'<span class="chev" aria-hidden="true">›</span>'+
           '</button>';
         }).join("")+'</div>'
@@ -771,6 +810,7 @@ function viewTotals(){
   debts.sort(function(a,b){ return b.left-a.left; });
   var debtSum=debts.reduce(function(a,d){ return a+d.left; },0);
 
+  var trials=trialsOf(S.month);
   var hours=hallHours(S.month), rent=rentOf(S.month), tax=taxOf(S.month);
   var net=total-rent-tax;
 
@@ -784,22 +824,33 @@ function viewTotals(){
       '<div class="note">'+sess.length+' '+plural(sess.length,"групповое занятие","групповых занятия","групповых занятий")+
         ' · '+visits+' '+plural(visits,"посещение","посещения","посещений")+
         (soloList.length?' · '+soloList.length+' '+plural(soloList.length,"индивидуальное","индивидуальных","индивидуальных")+
-          ' ('+num(soloHours(soloList))+' ч)':'')+'</div></div>'+
-    '<div class="stat-grid">'+
+          ' ('+hoursLabel(soloHours(soloList))+' ч)':'')+'</div></div>'+
+    '<div class="stat-grid'+(trials.length?' four':'')+'">'+
       '<div class="stat"><div class="lab">Средняя явка</div><div class="val">'+avg+'</div></div>'+
       '<div class="stat"><div class="lab">Занимаются</div><div class="val">'+activeStudents().length+'</div></div>'+
       '<div class="stat"><div class="lab">Ожидается ещё</div><div class="val">'+money(debtSum)+'</div></div>'+
+      (trials.length?'<div class="stat"><div class="lab">Пробных</div><div class="val">'+trials.length+'</div></div>':'')+
     '</div>'+
+    (trials.length
+      ? '<div class="block"><h3>Пробные занятия</h3><div class="list">'+
+        trials.map(function(st){
+          var day=trialDayOf(st,S.month);
+          return '<div class="row"><span class="grow"><span class="nm">'+esc(st.name)+'</span>'+
+            '<span class="mt">'+esc(group(st.group).name)+(day?' · '+esc(dayLabel(day)):'')+'</span></span>'+
+            '<span class="pill quiet">бесплатно</span></div>';
+        }).join("")+'</div>'+
+        '<p class="hint" style="margin-top:8px">Зал за эти занятия всё равно оплачен — часы учтены в аренде.</p></div>'
+      : '')+
     '<div class="block"><h3>Сколько остаётся</h3><div class="calc">'+
       '<div class="calc-row"><span class="cap"><b>Поступило</b>'+
         '<span>оплаты за '+esc(monthLabel(S.month))+'</span></span>'+
         '<span class="val">'+money(total)+'</span></div>'+
       '<div class="calc-row minus"><span class="cap"><b>Аренда зала</b>'+
-        '<span>'+num(hours)+' ч × '+money(D.settings.rentPerHour)+' — за проведённые занятия, оплачены они или нет</span></span>'+
-        '<span class="val">−'+money(rent)+'</span></div>'+
+        '<span>'+hoursLabel(hours)+' ч × '+money(D.settings.rentPerHour)+' — за проведённые занятия, оплачены они или нет</span></span>'+
+        '<span class="val">'+(rent>0?"−":"")+money(rent)+'</span></div>'+
       '<div class="calc-row minus"><span class="cap"><b>Налог '+num(D.settings.taxPercent)+'%</b>'+
         '<span>самозанятость, с того, что фактически поступило</span></span>'+
-        '<span class="val">−'+money(tax)+'</span></div>'+
+        '<span class="val">'+(tax>0?"−":"")+money(tax)+'</span></div>'+
       '<div class="calc-row total'+(net>=0?' good':'')+'"><span class="cap"><b>Остаётся</b></span>'+
         '<span class="val">'+money(net)+'</span></div>'+
     '</div>'+
@@ -941,9 +992,14 @@ function studentModal(st){
         GROUPS.map(function(g){ return '<option value="'+g.id+'"'+(st.group===g.id?" selected":"")+'>'+esc(g.name)+'</option>'; }).join("")+
       '</select></div>'+
       '<div class="field"><label for="f-plan">Тариф</label><select id="f-plan">'+
-        '<option value="month"'+(st.plan!=="single"?" selected":"")+'>Абонемент за месяц</option>'+
+        '<option value="month"'+(st.plan!=="single"&&st.plan!=="trial"?" selected":"")+'>Абонемент за месяц</option>'+
         '<option value="single"'+(st.plan==="single"?" selected":"")+'>Разовые занятия</option>'+
+        '<option value="trial"'+(st.plan==="trial"?" selected":"")+'>Пробное — бесплатно</option>'+
       '</select></div></div>'+
+    '<div class="field"><label for="f-trial">Дата пробного</label>'+
+      '<input type="date" id="f-trial" value="'+esc(st.trialDate||"")+'">'+
+      '<p class="hint" style="margin:6px 0 0">Заполняется, когда тариф — «Пробное». За такое занятие ничего не начисляется; когда человек останется, поменяйте тариф на абонемент.</p>'+
+    '</div>'+
     '<div class="field-2">'+
       '<div class="field"><label for="f-fee">Сумма, ₽</label><input type="number" id="f-fee" min="0" step="100" value="'+(+st.fee||0)+'"></div>'+
       '<div class="field"><label for="f-phone">Телефон</label><input type="tel" id="f-phone" value="'+esc(st.phone)+'"></div></div>'+
@@ -989,7 +1045,14 @@ function soloModal(rec){
         '<button type="button" class="chip" data-act="solo-date" data-id="2">позавчера</button>'+
       '</div>'+
     '</div>'+
-    '<div class="field"><label for="i-hours">Часов</label><input type="number" id="i-hours" min="0.5" step="0.5" value="'+(+rec.hours||1)+'"></div>'+
+    '<div class="field"><label for="i-hours">Сколько часов</label>'+
+      '<input type="number" id="i-hours" min="0.5" step="0.5" value="'+(+rec.hours||1)+'">'+
+      '<div class="chips" style="margin:8px 0 0">'+
+        '<button type="button" class="chip" data-act="solo-hours" data-id="1">1 ч</button>'+
+        '<button type="button" class="chip" data-act="solo-hours" data-id="1.5">1,5 ч</button>'+
+        '<button type="button" class="chip" data-act="solo-hours" data-id="2">2 ч</button>'+
+      '</div>'+
+    '</div>'+
     '<div class="field"><label for="i-rate">Ставка за час, ₽</label><input type="number" id="i-rate" min="0" step="100" value="'+(+rec.rate||0)+'"></div>'+
     '<p class="hint">Сумма посчитается сама: часы × ставка. Начисление прибавится к тому, что ученик должен за месяц.</p>'+
     '<div class="field"><label for="i-note">Заметка</label><input type="text" id="i-note" value="'+esc(rec.note||"")+'"></div>'+
@@ -1147,6 +1210,7 @@ document.addEventListener("click",function(e){
       group:document.getElementById("f-group").value,
       plan:document.getElementById("f-plan").value,
       fee:+document.getElementById("f-fee").value||0,
+      trialDate:document.getElementById("f-trial").value||"",
       phone:document.getElementById("f-phone").value.trim(),
       note:document.getElementById("f-note").value.trim(),
       token:document.getElementById("f-token").value||"",
@@ -1197,6 +1261,10 @@ document.addEventListener("click",function(e){
   if(act==="edit-solo"){
     var rec=D.solo.filter(function(r){ return r.id===id; })[0];
     if(rec) soloModal(rec);
+    return;
+  }
+  if(act==="solo-hours"){
+    document.getElementById("i-hours").value=id;
     return;
   }
   if(act==="solo-date"){
