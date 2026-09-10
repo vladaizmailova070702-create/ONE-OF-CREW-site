@@ -22,19 +22,25 @@ robots.txt          (для поисковых роботов)
 sitemap.xml         (карта сайта для Яндекса и Google)
 assets/web/*        (webp, jpg, mp4)
 assets/web/social/* (лента соцсетей: mp4, постеры и фото webp)
-brand_assets/web/*  (logo.png, favicon.*, apple-touch-icon.png)
+brand_assets/web/*  (logo.png, favicon.*, apple-touch-icon.png, journal-icon-*.png)
+journal/*           (index.html, manifest.webmanifest, sw.js — журнал студии)
 ```
 НЕ загружай: `assets/originals/`, `brand_assets/originals/`, `docs/`, `promo/`,
 `CLAUDE.md`, `.claude/`, `temporary screenshots/` и прочие служебные файлы.
 
 Пересобрать папку `deploy/` можно одной командой из корня проекта:
 ```
-rm -rf deploy && mkdir -p deploy/assets/web/social deploy/brand_assets/web   && cp *.html style.css robots.txt sitemap.xml deploy/   && cp assets/web/*.webp assets/web/*.jpg assets/web/*.mp4 deploy/assets/web/   && cp assets/web/social/* deploy/assets/web/social/   && cp brand_assets/web/logo.png brand_assets/web/favicon.*         brand_assets/web/apple-touch-icon.png deploy/brand_assets/web/
+rm -rf deploy && mkdir -p deploy/assets/web/social deploy/brand_assets/web deploy/journal   && cp *.html style.css robots.txt sitemap.xml deploy/   && cp assets/web/*.webp assets/web/*.jpg assets/web/*.mp4 deploy/assets/web/   && cp assets/web/social/* deploy/assets/web/social/   && cp brand_assets/web/logo.png brand_assets/web/favicon.*         brand_assets/web/apple-touch-icon.png brand_assets/web/journal-icon-*.png deploy/brand_assets/web/   && cp journal/index.html journal/manifest.webmanifest journal/sw.js deploy/journal/
 ```
 
 Типы контента для новых файлов (шаг 3 ниже): `robots.txt` → `text/plain`,
 `sitemap.xml` → `application/xml`, `.jpg` → `image/jpeg`, `.mp4` → `video/mp4`,
-`.webp` → `image/webp`.
+`.webp` → `image/webp`, `journal/manifest.webmanifest` →
+`application/manifest+json`, `journal/sw.js` → `text/javascript`.
+
+Про журнал (`/journal/`) — отдельная инструкция: `docs/JOURNAL.md`. Там же
+важное правило: после правки `journal/index.html` нужно поднять `VERSION`
+в `journal/sw.js`, иначе установленные копии останутся на старой версии.
 
 ---
 
