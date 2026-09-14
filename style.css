@@ -2056,3 +2056,16 @@ body::before {
 }
 .copyright-legal a:hover { color: var(--text-primary); }
 .copyright-legal a:focus-visible { outline: 2px solid var(--accent-soft); outline-offset: 3px; }
+
+/* Врезка-статус в начале документа (например, что обработка приостановлена) */
+.prose .notice {
+  margin-top: 0;
+  margin-bottom: 8px;
+  padding: 16px 18px;
+  border: 1px solid var(--accent-hover);
+  border-radius: var(--radius);
+  background: var(--surface-alt);
+  color: var(--text-primary);
+  font-size: 0.93rem;
+  line-height: 1.65;
+}

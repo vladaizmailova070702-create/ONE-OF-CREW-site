@@ -44,24 +44,10 @@
   }
   </script>
 
-  <!-- Yandex.Metrika counter 112378414 -->
-  <script type="text/javascript">
-    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-    m[i].l=1*new Date();
-    for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-    k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js?id=112378414", "ym");
-
-    ym(112378414, "init", {
-      ssr: true,
-      clickmap: true,
-      trackLinks: true,
-      accurateTrackBounce: true,
-      webvisor: true
-    });
-  </script>
-  <noscript><div><img src="https://mc.yandex.ru/watch/112378414" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-  <!-- /Yandex.Metrika counter -->
+  <!-- Яндекс.Метрика снята 15.09.2026: сбор приостановлен до подачи уведомления
+       в Роскомнадзор об обработке персональных данных. Счётчик 112378414.
+       Вернуть код: git show 8b9f2a7:index.html — блок в <head>.
+       См. docs/YANDEX_SEO.md, раздел 2.2. -->
 
 </head>
 <body>
@@ -110,12 +96,14 @@
       <time datetime="2026-09-15">Редакция от 15 сентября 2026</time>
     </div>
     <h1>Политика обработки<br />персональных данных</h1>
-    <p class="post-lead">Коротко: форм на сайте нет, вы ничего нам не отправляете. Единственное, что собирается, — обезличенная статистика посещений через Яндекс.Метрику. Ниже подробно, что это за данные и как отказаться.</p>
+    <p class="post-lead">Коротко: форм на сайте нет, вы ничего нам не отправляете. Единственное, что может собираться, — обезличенная статистика посещений через Яндекс.Метрику. Ниже подробно, что это за данные и как отказаться.</p>
   </header>
 
   <section class="section">
     <div class="container">
       <div class="prose">
+        <p class="notice"><strong>Статус на 15 сентября 2026: сбор статистики приостановлен.</strong> Счётчик Яндекс.Метрики снят с сайта до подачи оператором уведомления в Роскомнадзор об обработке персональных данных. Сейчас сайт не собирает сведений о посетителях. Всё описанное ниже начнёт действовать в день, когда сбор возобновится, — эта страница будет обновлена.</p>
+
         <h2>1. Кто обрабатывает данные</h2>
         <p>Оператором персональных данных является <strong>Измайлова Владислава Андреевна</strong>, физическое лицо, применяющее специальный налоговый режим «Налог на профессиональный доход» (самозанятая), ИНН <strong>272303751377</strong>. Деятельность ведётся под названием ONE OF STUDIO по адресу: Хабаровск, ул. Комсомольская, 78.</p>
         <p>Политика действует в отношении сайта <a href="https://oneofstudio.ru/">oneofstudio.ru</a> и составлена в соответствии с Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных».</p>
@@ -233,37 +221,5 @@
 
   <!-- Яндекс.Метрика: счётчик ставится сюда же, что и на index.html.
        Инструкция — в комментарии в конце index.html и в docs/YANDEX_SEO.md. -->
-  <!-- Уведомление о сборе статистики. Информирующее, не блокирующее:
-       по 152-ФЗ согласие-до-установки cookie не требуется, а модалка
-       поверх контента стоила бы обращений. -->
-  <div class="cookie-bar" id="cookieBar" role="region" aria-label="Уведомление о файлах cookie" hidden>
-    <p class="cookie-bar-text">
-      Сайт собирает обезличенную статистику через Яндекс.Метрику. Подробнее и как отказаться — в <a href="privacy.html">политике обработки персональных данных</a>.
-    </p>
-    <button class="cookie-bar-btn" type="button" id="cookieBarOk">Понятно</button>
-  </div>
-
-  <script>
-    // Показываем один раз. Если localStorage недоступен (инкогнито, запрет
-    // на данные сайтов), просто показываем уведомление каждый раз — это
-    // безопаснее, чем уронить страницу.
-    (function () {
-      var KEY = 'oneof_cookie_notice_v1';
-      var bar = document.getElementById('cookieBar');
-      var ok = document.getElementById('cookieBarOk');
-      if (!bar || !ok) return;
-
-      var seen = false;
-      try { seen = localStorage.getItem(KEY) === '1'; } catch (e) {}
-      if (seen) return;
-
-      bar.hidden = false;
-      ok.addEventListener('click', function () {
-        bar.hidden = true;
-        try { localStorage.setItem(KEY, '1'); } catch (e) {}
-      });
-    })();
-  </script>
-
 </body>
 </html>
