@@ -1965,3 +1965,94 @@ body::before {
   .post-card { transition: none; }
   .post-card:hover { transform: none; }
 }
+
+/* ============================================================
+   УВЕДОМЛЕНИЕ О COOKIE
+   Информирующее, не блокирующее: сайт живёт ради того, чтобы
+   человек дошёл до кнопки мессенджера, и модалка поверх контента
+   забирала бы обращения. Появляется внизу, закрывается навсегда.
+   ============================================================ */
+.cookie-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  z-index: 60;
+  width: min(720px, calc(100vw - 32px));
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 18px;
+  background: rgba(26, 18, 18, 0.96);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+}
+.cookie-bar[hidden] { display: none !important; }
+
+.cookie-bar-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+.cookie-bar-text a {
+  color: var(--accent-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.cookie-bar-text a:hover { color: var(--white); }
+.cookie-bar-text a:focus-visible { outline: 2px solid var(--accent-soft); outline-offset: 3px; }
+
+.cookie-bar-btn {
+  flex: none;
+  padding: 9px 20px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.cookie-bar-btn:hover { background: var(--accent-hover); }
+.cookie-bar-btn:focus-visible { outline: 2px solid var(--white); outline-offset: 3px; }
+
+@media (max-width: 560px) {
+  /* Оставляем кнопку в строке: колонка делала полосу вдвое выше, и она
+     накрывала кнопку «Записаться» в первом экране. */
+  .cookie-bar {
+    gap: 12px;
+    bottom: 12px;
+    padding: 12px 14px;
+  }
+  .cookie-bar-text { font-size: 0.76rem; line-height: 1.4; }
+  .cookie-bar-btn { padding: 9px 14px; font-size: 11px; letter-spacing: 0.08em; }
+}
+
+/* Самые узкие экраны: на 360px полоса упиралась в кнопку «Записаться»
+   в первом экране, поэтому здесь она ещё компактнее. */
+@media (max-width: 400px) {
+  .cookie-bar { padding: 10px 12px; gap: 10px; bottom: 10px; }
+  .cookie-bar-text { font-size: 0.71rem; line-height: 1.35; }
+  .cookie-bar-btn { padding: 8px 12px; font-size: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cookie-bar-btn { transition: none; }
+}
+
+.copyright-legal { margin-top: 6px; }
+.copyright-legal a {
+  color: var(--text-secondary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.copyright-legal a:hover { color: var(--text-primary); }
+.copyright-legal a:focus-visible { outline: 2px solid var(--accent-soft); outline-offset: 3px; }

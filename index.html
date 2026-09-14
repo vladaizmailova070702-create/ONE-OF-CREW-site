@@ -44,7 +44,7 @@
 
   <link rel="preload" as="image" href="assets/web/hero.webp" />
 
-  <link rel="stylesheet" href="style.css?v=5" />
+  <link rel="stylesheet" href="style.css?v=6" />
 
   <!-- JSON-LD: DanceSchool + расписание групп -->
   <script type="application/ld+json">
@@ -951,6 +951,7 @@
         <span class="tag">© <span id="year">2026</span></span>
       </div>
       <p class="copyright">All rights reserved · ONE OF STUDIO</p>
+      <p class="copyright copyright-legal"><a href="privacy.html">Политика обработки персональных данных</a></p>
     </div>
   </footer>
 
@@ -1128,6 +1129,38 @@
       });
     })();
 
+  </script>
+
+  <!-- Уведомление о сборе статистики. Информирующее, не блокирующее:
+       по 152-ФЗ согласие-до-установки cookie не требуется, а модалка
+       поверх контента стоила бы обращений. -->
+  <div class="cookie-bar" id="cookieBar" role="region" aria-label="Уведомление о файлах cookie" hidden>
+    <p class="cookie-bar-text">
+      Сайт собирает обезличенную статистику через Яндекс.Метрику. Подробнее и как отказаться — в <a href="privacy.html">политике обработки персональных данных</a>.
+    </p>
+    <button class="cookie-bar-btn" type="button" id="cookieBarOk">Понятно</button>
+  </div>
+
+  <script>
+    // Показываем один раз. Если localStorage недоступен (инкогнито, запрет
+    // на данные сайтов), просто показываем уведомление каждый раз — это
+    // безопаснее, чем уронить страницу.
+    (function () {
+      var KEY = 'oneof_cookie_notice_v1';
+      var bar = document.getElementById('cookieBar');
+      var ok = document.getElementById('cookieBarOk');
+      if (!bar || !ok) return;
+
+      var seen = false;
+      try { seen = localStorage.getItem(KEY) === '1'; } catch (e) {}
+      if (seen) return;
+
+      bar.hidden = false;
+      ok.addEventListener('click', function () {
+        bar.hidden = true;
+        try { localStorage.setItem(KEY, '1'); } catch (e) {}
+      });
+    })();
   </script>
 
 </body>
