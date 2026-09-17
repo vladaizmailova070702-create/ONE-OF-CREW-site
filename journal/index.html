@@ -126,20 +126,40 @@ input[type=month]{min-width:148px}
 
 .roster{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
 .rrow{
-  display:flex;align-items:center;gap:12px;width:100%;text-align:left;
-  background:var(--surface);border:0;padding:14px;cursor:pointer;
+  display:flex;align-items:center;gap:8px;width:100%;
+  background:var(--surface);
+}
+.rrow-main{
+  display:flex;align-items:center;gap:12px;flex:1;min-width:0;text-align:left;
+  background:none;border:0;padding:14px;cursor:pointer;
   transition:background .15s ease;
 }
-.rrow:hover{background:var(--surface-2)}
+.rrow-main:hover{background:var(--surface-2)}
+/* отметка болезни: занятие не списывается и переносится */
+.rrow-sick{
+  flex:none;margin-right:10px;border:1px solid var(--line-strong);background:transparent;
+  color:var(--faint);border-radius:999px;padding:6px 11px;font-size:11px;font-weight:600;
+  letter-spacing:.04em;cursor:pointer;white-space:nowrap;
+  transition:background .15s ease,border-color .15s ease,color .15s ease;
+}
+.rrow-sick:hover{border-color:var(--warn);color:var(--warn)}
+.rrow-sick[aria-pressed=true]{background:rgba(194,147,63,.18);border-color:rgba(194,147,63,.5);color:#dcb469}
 .rrow .tick{
   flex:none;width:22px;height:22px;border-radius:6px;border:1.5px solid var(--line-strong);
   display:grid;place-items:center;font-size:13px;color:transparent;
   transition:background .15s ease,border-color .15s ease,color .15s ease;
 }
-.rrow[aria-pressed=true] .tick{background:var(--accent);border-color:var(--accent);color:#fff}
+.rrow-main[aria-pressed=true] .tick{background:var(--accent);border-color:var(--accent);color:#fff}
+.rrow.sick{background:rgba(194,147,63,.05)}
 .rrow .nm{display:block;font-weight:600;font-size:15px}
 .rrow .mt{display:block;font-size:12px;color:var(--faint);margin-top:1px}
+.rrow .mt.sick{color:#dcb469}
 .rrow .right{margin-left:auto;text-align:right;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+@media(max-width:480px){
+  .rrow .right{display:none}
+  .rrow-main{padding:13px 10px 13px 14px;gap:10px}
+  .rrow-sick{margin-right:8px;padding:6px 9px}
+}
 
 /* ---------- списки ---------- */
 .list{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
@@ -301,13 +321,25 @@ input[type=month]{min-width:148px}
    ============================================================ */
 
 var GROUPS = [
-  {id:"choreo", name:"Choreo", meta:"ONE OF CREW · 16–30 лет", time:"Вс 13:00–15:00", fee:4000, hours:2},
-  {id:"kpop",   name:"K-Pop",  meta:"Cover Dance · 12–25 лет",  time:"Вс 15:00–17:00", fee:3500, hours:2},
+  {id:"choreo", name:"Choreo", meta:"ONE OF CREW · 16–30 лет", time:"Вс 13:00–15:00", fee:4000, hours:2, lessons:4, weekday:0},
+  {id:"kpop",   name:"K-Pop",  meta:"Cover Dance · 12–25 лет",  time:"Вс 15:00–17:00", fee:3500, hours:2, lessons:4, weekday:0},
   // индивидуальные: не группа с расписанием, а отдельные занятия по записи —
   // fee здесь ставка за час
   {id:"solo",   name:"Индивидуальные", meta:"по записи", time:"время по договорённости", fee:2000, solo:true}
 ];
 var METHODS = ["Перевод", "Наличные"];
+// причины пропуска. Списывать занятие или нет — решает поле keep:
+// со справкой занятие переносится, остальные пропуски сгорают.
+var ABSENCE = [
+  {id:"sick",  name:"Болезнь, есть справка", short:"справка", keep:true},
+  {id:"skip",  name:"Прогул",                short:"прогул",  keep:false},
+  {id:"trip",  name:"Отъезд, каникулы",      short:"отъезд",  keep:false},
+  {id:"other", name:"Другая причина",        short:"причина", keep:false}
+];
+function absenceInfo(code){
+  for(var i=0;i<ABSENCE.length;i++) if(ABSENCE[i].id===code) return ABSENCE[i];
+  return null;
+}
 var KINDS = ["Абонемент", "Разовое занятие", "Индивидуальное", "Второе направление"];
 var MONTH_NAMES = ["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"];
 var LKEY = "oneof-journal-v1";
@@ -559,6 +591,143 @@ function hallHours(ym){
 function rentOf(ym){ return hallHours(ym) * (+D.settings.rentPerHour||0); }
 function taxOf(ym){ return Math.round(incomeOf(ym) * (+D.settings.taxPercent||0) / 100); }
 
+/* ============================================================
+   Оплата считается ЗАНЯТИЯМИ, а не календарным месяцем.
+
+   Абонемент — это пакет из 4 занятий (8 часов). Внесённые деньги
+   делятся на цену занятия и превращаются в оплаченные занятия;
+   каждое посещение списывает одно. Остаток никуда не сгорает и
+   спокойно переходит на следующий месяц — поэтому оплата в середине
+   сентября закрывает часть октября.
+
+   Пробное занятие бесплатное и ничего не списывает.
+   ============================================================ */
+
+// цена одного занятия: у разовых это сама сумма, у абонемента — доля пакета
+function lessonPrice(st){
+  if(st.plan==="single") return +st.fee||0;
+  var pack = group(st.group).lessons || 4;
+  return pack>0 ? (+st.fee||0)/pack : 0;
+}
+// деньги, внесённые за групповые занятия (индивидуальные считаются отдельно)
+function paidForLessons(st){
+  return D.payments.reduce(function(a,p){
+    if(p.studentId!==st.id) return a;
+    if(p.kind==="Индивидуальное") return a;
+    return a+(+p.amount||0);
+  },0);
+}
+function boughtLessons(st){
+  var price=lessonPrice(st);
+  return price>0 ? paidForLessons(st)/price : 0;
+}
+// с какого дня у человека идёт платный период:
+// после пробного — со следующего занятия группы, иначе — с первого
+// его посещения, а если он ещё не приходил — с первой оплаты
+function startDateOf(st){
+  var k, s;
+  // если дата проставлена вручную — она и есть начало платного периода
+  if(st.sinceDate) return st.sinceDate;
+  if(st.trialDate){
+    var after="";
+    for(k in D.sessions){
+      s=D.sessions[k];
+      if(!s||!s.date||s.group!==st.group) continue;
+      if(s.date>st.trialDate && (!after || s.date<after)) after=s.date;
+    }
+    if(after) return after;
+    var d=new Date(st.trialDate+"T00:00:00");
+    d.setDate(d.getDate()+1);
+    return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate());
+  }
+  var first="";
+  for(k in D.sessions){
+    s=D.sessions[k];
+    if(!s||!s.date) continue;
+    if((s.present||[]).indexOf(st.id)<0) continue;
+    if(!first || s.date<first) first=s.date;
+  }
+  if(first) return first;
+  var pay="";
+  D.payments.forEach(function(p){
+    if(p.studentId!==st.id) return;
+    if(!pay || String(p.date)<pay) pay=String(p.date);
+  });
+  return pay||"";
+}
+
+// Списываются ПРОВЕДЁННЫЕ занятия группы с начала платного периода —
+// абонемент закрывает занятия, а не явку: пропуск не переносится.
+// Пробное в счёт не идёт.
+function usedLessons(st){
+  var from=startDateOf(st);
+  if(!from) return 0;
+  var n=0;
+  for(var k in D.sessions){
+    var s=D.sessions[k];
+    if(!s||!s.date||s.group!==st.group) continue;
+    if(s.date<from) continue;
+    if(st.trialDate && s.date===st.trialDate) continue;
+    // переносится только пропуск по справке; прогул и отъезд списываются
+    var why=absenceInfo((s.absence||{})[st.id]);
+    if(why && why.keep) continue;
+    n++;
+  }
+  return n;
+}
+
+// занятия, перенесённые по справке
+function excusedLessons(st){
+  var from=startDateOf(st);
+  if(!from) return 0;
+  var n=0;
+  for(var k in D.sessions){
+    var s=D.sessions[k];
+    if(!s||!s.date||s.group!==st.group) continue;
+    if(s.date<from) continue;
+    var why=absenceInfo((s.absence||{})[st.id]);
+    if(why && why.keep) n++;
+  }
+  return n;
+}
+
+// сколько из списанных занятий человек пропустил
+function missedLessons(st){
+  var from=startDateOf(st);
+  if(!from) return 0;
+  var n=0;
+  for(var k in D.sessions){
+    var s=D.sessions[k];
+    if(!s||!s.date||s.group!==st.group) continue;
+    if(s.date<from) continue;
+    if(st.trialDate && s.date===st.trialDate) continue;
+    var w=absenceInfo((s.absence||{})[st.id]);
+    if(w && w.keep) continue;
+    if((s.present||[]).indexOf(st.id)<0) n++;
+  }
+  return n;
+}
+function lessonBalance(st){ return Math.round((boughtLessons(st)-usedLessons(st))*100)/100; }
+
+// до какой даты хватит оплаченного — отсчитываем занятия по расписанию группы
+function coveredUntil(st){
+  var left=lessonBalance(st);
+  if(left<=0) return "";
+  var weekday=group(st.group).weekday;
+  if(weekday===undefined) return "";
+  var d=new Date(), seen=0, last="";
+  for(var i=0;i<400 && seen<left;i++){
+    if(d.getDay()===weekday){ seen++; last=d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate()); }
+    d.setDate(d.getDate()+1);
+  }
+  return last;
+}
+// сколько ученик должен деньгами (отрицательный баланс)
+function debtOf(st){
+  var left=lessonBalance(st);
+  return left<0 ? Math.round(-left*lessonPrice(st)) : 0;
+}
+
 function trialsOf(ym){
   // кто был на пробном в этом месяце: по дате в карточке, а если её не
   // указали — по первой отметке посещения
@@ -670,8 +839,9 @@ function viewSolo(){
 function viewLesson(){
   if(group(S.group).solo) return viewSolo();
   var g=group(S.group), key=sessionKey(S.date,S.group);
-  var sess=D.sessions[key]||{date:S.date,group:S.group,present:[]};
+  var sess=D.sessions[key]||{date:S.date,group:S.group,present:[],absence:{}};
   var present=sess.present||[];
+  var absence=sess.absence||{};
   var roster=activeStudents(S.group);
   var ratio=roster.length?present.length/roster.length:0;
 
@@ -690,12 +860,22 @@ function viewLesson(){
       '<span class="meter"><i style="transform:scaleX('+ratio.toFixed(3)+')"></i></span></div>'+
       '<div class="roster">'+roster.map(function(st){
         var on=present.indexOf(st.id)>=0;
-        return '<button class="rrow" data-act="toggle" data-id="'+st.id+'" aria-pressed="'+on+'">'+
-          '<span class="tick" aria-hidden="true">✓</span>'+
-          '<span><span class="nm">'+esc(st.name)+'</span>'+
-          (st.plan==="trial"?'<span class="mt">пробное — бесплатно</span>'
-            :st.plan==="single"?'<span class="mt">разовые</span>':'')+'</span>'+
-          '<span class="right">'+visitsOf(st.id,S.month,S.group)+' в месяце</span></button>';
+        var why=absenceInfo(absence[st.id]);
+        var note = why
+            ? '<span class="mt'+(why.keep?' sick':'')+'">'+esc(why.short)+
+              (why.keep?' — не списано':' — списано')+'</span>'
+          : st.plan==="trial" ? '<span class="mt">пробное — бесплатно</span>'
+          : st.plan==="single" ? '<span class="mt">разовые</span>' : '';
+        return '<div class="rrow'+(why&&why.keep?' sick':'')+'">'+
+          '<button class="rrow-main" data-act="toggle" data-id="'+st.id+'" aria-pressed="'+on+'">'+
+            '<span class="tick" aria-hidden="true">✓</span>'+
+            '<span><span class="nm">'+esc(st.name)+'</span>'+note+'</span>'+
+            '<span class="right">'+visitsOf(st.id,S.month,S.group)+' в месяце</span>'+
+          '</button>'+
+          '<button class="rrow-sick" data-act="absence" data-id="'+st.id+'" aria-pressed="'+(!!why)+'"'+
+            ' title="Почему не был: болезнь со справкой переносит занятие, остальное списывается">'+
+            esc(why?why.short:"пропуск")+'</button>'+
+        '</div>';
       }).join("")+'</div>';
   }
 
@@ -712,13 +892,7 @@ function viewStudents(){
     var list=activeStudents(g.id);
     var inner = list.length
       ? '<div class="list">'+list.map(function(st){
-          var pill="";
-          if(moneyVisible()){
-            var charge=chargeOf(st,S.month), paid=paidOf(st.id,S.month);
-            pill = (charge>0 && paid>=charge) ? '<span class="pill paid">оплачено</span>'
-              : paid>0 ? '<span class="pill part">частично</span>'
-              : charge>0 ? '<span class="pill debt">не оплачено</span>' : '';
-          }
+          var pill = moneyVisible() ? balancePill(st) : "";
           return '<button class="rowb" data-act="edit-student" data-id="'+st.id+'">'+
             '<span class="grow"><span class="nm">'+esc(st.name)+'</span>'+
             '<span class="mt">'+(
@@ -751,23 +925,53 @@ function viewStudents(){
     '</section>';
 }
 
+// строка под именем: сколько внесено и на сколько занятий этого хватило
+function balanceLine(st){
+  if(st.group==="solo" || st.plan==="trial"){
+    var soloCharge=soloChargeOf(st.id,S.month), soloPaid=paidOf(st.id,S.month);
+    if(st.plan==="trial" && soloCharge<=0) return "пробное — бесплатно";
+    return "внесено "+num(soloPaid)+" из "+money(soloCharge);
+  }
+  var bought=boughtLessons(st), used=usedLessons(st), left=lessonBalance(st);
+  var parts=[];
+  parts.push("внесено "+money(paidForLessons(st)));
+  if(bought>0) parts.push("это "+hoursLabel(bought)+" "+plural(Math.round(bought),"занятие","занятия","занятий"));
+  if(used>0){
+    var missed=missedLessons(st);
+    parts.push("прошло "+used+(missed>0?" (пропущено "+missed+")":""));
+  }
+  var ill=excusedLessons(st);
+  if(ill>0) parts.push("перенесено по справке "+ill);
+  var solo=soloChargeOf(st.id,S.month);
+  if(solo>0) parts.push("плюс "+money(solo)+" за индивидуальные");
+  return parts.join(" · ");
+}
+function balancePill(st){
+  if(st.plan==="trial") return '<span class="pill quiet">пробное</span>';
+  if(st.group==="solo"){
+    var charge=soloChargeOf(st.id,S.month), paid=paidOf(st.id,S.month);
+    if(charge<=0) return '<span class="pill quiet">нет начислений</span>';
+    return paid>=charge ? '<span class="pill paid">оплачено</span>'
+      : '<span class="pill debt">'+money(charge-paid)+'</span>';
+  }
+  var left=lessonBalance(st);
+  if(left<0) return '<span class="pill debt">долг '+money(debtOf(st))+'</span>';
+  if(left<0.5) return '<span class="pill part">закончились</span>';
+  var until=coveredUntil(st);
+  return '<span class="pill paid">'+hoursLabel(left)+' '+plural(Math.round(left),"занятие","занятия","занятий")+
+    (until?' · до '+dayLabel(until):'')+'</span>';
+}
+
 /* ---- Оплаты ---- */
 function viewMoney(){
   var blocks=GROUPS.map(function(g){
     var list=activeStudents(g.id);
     if(!list.length) return "";
     return '<div class="block"><h3>'+esc(g.name)+'</h3><div class="list">'+list.map(function(st){
-      var charge=chargeOf(st,S.month), paid=paidOf(st.id,S.month), left=charge-paid;
-      var pill = charge<=0 ? '<span class="pill quiet">нет начислений</span>'
-        : left<=0 ? '<span class="pill paid">оплачено</span>'
-        : paid>0 ? '<span class="pill part">долг '+money(left)+'</span>'
-        : '<span class="pill debt">'+money(charge)+'</span>';
-      var solo=soloChargeOf(st.id,S.month);
       return '<button class="rowb" data-act="add-payment" data-id="'+st.id+'">'+
         '<span class="grow"><span class="nm">'+esc(st.name)+'</span>'+
-        '<span class="mt">внесено '+num(paid)+' из '+money(charge)+
-        (solo>0?' · из них '+money(solo)+' за индивидуальные':'')+'</span></span>'+
-        pill+'<span class="chev" aria-hidden="true">+</span>'+
+        '<span class="mt">'+balanceLine(st)+'</span></span>'+
+        balancePill(st)+'<span class="chev" aria-hidden="true">+</span>'+
       '</button>';
     }).join("")+'</div></div>';
   }).join("");
@@ -804,7 +1008,16 @@ function viewTotals(){
 
   var debts=[];
   activeStudents().forEach(function(st){
-    var left=chargeOf(st,S.month)-paidOf(st.id,S.month);
+    // долг деньгами: недоплаченные занятия плюс неоплаченные индивидуальные
+    var left = debtOf(st);
+    if(st.group==="solo" || st.plan==="trial"){
+      left = Math.max(0, soloChargeOf(st.id,S.month)-paidOf(st.id,S.month));
+    } else {
+      var soloLeft = soloChargeOf(st.id,S.month) - D.payments.reduce(function(a,p){
+        return a+(p.studentId===st.id && p.kind==="Индивидуальное" && p.month===S.month ? (+p.amount||0) : 0);
+      },0);
+      if(soloLeft>0) left += soloLeft;
+    }
     if(left>0) debts.push({st:st,left:left});
   });
   debts.sort(function(a,b){ return b.left-a.left; });
@@ -996,6 +1209,10 @@ function studentModal(st){
         '<option value="single"'+(st.plan==="single"?" selected":"")+'>Разовые занятия</option>'+
         '<option value="trial"'+(st.plan==="trial"?" selected":"")+'>Пробное — бесплатно</option>'+
       '</select></div></div>'+
+    '<div class="field"><label for="f-since">Занимается с</label>'+
+      '<input type="date" id="f-since" value="'+esc(st.sinceDate||"")+'">'+
+      '<p class="hint" style="margin:6px 0 0">С этого дня списываются занятия. Оставьте пустым — журнал возьмёт первое занятие после пробного, а если пробного нет — первое посещение.</p>'+
+    '</div>'+
     '<div class="field"><label for="f-trial">Дата пробного</label>'+
       '<input type="date" id="f-trial" value="'+esc(st.trialDate||"")+'">'+
       '<p class="hint" style="margin:6px 0 0">Заполняется, когда тариф — «Пробное». За такое занятие ничего не начисляется; когда человек останется, поменяйте тариф на абонемент.</p>'+
@@ -1018,6 +1235,30 @@ function studentModal(st){
     '</div>'
   );
 }
+function absenceModal(st){
+  var key=sessionKey(S.date,S.group);
+  var sess=D.sessions[key]||{present:[],absence:{}};
+  var cur=(sess.absence||{})[st.id]||"";
+  openModal(
+    '<h3>'+esc(st.name)+' · '+esc(dayLabel(S.date))+'</h3>'+
+    '<p class="hint">Почему не было на занятии. Со справкой занятие переносится на потом, остальные причины списывают его как обычно.</p>'+
+    '<div class="list" style="margin-bottom:14px">'+
+      ABSENCE.map(function(a){
+        return '<button class="rowb" data-act="set-absence" data-id="'+a.id+'" data-student="'+esc(st.id)+'">'+
+          '<span class="grow"><span class="nm">'+esc(a.name)+'</span>'+
+          '<span class="mt">'+(a.keep?"занятие не списывается":"занятие списывается")+'</span></span>'+
+          (cur===a.id?'<span class="pill paid">выбрано</span>':'')+
+          '<span class="chev" aria-hidden="true">›</span></button>';
+      }).join("")+
+      (cur?'<button class="rowb" data-act="set-absence" data-id="none" data-student="'+esc(st.id)+'">'+
+        '<span class="grow"><span class="nm">Убрать отметку</span>'+
+        '<span class="mt">просто не отмечен</span></span>'+
+        '<span class="chev" aria-hidden="true">›</span></button>':'')+
+    '</div>'+
+    '<div class="actions"><button class="btn" data-act="close">Отмена</button></div>'
+  );
+}
+
 function soloModal(rec){
   var isNew=!rec;
   rec = rec || {id:uid(), date:todayISO(), studentId:"", hours:1, rate:group("solo").fee, note:""};
@@ -1065,10 +1306,21 @@ function soloModal(rec){
 }
 
 function paymentModal(st){
-  var charge=chargeOf(st,S.month), left=Math.max(0,charge-paidOf(st.id,S.month));
-  // если весь долг — за индивидуальные, вид оплаты подставляем сразу
+  // что предложить: непогашенный долг, а если долгов нет — обычный абонемент
   var soloPart=soloChargeOf(st.id,S.month);
-  var onlySolo = soloPart>0 && soloPart>=charge;
+  var soloPaid=D.payments.reduce(function(a,p){
+    return a+(p.studentId===st.id && p.kind==="Индивидуальное" ? (+p.amount||0) : 0);
+  },0);
+  var soloLeft=Math.max(0, soloPart-soloPaid);
+  var left;
+  if(st.group==="solo" || st.plan==="trial"){
+    left=soloLeft;
+  } else {
+    left=debtOf(st)+soloLeft;
+    if(left<=0 && lessonBalance(st)<0.5) left=+st.fee||0;
+  }
+  var charge=left;
+  var onlySolo = soloLeft>0 && soloLeft>=left;
   openModal(
     '<h3>Оплата · '+esc(st.name)+'</h3>'+
     '<input type="hidden" id="p-student" value="'+esc(st.id)+'">'+
@@ -1178,18 +1430,43 @@ document.addEventListener("click",function(e){
 
   if(act==="toggle"){
     var key=sessionKey(S.date,S.group);
-    var sess=D.sessions[key]||{date:S.date,group:S.group,present:[]};
+    var sess=D.sessions[key]||{date:S.date,group:S.group,present:[],absence:{}};
     var list=(sess.present||[]).slice();
+    var abs=Object.assign({}, sess.absence||{});
     var i=list.indexOf(id);
-    if(i>=0) list.splice(i,1); else list.push(id);
-    D.sessions[key]={date:S.date,group:S.group,present:list};
+    if(i>=0){ list.splice(i,1); }
+    else { list.push(id); delete abs[id]; }  // пришёл — причина отсутствия ни к чему
+    D.sessions[key]={date:S.date,group:S.group,present:list,absence:abs};
     commit();
+    return;
+  }
+  if(act==="absence"){
+    var st0=D.students.filter(function(x){ return x.id===id; })[0];
+    if(st0) absenceModal(st0);
+    return;
+  }
+  if(act==="set-absence"){
+    var kx=sessionKey(S.date,S.group);
+    var sx=D.sessions[kx]||{date:S.date,group:S.group,present:[],absence:{}};
+    var pl=(sx.present||[]).slice();
+    var ab=Object.assign({}, sx.absence||{});
+    var who=el.getAttribute("data-student");
+    if(id==="none"){ delete ab[who]; }
+    else {
+      ab[who]=id;
+      var pi=pl.indexOf(who);
+      if(pi>=0) pl.splice(pi,1);  // отсутствие снимает отметку присутствия
+    }
+    D.sessions[kx]={date:S.date,group:S.group,present:pl,absence:ab};
+    closeModal(); commit();
     return;
   }
   if(act==="clear-day"){
     var k2=sessionKey(S.date,S.group);
-    if(D.sessions[k2]&&(D.sessions[k2].present||[]).length&&confirm("Снять все отметки за "+dayLabel(S.date)+"?")){
-      D.sessions[k2]={date:S.date,group:S.group,present:[]};
+    var sc=D.sessions[k2];
+    var has=sc && ((sc.present||[]).length || Object.keys(sc.absence||{}).length);
+    if(has&&confirm("Снять все отметки за "+dayLabel(S.date)+"?")){
+      D.sessions[k2]={date:S.date,group:S.group,present:[],absence:{}};
       commit();
     }
     return;
@@ -1211,6 +1488,7 @@ document.addEventListener("click",function(e){
       plan:document.getElementById("f-plan").value,
       fee:+document.getElementById("f-fee").value||0,
       trialDate:document.getElementById("f-trial").value||"",
+      sinceDate:document.getElementById("f-since").value||"",
       phone:document.getElementById("f-phone").value.trim(),
       note:document.getElementById("f-note").value.trim(),
       token:document.getElementById("f-token").value||"",
@@ -1250,7 +1528,9 @@ document.addEventListener("click",function(e){
       D.solo=D.solo.filter(function(r){ return r.studentId!==id; });
       for(var k3 in D.sessions){
         var ss=D.sessions[k3];
-        if(ss&&ss.present) ss.present=ss.present.filter(function(x){ return x!==id; });
+        if(!ss) continue;
+        if(ss.present) ss.present=ss.present.filter(function(x){ return x!==id; });
+        if(ss.absence) delete ss.absence[id];
       }
       closeModal(); commit();
     }

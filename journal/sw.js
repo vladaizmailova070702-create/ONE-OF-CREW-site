@@ -3,7 +3,7 @@
    При изменении файлов приложения поднимите VERSION — иначе у уже
    установленных копий останется старый кэш. */
 
-var VERSION = "journal-v6";
+var VERSION = "journal-v7";
 var SHELL = [
   "./",
   "./index.html",
