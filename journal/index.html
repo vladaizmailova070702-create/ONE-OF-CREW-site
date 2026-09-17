@@ -624,6 +624,17 @@ function boughtLessons(st){
 // с какого дня у человека идёт платный период:
 // после пробного — со следующего занятия группы, иначе — с первого
 // его посещения, а если он ещё не приходил — с первой оплаты
+// На занятии показываем только тех, у кого к этому дню уже начался
+// платный период. До него человека в списке нет — он ещё не занимался
+// (пробное фиксируется датой в карточке, а не отметкой).
+function rosterFor(groupId, date){
+  return activeStudents(groupId).filter(function(st){
+    var from=startDateOf(st);
+    if(!from) return true;          // дата начала ещё не определилась
+    return String(date)>=String(from);
+  });
+}
+
 function startDateOf(st){
   var k, s;
   // если дата проставлена вручную — она и есть начало платного периода
@@ -797,7 +808,7 @@ function render(){
 
 function groupChips(){
   return '<div class="chips">'+GROUPS.map(function(g){
-    var count = g.solo ? soloOf(S.month).length : activeStudents(g.id).length;
+    var count = g.solo ? soloOf(S.month).length : rosterFor(g.id, S.date).length;
     return '<button class="chip" data-act="group" data-id="'+g.id+'" aria-pressed="'+(S.group===g.id)+'">'+
       esc(g.name)+'<span class="n">'+count+'</span></button>';
   }).join("")+'</div>';
@@ -842,7 +853,7 @@ function viewLesson(){
   var sess=D.sessions[key]||{date:S.date,group:S.group,present:[],absence:{}};
   var present=sess.present||[];
   var absence=sess.absence||{};
-  var roster=activeStudents(S.group);
+  var roster=rosterFor(S.group, S.date);
   var ratio=roster.length?present.length/roster.length:0;
 
   var dateChips='<div class="chips">'+sundaysOf(S.month).map(function(d){
@@ -854,7 +865,10 @@ function viewLesson(){
 
   var body;
   if(!roster.length){
-    body='<div class="empty"><b>В группе пока никого</b>Добавьте учеников в разделе «Ученики» — и здесь появится список для отметок.</div>';
+    body='<div class="empty"><b>На эту дату никого</b>'+
+      (activeStudents(S.group).length
+        ? 'В группе есть ученики, но к '+esc(dayLabel(S.date))+' у них ещё не начался платный период. Дата начала — в карточке ученика, поле «Занимается с».'
+        : 'Добавьте учеников в разделе «Ученики» — и здесь появится список для отметок.')+'</div>';
   } else {
     body='<div class="meterline"><span class="cnt">'+present.length+' / '+roster.length+'</span>'+
       '<span class="meter"><i style="transform:scaleX('+ratio.toFixed(3)+')"></i></span></div>'+
