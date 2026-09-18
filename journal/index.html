@@ -772,8 +772,18 @@ function chargeOf(st, ym){
 function paidOf(studentId, ym){
   return D.payments.reduce(function(a,p){ return a+(p.studentId===studentId&&p.month===ym?(+p.amount||0):0); },0);
 }
+// деньги, полученные прямо в записях индивидуальных занятий
+function soloPaidIn(ym, studentId){
+  return D.solo.reduce(function(a,r){
+    if(!r||!r.date||String(r.date).slice(0,7)!==ym) return a;
+    if(studentId && r.studentId!==studentId) return a;
+    return a+(+r.paid||0);
+  },0);
+}
+
 function incomeOf(ym,g){
-  return D.payments.reduce(function(a,p){
+  var fromSolo = (!g || g==="solo") ? soloPaidIn(ym) : 0;
+  return fromSolo + D.payments.reduce(function(a,p){
     if(p.month!==ym) return a;
     if(g){
       var isSolo = p.kind==="Индивидуальное";
@@ -806,11 +816,11 @@ function render(){
   main.innerHTML=html;
 }
 
+// в журнале занятий только группы: индивидуальные ведутся в карточке ученика
 function groupChips(){
-  return '<div class="chips">'+GROUPS.map(function(g){
-    var count = g.solo ? soloOf(S.month).length : rosterFor(g.id, S.date).length;
+  return '<div class="chips">'+GROUPS.filter(function(g){ return !g.solo; }).map(function(g){
     return '<button class="chip" data-act="group" data-id="'+g.id+'" aria-pressed="'+(S.group===g.id)+'">'+
-      esc(g.name)+'<span class="n">'+count+'</span></button>';
+      esc(g.name)+'<span class="n">'+rosterFor(g.id, S.date).length+'</span></button>';
   }).join("")+'</div>';
 }
 
@@ -848,7 +858,8 @@ function viewSolo(){
 
 /* ---- Занятие ---- */
 function viewLesson(){
-  if(group(S.group).solo) return viewSolo();
+  // на экран занятий индивидуальные больше не попадают
+  if(group(S.group).solo) S.group=GROUPS[0].id;
   var g=group(S.group), key=sessionKey(S.date,S.group);
   var sess=D.sessions[key]||{date:S.date,group:S.group,present:[],absence:{}};
   var present=sess.present||[];
@@ -940,11 +951,22 @@ function viewStudents(){
 }
 
 // строка под именем: сколько внесено и на сколько занятий этого хватило
+// за индивидуальные платят прямо в записи занятия либо отдельной оплатой
+function soloReceived(studentId, ym){
+  var inRecords=soloPaidIn(ym, studentId);
+  var asPayments=D.payments.reduce(function(a,p){
+    return a+(p.studentId===studentId && p.kind==="Индивидуальное" && p.month===ym ? (+p.amount||0) : 0);
+  },0);
+  return inRecords+asPayments;
+}
+
 function balanceLine(st){
   if(st.group==="solo" || st.plan==="trial"){
-    var soloCharge=soloChargeOf(st.id,S.month), soloPaid=paidOf(st.id,S.month);
+    var soloCharge=soloChargeOf(st.id,S.month), got=soloReceived(st.id,S.month);
     if(st.plan==="trial" && soloCharge<=0) return "пробное — бесплатно";
-    return "внесено "+num(soloPaid)+" из "+money(soloCharge);
+    var cnt=soloOf(S.month, st.id).length;
+    return (cnt?cnt+" "+plural(cnt,"занятие","занятия","занятий")+" · ":"")+
+      "внесено "+num(got)+" из "+money(soloCharge);
   }
   var bought=boughtLessons(st), used=usedLessons(st), left=lessonBalance(st);
   var parts=[];
@@ -963,10 +985,10 @@ function balanceLine(st){
 function balancePill(st){
   if(st.plan==="trial") return '<span class="pill quiet">пробное</span>';
   if(st.group==="solo"){
-    var charge=soloChargeOf(st.id,S.month), paid=paidOf(st.id,S.month);
-    if(charge<=0) return '<span class="pill quiet">нет начислений</span>';
-    return paid>=charge ? '<span class="pill paid">оплачено</span>'
-      : '<span class="pill debt">'+money(charge-paid)+'</span>';
+    var charge=soloChargeOf(st.id,S.month), got=soloReceived(st.id,S.month);
+    if(charge<=0) return '<span class="pill quiet">нет занятий</span>';
+    return got>=charge ? '<span class="pill paid">оплачено</span>'
+      : '<span class="pill debt">'+money(charge-got)+'</span>';
   }
   var left=lessonBalance(st);
   if(left<0) return '<span class="pill debt">долг '+money(debtOf(st))+'</span>';
@@ -1025,11 +1047,9 @@ function viewTotals(){
     // долг деньгами: недоплаченные занятия плюс неоплаченные индивидуальные
     var left = debtOf(st);
     if(st.group==="solo" || st.plan==="trial"){
-      left = Math.max(0, soloChargeOf(st.id,S.month)-paidOf(st.id,S.month));
+      left = Math.max(0, soloChargeOf(st.id,S.month)-soloReceived(st.id,S.month));
     } else {
-      var soloLeft = soloChargeOf(st.id,S.month) - D.payments.reduce(function(a,p){
-        return a+(p.studentId===st.id && p.kind==="Индивидуальное" && p.month===S.month ? (+p.amount||0) : 0);
-      },0);
+      var soloLeft = soloChargeOf(st.id,S.month) - soloReceived(st.id,S.month);
       if(soloLeft>0) left += soloLeft;
     }
     if(left>0) debts.push({st:st,left:left});
@@ -1058,6 +1078,22 @@ function viewTotals(){
       '<div class="stat"><div class="lab">Ожидается ещё</div><div class="val">'+money(debtSum)+'</div></div>'+
       (trials.length?'<div class="stat"><div class="lab">Пробных</div><div class="val">'+trials.length+'</div></div>':'')+
     '</div>'+
+    (soloList.length
+      ? '<div class="block"><h3>Индивидуальные занятия</h3><div class="list">'+
+        soloList.map(function(r){
+          var who=D.students.filter(function(x){ return x.id===r.studentId; })[0];
+          var cost=(+r.hours||0)*(+r.rate||0), paid=+r.paid||0;
+          return '<div class="row"><span class="grow"><span class="nm">'+esc(who?who.name:"—")+'</span>'+
+            '<span class="mt">'+esc(dayLabel(r.date))+' · '+hoursLabel(r.hours)+' ч × '+money(r.rate)+'</span></span>'+
+            '<span class="num">'+money(cost)+'</span>'+
+            (paid>=cost&&cost>0?'<span class="pill paid">оплачено</span>'
+              : paid>0?'<span class="pill part">'+money(paid)+'</span>'
+              : '<span class="pill quiet">оплата не указана</span>')+
+          '</div>';
+        }).join("")+'</div>'+
+        '<p class="hint" style="margin-top:8px">Даты и оплата правятся в карточке ученика.</p></div>'
+      : '')+
+
     (trials.length
       ? '<div class="block"><h3>Пробные занятия</h3><div class="list">'+
         trials.map(function(st){
@@ -1193,6 +1229,52 @@ function openModal(html){
   modalRoot.innerHTML='<div class="backdrop" data-act="backdrop"><div class="modal" role="dialog" aria-modal="true">'+html+'</div></div>';
   var f=modalRoot.querySelector("input,select,textarea"); if(f) f.focus();
 }
+// собирает карточку из формы и кладёт в журнал; null — если имя пустое
+function saveStudentFromForm(){
+  var name=document.getElementById("f-name").value.trim();
+  if(!name){ toast("Впишите имя ученика."); return null; }
+  var obj={
+    id:document.getElementById("f-id").value,
+    name:name,
+    group:document.getElementById("f-group").value,
+    plan:document.getElementById("f-plan").value,
+    fee:+document.getElementById("f-fee").value||0,
+    trialDate:document.getElementById("f-trial").value||"",
+    sinceDate:document.getElementById("f-since").value||"",
+    phone:document.getElementById("f-phone").value.trim(),
+    note:document.getElementById("f-note").value.trim(),
+    token:document.getElementById("f-token").value||"",
+    active:document.getElementById("f-active").value==="1"
+  };
+  var at=-1;
+  for(var i=0;i<D.students.length;i++) if(D.students[i].id===obj.id) at=i;
+  if(at>=0) D.students[at]=obj; else D.students.push(obj);
+  return obj;
+}
+
+// индивидуальные занятия ученика — прямо в его карточке
+function soloBlock(studentId){
+  var list=D.solo.filter(function(r){ return r.studentId===studentId; })
+    .sort(function(a,b){ return String(b.date).localeCompare(String(a.date)); });
+  var inner = list.length
+    ? '<div class="list">'+list.map(function(r){
+        var cost=(+r.hours||0)*(+r.rate||0), paid=+r.paid||0;
+        return '<button type="button" class="rowb" data-act="edit-solo" data-id="'+esc(r.id)+'">'+
+          '<span class="grow"><span class="nm">'+esc(dayLabel(r.date))+' · '+money(cost)+'</span>'+
+          '<span class="mt">'+hoursLabel(r.hours)+' ч × '+money(r.rate)+
+            (r.note?' · '+esc(r.note):'')+'</span></span>'+
+          (paid>=cost&&cost>0 ? '<span class="pill paid">оплачено</span>'
+            : paid>0 ? '<span class="pill part">внесено '+money(paid)+'</span>'
+            : '<span class="pill quiet">оплата не указана</span>')+
+          '<span class="chev" aria-hidden="true">›</span></button>';
+      }).join("")+'</div>'
+    : '<p class="hint" style="margin:0 0 10px">Занятий пока нет.</p>';
+  return inner+
+    '<div class="actions" style="margin-top:10px">'+
+      '<button type="button" class="btn sm" data-act="add-solo-for" data-id="'+esc(studentId)+'">Добавить занятие</button>'+
+    '</div>';
+}
+
 function linkBlock(token){
   if(!token){
     return '<button class="btn sm" data-act="make-link">Создать ссылку</button>'+
@@ -1234,8 +1316,11 @@ function studentModal(st){
     '<div class="field-2">'+
       '<div class="field"><label for="f-fee">Сумма, ₽</label><input type="number" id="f-fee" min="0" step="100" value="'+(+st.fee||0)+'"></div>'+
       '<div class="field"><label for="f-phone">Телефон</label><input type="tel" id="f-phone" value="'+esc(st.phone)+'"></div></div>'+
-    '<p class="hint">Для абонемента — плата за месяц. Для разовых — цена одного занятия, начисление считается по посещениям.</p>'+
+    '<p class="hint">Для абонемента — плата за месяц, это 4 занятия. Для разовых — цена одного занятия. Индивидуальные сюда не входят: их даты и оплата — ниже.</p>'+
     '<div class="field"><label for="f-note">Заметка</label><input type="text" id="f-note" value="'+esc(st.note)+'"></div>'+
+    '<div class="field"><label>Индивидуальные занятия</label>'+soloBlock(st.id)+
+      '<p class="hint" style="margin:8px 0 0">Даты и оплата разовых занятий — здесь. В журнал занятий они не попадают.</p>'+
+    '</div>'+
     '<input type="hidden" id="f-token" value="'+esc(st.token||"")+'">'+
     '<div class="field"><label>Ссылка для родителей</label><div id="link-box">'+linkBlock(st.token||"")+'</div></div>'+
     '<div class="field"><label for="f-active">Статус</label><select id="f-active">'+
@@ -1273,9 +1358,10 @@ function absenceModal(st){
   );
 }
 
-function soloModal(rec){
+function soloModal(rec, forStudent){
   var isNew=!rec;
-  rec = rec || {id:uid(), date:todayISO(), studentId:"", hours:1, rate:group("solo").fee, note:""};
+  rec = rec || {id:uid(), date:todayISO(), studentId:forStudent||"", hours:1,
+                rate:group("solo").fee, paid:0, note:""};
   var people=activeStudents();
   if(!people.length){
     openModal('<h3>Некого записать</h3>'+
@@ -1308,8 +1394,11 @@ function soloModal(rec){
         '<button type="button" class="chip" data-act="solo-hours" data-id="2">2 ч</button>'+
       '</div>'+
     '</div>'+
-    '<div class="field"><label for="i-rate">Ставка за час, ₽</label><input type="number" id="i-rate" min="0" step="100" value="'+(+rec.rate||0)+'"></div>'+
-    '<p class="hint">Сумма посчитается сама: часы × ставка. Начисление прибавится к тому, что ученик должен за месяц.</p>'+
+    '<div class="field-2">'+
+      '<div class="field"><label for="i-rate">Ставка за час, ₽</label><input type="number" id="i-rate" min="0" step="100" value="'+(+rec.rate||0)+'"></div>'+
+      '<div class="field"><label for="i-paid">Оплачено, ₽</label><input type="number" id="i-paid" min="0" step="100" value="'+(rec.paid===undefined?"":(+rec.paid||0))+'" placeholder="0"></div>'+
+    '</div>'+
+    '<p class="hint">Стоимость считается сама: часы × ставка. В «Оплачено» впишите, сколько за это занятие получили — эта сумма попадёт в доход месяца по дате занятия. Оставьте пустым, если ещё не заплатили.</p>'+
     '<div class="field"><label for="i-note">Заметка</label><input type="text" id="i-note" value="'+esc(rec.note||"")+'"></div>'+
     '<div class="actions">'+
       '<button class="btn primary" data-act="save-solo">Сохранить</button>'+
@@ -1322,10 +1411,7 @@ function soloModal(rec){
 function paymentModal(st){
   // что предложить: непогашенный долг, а если долгов нет — обычный абонемент
   var soloPart=soloChargeOf(st.id,S.month);
-  var soloPaid=D.payments.reduce(function(a,p){
-    return a+(p.studentId===st.id && p.kind==="Индивидуальное" ? (+p.amount||0) : 0);
-  },0);
-  var soloLeft=Math.max(0, soloPart-soloPaid);
+  var soloLeft=Math.max(0, soloPart-soloReceived(st.id,S.month));
   var left;
   if(st.group==="solo" || st.plan==="trial"){
     left=soloLeft;
@@ -1493,25 +1579,14 @@ document.addEventListener("click",function(e){
     return;
   }
   if(act==="save-student"){
-    var name=document.getElementById("f-name").value.trim();
-    if(!name){ toast("Впишите имя ученика."); return; }
-    var obj={
-      id:document.getElementById("f-id").value,
-      name:name,
-      group:document.getElementById("f-group").value,
-      plan:document.getElementById("f-plan").value,
-      fee:+document.getElementById("f-fee").value||0,
-      trialDate:document.getElementById("f-trial").value||"",
-      sinceDate:document.getElementById("f-since").value||"",
-      phone:document.getElementById("f-phone").value.trim(),
-      note:document.getElementById("f-note").value.trim(),
-      token:document.getElementById("f-token").value||"",
-      active:document.getElementById("f-active").value==="1"
-    };
-    var found=-1;
-    for(var j=0;j<D.students.length;j++) if(D.students[j].id===obj.id) found=j;
-    if(found>=0) D.students[found]=obj; else D.students.push(obj);
-    closeModal(); commit();
+    if(saveStudentFromForm()){ closeModal(); commit(); }
+    return;
+  }
+  if(act==="add-solo-for"){
+    var saved=saveStudentFromForm();
+    if(!saved) return;
+    commit();
+    soloModal(null, saved.id);
     return;
   }
   if(act==="make-link"){
@@ -1578,6 +1653,7 @@ document.addEventListener("click",function(e){
       id:document.getElementById("i-id").value,
       date:document.getElementById("i-date").value||todayISO(),
       studentId:sid, hours:hours, rate:rate,
+      paid:+document.getElementById("i-paid").value||0,
       note:document.getElementById("i-note").value.trim()
     };
     var at=-1;
