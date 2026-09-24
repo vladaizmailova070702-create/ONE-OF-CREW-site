@@ -2130,3 +2130,56 @@ body::before {
   font-size: 0.93rem;
   line-height: 1.65;
 }
+
+/* ============================================================
+   ШИРОКИЕ СЕКЦИИ
+   На десктопе контент раздвигается до краёв экрана — иначе на большом
+   мониторе по бокам оставались пустые поля, а карточки выглядели мелко.
+   Ниже 1100px всё как было: контейнер 1240px, мобильная раскладка цела.
+   ============================================================ */
+@media (min-width: 1100px) {
+  .section--wide > .container { max-width: none; }
+
+  /* четыре кнопки связи в ряд вместо колодца 2x2 */
+  .contacts .contact-links {
+    max-width: 1100px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  /* длинные строки на всю ширину не читаются — делим текст на колонки */
+  .seo-inner {
+    max-width: none;
+    columns: 2;
+    column-gap: clamp(32px, 4vw, 72px);
+  }
+  .seo-inner h2 { column-span: all; }
+  .seo-inner p { break-inside: avoid; }
+}
+
+/* четыре направления: было две карточки, теперь четыре */
+.dir-grid--quad {
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+}
+
+/* прайс: с четырьмя карточками ставим их попарно */
+@media (min-width: 1200px) {
+  .price-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* у новых групп цены пока нет — на её месте статус набора */
+.price-amount--soon {
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  line-height: 1.15;
+  color: var(--accent-soft);
+}
+.price-card--soon::before { opacity: 0.5; }
+
+.schedule-soon {
+  margin-top: clamp(18px, 2.5vw, 26px);
+  padding-top: clamp(16px, 2vw, 22px);
+  border-top: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.schedule-soon strong { color: var(--text-primary); }
