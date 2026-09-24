@@ -1255,6 +1255,21 @@ body::before {
   color: var(--text-secondary);
 }
 
+/* Колонки заканчиваются на разной высоте — это природа кладки, выровнять
+   их нельзя. Чтобы рваный низ не читался как дыры, гасим его градиентом
+   в цвет секции: силуэт растворяется, а кадры остаются целыми. */
+.social-grid-wrap { position: relative; }
+.social-grid-wrap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: clamp(52px, 5.5vw, 104px);
+  background: linear-gradient(to bottom, rgba(26, 18, 18, 0), var(--surface-alt));
+  pointer-events: none;
+}
+
 .social-grid {
   columns: 3;
   column-gap: 16px;
@@ -1389,8 +1404,7 @@ body::before {
    выглядели мелкими. Колонок добавляем по мере роста экрана, чтобы размер
    плитки оставался прежним. Мобильная раскладка не меняется. */
 @media (min-width: 1100px) {
-  .social-grid {
-    position: relative;
+  .social-grid-wrap {
     left: 50%;
     transform: translateX(-50%);
     width: calc(100vw - 2 * var(--pad));
