@@ -1383,6 +1383,30 @@ body::before {
 @media (max-width: 900px) {
   .social-grid { columns: 2; }
 }
+
+/* На десктопе лента выходит за пределы контейнера и занимает почти всю
+   ширину экрана — иначе по бокам оставались широкие пустые поля, а кадры
+   выглядели мелкими. Колонок добавляем по мере роста экрана, чтобы размер
+   плитки оставался прежним. Мобильная раскладка не меняется. */
+@media (min-width: 1100px) {
+  .social-grid {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100vw - 2 * var(--pad));
+  }
+}
+@media (min-width: 1400px) {
+  .social-grid { columns: 4; }
+}
+/* пороги подобраны так, чтобы плитка оставалась примерно 330-410px:
+   при пятой и шестой колонке раньше времени кадры мельчают */
+@media (min-width: 1750px) {
+  .social-grid { columns: 5; }
+}
+@media (min-width: 2300px) {
+  .social-grid { columns: 6; }
+}
 @media (max-width: 560px) {
   .social-grid { column-gap: 10px; }
   .soc-tile { margin-bottom: 10px; }
