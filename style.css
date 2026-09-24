@@ -1258,25 +1258,39 @@ body::before {
 /* Колонки заканчиваются на разной высоте — это природа кладки, выровнять
    их нельзя. Чтобы рваный низ не читался как дыры, гасим его градиентом
    в цвет секции: силуэт растворяется, а кадры остаются целыми. */
-.social-grid-wrap { position: relative; }
-.social-grid-wrap::after {
+.social-grid-wrap {
+  position: relative;
+  /* высота строки кладки и сколько строк видно до нажатия кнопки */
+  --soc-row: clamp(56px, 7vw, 130px);
+  --soc-gap: 16px;
+  --soc-rows: 14;
+}
+.social-grid-wrap:not(.is-open)::after {
   content: "";
   position: absolute;
   left: 0;
   right: 0;
-  bottom: -1px;
-  height: clamp(52px, 5.5vw, 104px);
+  bottom: 0;
+  height: clamp(70px, 7vw, 150px);
   background: linear-gradient(to bottom, rgba(26, 18, 18, 0), var(--surface-alt));
   pointer-events: none;
 }
 
 .social-grid {
-  columns: 3;
-  column-gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: var(--soc-row);
+  grid-auto-flow: row dense;
+  gap: var(--soc-gap);
 }
+/* высота плитки кратна строке сетки: широкий кадр — 2 строки,
+   близкий к квадрату — 3, вертикальный — 4 */
+.soc-tile--r2 { grid-row: span 2; }
+.soc-tile--r3 { grid-row: span 3; }
+.soc-tile--r4 { grid-row: span 4; }
 .soc-tile {
-  break-inside: avoid;
-  margin: 0 0 16px;
+  margin: 0;
+  height: 100%;
   position: relative;
   border-radius: var(--radius);
   overflow: hidden;
@@ -1287,10 +1301,10 @@ body::before {
    колонку: превью кадрируется по центру, а при проигрывании видео
    разворачивается в родную пропорцию */
 .soc-photo,
-.soc-media { display: block; width: 100%; max-height: 520px; }
+.soc-media { display: block; width: 100%; height: 100%; }
 .soc-photo { object-fit: cover; }
 .soc-media { position: relative; }
-.soc-tile.is-playing .soc-media { max-height: none; }
+.soc-tile.is-playing .soc-video { object-fit: contain; }
 .soc-media .soc-poster,
 .soc-media .soc-video {
   position: absolute;
@@ -1370,8 +1384,15 @@ body::before {
 
 /* «Показать ещё»: первые 12 карточек видны сразу, остальные —
    в разметке (их видит поиск), но скрыты до клика. */
-.soc-tile--more { display: none; }
-.social-grid.is-expanded .soc-tile--more { display: block; }
+/* Раньше лишние плитки прятались по одной (display: none), и кладка
+   рассыпалась: колонки заканчивались на разной высоте. Теперь в кладке
+   участвуют все кадры, а свёрнутый вид просто обрезан по высоте —
+   низ получается ровным, а нижний ряд растворяется градиентом. */
+.social-grid-wrap:not(.is-open) {
+  max-height: calc(var(--soc-row) * var(--soc-rows)
+                   + (var(--soc-rows) - 1) * var(--soc-gap));
+  overflow: hidden;
+}
 
 .social-more-wrap {
   display: flex;
@@ -1395,8 +1416,9 @@ body::before {
   }
   .social-links { justify-content: flex-end; }
 }
-@media (max-width: 900px) {
-  .social-grid { columns: 2; }
+@media (min-width: 901px) {
+  .social-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .social-grid-wrap { --soc-rows: 10; }
 }
 
 /* На десктопе лента выходит за пределы контейнера и занимает почти всю
@@ -1411,19 +1433,20 @@ body::before {
   }
 }
 @media (min-width: 1400px) {
-  .social-grid { columns: 4; }
+  .social-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .social-grid-wrap { --soc-rows: 9; }
 }
 /* пороги подобраны так, чтобы плитка оставалась примерно 330-410px:
    при пятой и шестой колонке раньше времени кадры мельчают */
 @media (min-width: 1750px) {
-  .social-grid { columns: 5; }
+  .social-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .social-grid-wrap { --soc-rows: 8; }
 }
 @media (min-width: 2300px) {
-  .social-grid { columns: 6; }
+  .social-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 }
 @media (max-width: 560px) {
-  .social-grid { column-gap: 10px; }
-  .soc-tile { margin-bottom: 10px; }
+  .social-grid-wrap { --soc-gap: 10px; }
   .social-link { flex: 1 1 100%; }
 }
 @media (prefers-reduced-motion: reduce) {
