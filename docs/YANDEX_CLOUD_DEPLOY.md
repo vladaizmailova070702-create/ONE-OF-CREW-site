@@ -27,7 +27,8 @@ journal/*           (index.html, manifest.webmanifest, sw.js — журнал с
 journal/me/index.html (кабинет для родителей; config.js НЕ трогать — см. ниже)
 ```
 НЕ загружай: `assets/originals/`, `brand_assets/originals/`, `docs/`, `promo/`,
-`CLAUDE.md`, `.claude/`, `temporary screenshots/` и прочие служебные файлы.
+`AGENTS.md`, `CLAUDE.md`, `.agents/`, `.codex/`, `.claude/`,
+`temporary screenshots/` и прочие служебные файлы.
 
 Пересобрать папку `deploy/` можно одной командой из корня проекта:
 ```

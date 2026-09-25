@@ -7,6 +7,16 @@ frontend components, visual UI, and responsive web layouts.
 compatibility pointer. Before changing studio content, hosting, or the journal,
 read `docs/PROJECT_CONTEXT.md` and the relevant guide in `docs/`.
 
+## Project Map And Durable State
+
+- ONE OF STUDIO is a Russian-language dance-studio website for Khabarovsk. The public site is static HTML/CSS/JS: start with `index.html` and `style.css`, then the page relevant to the task. The separate `journal/` PWA includes a local data server and an optional cloud sync function; follow `docs/JOURNAL.md` for journal work.
+- For current offers, prices, schedules, and group availability, inspect the live repository pages and confirm time-sensitive changes with the user. `docs/ONE_OF_STUDIO_SITE_PROMPT.md` is the original site brief, not a current price list. `docs/PROJECT_CONTEXT.md` records dated decisions. Hosting instructions live in `docs/UPDATE_SITE.md`.
+- `docs/REQUESTS.md` is the durable register of project-related user requests, corrections, constraints, and preferences. Add a concise row when each arrives, including deferred, blocked, rejected, or superseded requests. Link to the authoritative file or result and update the status as work progresses. Do not put secrets or unrelated private conversation there.
+- Keep requirements and accepted behavior in their task-relevant canonical documents; use the register to point to them. Record durable plan steps, decisions, verification evidence, blockers, and handoff context in files rather than only in chat. Before completing work, reconcile changed behavior, the request register, and related docs for contradictions. Continue the next authorized plan step after verifying the current one; ask only when a consequential decision or authority is missing.
+- The repository has no root package manifest or repository-wide automated test/build command. Use the existing local-server and visual-verification workflow below for site changes. For the journal, `powershell -ExecutionPolicy Bypass -File tools/journal.ps1` is the documented Windows launcher; `node .agents/skills/impeccable/scripts/hook-admin.mjs status` checks the design hook. The launcher has been syntax-checked but has not been started as part of agent setup.
+- Journal records are local user data under `%USERPROFILE%\OneOfJournal`. Never commit them or overwrite the deployed `journal/me/config.js` with the placeholder in this repository. Keep credentials and local environment files out of Git.
+- Recommend GPT-6 Sol for routine coding, GPT-6 Luna for narrow mechanical work, and GPT-6 Astra for complex architecture, security, or difficult review when available. Preserve the user's model choice; a recommendation does not switch models.
+
 ## Project Brief
 
 Before writing any code, read the project-specific brief if one exists:
