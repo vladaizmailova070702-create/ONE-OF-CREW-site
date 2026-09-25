@@ -2212,3 +2212,44 @@ body::before {
   color: var(--text-secondary);
 }
 .prose .name-list li::before { display: none; }
+
+/* ---------- раздел «Тренеры» ---------- */
+/* Тренеров всего двое, и в полноширинной секции вертикальные карточки
+   раздувались до гигантских фото. Поэтому карточка горизонтальная:
+   портрет слева, текст справа — так блок заполняет ширину без перекоса. */
+.teachers-grid { grid-template-columns: repeat(auto-fit, minmax(430px, 1fr)); }
+.teachers-grid .why-card {
+  display: grid;
+  grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+}
+.teachers-grid .why-media { aspect-ratio: auto; height: 100%; min-height: 300px; }
+.teachers-grid .why-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(22px, 2.4vw, 34px);
+}
+@media (max-width: 700px) {
+  .teachers-grid { grid-template-columns: 1fr; }
+  .teachers-grid .why-card { grid-template-columns: 1fr; }
+  .teachers-grid .why-media { aspect-ratio: 4 / 5; height: auto; min-height: 0; }
+}
+.teacher-role {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-soft);
+}
+.teacher-more { margin-top: 14px; }
+.teacher-more a {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.teacher-more a:hover { color: var(--accent-soft); }
+.teacher-more a:focus-visible { outline: 2px solid var(--accent-soft); outline-offset: 3px; }
