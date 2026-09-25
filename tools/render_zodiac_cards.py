@@ -116,7 +116,7 @@ def cover_html(photo: Path, part: int, signs: str) -> str:
                    height: 8px; background: #b42125; }}
       .contact {{ position: absolute; left: 58px; bottom: 58px; width: 670px;
                   font-weight: 800; }}
-      .address {{ font-size: 27px; line-height: 1.2; margin-bottom: 25px; }}
+      .address {{ font-size: 32px; line-height: 1.2; margin-bottom: 25px; }}
       .contact-row {{ display: flex; align-items: baseline; gap: 18px; margin-top: 12px; }}
       .label {{ width: 160px; color: #a51d22; font-size: 25px; }}
       .value {{ font-size: 32px; }}
@@ -126,7 +126,7 @@ def cover_html(photo: Path, part: int, signs: str) -> str:
     alt="ONE OF STUDIO"></div><div class="part">ЧАСТЬ {part} / 2</div>
     <div class="title">ТВОЙ СТИЛЬ<br>ТАНЦА<br>ПО ЗНАКУ<br>ЗОДИАКА</div>
     <div class="range">{signs}</div><div class="red-rule"></div>
-    <div class="contact"><div class="address">ХАБАРОВСК · УЛ. КОМСОМОЛЬСКАЯ, 78</div>
+    <div class="contact"><div class="address">ХАБАРОВСК</div>
     <div class="contact-row"><span class="label">САЙТ</span>
     <span class="value">oneofstudio.ru</span></div>
     <div class="contact-row"><span class="label">TELEGRAM</span>
