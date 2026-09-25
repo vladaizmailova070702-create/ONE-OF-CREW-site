@@ -61,6 +61,8 @@ function Get-PythonW {
         if (Test-Path $w) { return $w }
         return $exe
     }
+    $codexPythonW = Join-Path $env:USERPROFILE '.cache\codex-runtimes\codex-primary-runtime\dependencies\python\pythonw.exe'
+    if (Test-Path $codexPythonW) { return $codexPythonW }
     throw "Python не найден. Установите его с python.org или из Microsoft Store."
 }
 
