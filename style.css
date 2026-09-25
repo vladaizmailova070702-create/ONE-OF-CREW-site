@@ -1737,6 +1737,9 @@ body::before {
   background: var(--surface);
 }
 .subhero-media img { width: 100%; height: 100%; object-fit: cover; }
+/* горизонтальный кадр в первом экране: при 4:5 у него срезало бы
+   крайних танцоров, поэтому для таких фото своя пропорция */
+.subhero-media--wide { aspect-ratio: 4 / 3; }
 
 /* ---------- «чипы» фактов ---------- */
 .chip {
