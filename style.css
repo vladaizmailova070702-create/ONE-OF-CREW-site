@@ -2183,3 +2183,29 @@ body::before {
   line-height: 1.6;
 }
 .schedule-soon strong { color: var(--text-primary); }
+
+/* Цитата преподавателя на странице тренера */
+.prose blockquote {
+  margin: 22px 0 0;
+  padding: 18px 22px;
+  border-left: 3px solid var(--accent);
+  background: var(--surface-alt);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.prose blockquote p { margin-top: 0; color: var(--text-primary); font-style: italic; }
+.prose blockquote p + p { margin-top: 12px; }
+
+/* Список имён — компактной сеткой, а не простынёй через запятую */
+.name-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 6px 18px;
+  margin-top: 16px;
+}
+.name-list li {
+  padding-left: 0;
+  margin-top: 0;
+  font-size: 0.93rem;
+  color: var(--text-secondary);
+}
+.prose .name-list li::before { display: none; }
