@@ -44,7 +44,7 @@
 
   <link rel="preload" as="image" href="assets/web/hero.webp" />
 
-  <link rel="stylesheet" href="style.css?v=8" />
+  <link rel="stylesheet" href="style.css?v=9" />
 
   <!-- JSON-LD: DanceSchool + расписание групп -->
   <script type="application/ld+json">
@@ -1100,6 +1100,8 @@
         <div class="social-story-rail" aria-label="Истории и афиши студии">
           <button class="social-story" type="button" data-story="assets/web/olga-intro/story-01-intro.webp" data-caption="Новый тренер — Ольга Шах" aria-label="Открыть историю: новый тренер Ольга Шах"><img src="assets/web/olga-intro/story-01-intro.webp" alt="История-знакомство с Ольгой Шах" width="1080" height="1920" loading="lazy" /><span>Новый тренер</span></button>
           <button class="social-story" type="button" data-story="assets/web/olga-intro/story-03-choreo.webp" data-caption="Набор в Choreo 9+" aria-label="Открыть историю: набор в Choreo 9+"><img src="assets/web/olga-intro/story-03-choreo.webp" alt="История о наборе в Choreo 9+" width="1080" height="1920" loading="lazy" /><span>Choreo 9+</span></button>
+          <button class="social-story" type="button" data-story="assets/web/events/lady-style-group-story.webp" data-caption="Набор в Lady Style 25+" data-link="lady-style.html" data-link-label="О группе и запись" aria-label="Открыть афишу: набор в Lady Style 25+"><img src="assets/web/events/lady-style-group-story.webp" alt="Афиша набора в Lady Style 25+ с Ольгой Шах: воскресенье 18:00–19:30, Комсомольская, 78" width="1080" height="1920" loading="lazy" /><span>Lady Style 25+</span></button>
+          <button class="social-story" type="button" data-story="assets/web/events/lady-style-masterclass-story.webp" data-caption="Мастер-класс Ольги Шах — 18 октября" data-link="lady-style-masterclass-18-october.html" data-link-label="О мастер-классе и запись" aria-label="Открыть историю: мастер-класс Lady Style 25+ 18 октября"><img src="assets/web/events/lady-style-masterclass-story.webp" alt="Афиша мастер-класса Lady Style 25+ с Ольгой Шах: 18 октября, 18:00–19:30, 800 ₽" width="1080" height="1920" loading="lazy" /><span>Мастер-класс</span></button>
           <button class="social-story" type="button" data-story="assets/web/recruitment-posters/group-recruitment-story.webp" data-caption="Набор в группы ONE OF STUDIO" aria-label="Открыть историю: набор во все группы"><img src="assets/web/recruitment-posters/group-recruitment-story.webp" alt="Актуальная история о наборе во все группы студии" width="1080" height="1920" loading="lazy" /><span>Набор в группы</span></button>
           <button class="social-story" type="button" data-story="assets/web/studio-entrances/story-istomina-41.webp" data-caption="Как найти зал на Истомина, 41" aria-label="Открыть историю: вход на Истомина, 41"><img src="assets/web/studio-entrances/story-istomina-41.webp" alt="Фото входа на Истомина, 41 с указателем" width="1080" height="1920" loading="lazy" /><span>Вход на Истомина</span></button>
           <button class="social-story" type="button" data-story="assets/web/studio-entrances/story-komsomolskaya-78.webp" data-caption="Как найти зал на Комсомольской, 78" aria-label="Открыть историю: вход на Комсомольской, 78"><img src="assets/web/studio-entrances/story-komsomolskaya-78.webp" alt="Фото входа на Комсомольской, 78 с указателем" width="1080" height="1920" loading="lazy" /><span>Вход на Комсомольской</span></button>
@@ -1149,6 +1151,7 @@
           <button class="social-story-close" type="button" aria-label="Закрыть историю">×</button>
           <button class="social-story-step social-story-prev" type="button" aria-label="Предыдущая история">‹</button>
           <figure><img src="" alt="" width="1080" height="1920" /><figcaption></figcaption></figure>
+          <a class="social-story-link" href="lady-style.html" hidden></a>
           <button class="social-story-step social-story-next" type="button" aria-label="Следующая история">›</button>
         </dialog>
       </div>
@@ -1418,12 +1421,20 @@
       if (!cards.length || !viewer) return;
       var picture = viewer.querySelector('img');
       var caption = viewer.querySelector('figcaption');
+      var detailLink = viewer.querySelector('.social-story-link');
       var active = 0;
       function show(index) {
         active = (index + cards.length) % cards.length;
         picture.src = cards[active].dataset.story;
         picture.alt = cards[active].querySelector('img').alt;
         caption.textContent = cards[active].dataset.caption;
+        var link = cards[active].dataset.link;
+        detailLink.hidden = !link;
+        viewer.classList.toggle('has-link', Boolean(link));
+        if (link) {
+          detailLink.href = link;
+          detailLink.textContent = cards[active].dataset.linkLabel;
+        }
       }
       cards.forEach(function (card, index) {
         card.addEventListener('click', function () { show(index); viewer.showModal(); });

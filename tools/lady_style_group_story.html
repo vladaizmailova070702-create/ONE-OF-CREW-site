@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lady Style 25+ — история о наборе</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; }
+    body { font-family: Arial, sans-serif; }
+    .story { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #f5f2ec; color: #111; }
+    .story::before, .story::after { content: ""; position: absolute; z-index: 1; background: #eb2528; transform: rotate(20deg); transform-origin: top right; }
+    .story::before { width: 28px; height: 340px; right: 115px; top: -50px; }
+    .story::after { width: 10px; height: 330px; right: 62px; top: -45px; }
+    .logo { position: absolute; z-index: 2; top: 72px; left: 62px; width: 356px; height: 105px; padding: 12px; background: #111; object-fit: contain; }
+    .kicker { position: absolute; top: 225px; left: 62px; margin: 0; color: #52504d; font: 700 34px Arial, sans-serif; }
+    .headline { position: absolute; z-index: 2; top: 310px; left: 58px; right: 48px; font-family: Impact, "Arial Narrow", sans-serif; text-transform: uppercase; }
+    .headline span { display: block; white-space: nowrap; }
+    .headline .open { color: #e31b23; font-size: 112px; line-height: 1.1; }
+    .headline .style { font-size: 160px; line-height: 1.08; }
+    .headline .age { color: #e31b23; font-size: 180px; line-height: 1.05; }
+    .photo { position: absolute; top: 810px; left: 0; width: 1080px; height: 735px; overflow: hidden; border-top: 10px solid #e31b23; }
+    .photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 35%; }
+    .details { position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; height: 390px; padding: 30px 62px 60px; background: #111; color: #fff; border-top: 10px solid #e31b23; }
+    .details p { margin: 0; }
+    .time { font: 78px/1.05 Impact, "Arial Narrow", sans-serif; }
+    .audience { margin-top: 14px !important; color: #f03c3c; font: 700 37px/1.18 Arial, sans-serif; }
+    .address { margin-top: 21px !important; font: 700 35px/1.2 Arial, sans-serif; }
+    .bottom { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin-top: 19px; }
+    .teacher { color: #f03c3c; font: 51px/1 Impact, "Arial Narrow", sans-serif; }
+    .signup { font: 700 35px/1 Arial, sans-serif; }
+  </style>
+</head>
+<body>
+  <main class="story" id="story">
+    <img class="logo" src="../brand_assets/web/logo.png" alt="ONE OF STUDIO" />
+    <p class="kicker">ХАБАРОВСК / НОВАЯ ГРУППА</p>
+    <h1 class="headline"><span class="open">НАБОР ОТКРЫТ</span><span class="style">LADY STYLE</span><span class="age">25+</span></h1>
+    <div class="photo"><img src="../assets/web/social/photo-studio-cap.webp" alt="Ольга Шах танцует в студии" /></div>
+    <div class="details">
+      <p class="time">ВОСКРЕСЕНЬЕ 18:00–19:30</p>
+      <p class="audience">ОТ 25 ЛЕТ · МОЖНО БЕЗ ОПЫТА</p>
+      <p class="address">КОМСОМОЛЬСКАЯ, 78 · 3 ЭТАЖ · ОФИС 307</p>
+      <div class="bottom"><p class="teacher">ОЛЬГА ШАХ</p><p class="signup">ЗАПИСЬ @E_D_Khiro</p></div>
+    </div>
+  </main>
+</body>
+</html>
