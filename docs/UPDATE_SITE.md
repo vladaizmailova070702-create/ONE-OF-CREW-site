@@ -205,3 +205,16 @@ Lady style 25+: ул. Комсомольская, 78, вс 18:00–19:30.
 `/assets/web/events/lady-style-masterclass-18-october.webp`. Проверить
 боевую страницу, ссылки с главной и страницы направления, загрузку афиши.
 Исходная афиша 2 104 426 Б → WebP 119 178 Б; оригинал сохранён отдельно.
+
+## Обновление 29.09.2026 — раздел «Жизнь студии»
+
+Загрузить из `deploy/` файлы `index.html`, `style.css` и шесть WebP с сохранением путей:
+
+- `assets/web/olga-intro/story-01-intro.webp`
+- `assets/web/olga-intro/story-03-choreo.webp`
+- `assets/web/recruitment-posters/group-recruitment-story.webp`
+- `assets/web/recruitment-posters/group-recruitment-post.webp`
+- `assets/web/studio-entrances/story-istomina-41.webp`
+- `assets/web/studio-entrances/story-komsomolskaya-78.webp`
+
+После загрузки сбросить кэш CDN для главной, `style.css` и этих шести изображений. Проверить ленту, открытие/закрытие историй, ссылки людей и работу «Показать ещё» на боевом сайте. Это дополнение к файлам обновления мастер-класса выше, если оно ещё не опубликовано.

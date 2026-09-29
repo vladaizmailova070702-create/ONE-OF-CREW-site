@@ -2370,3 +2370,7 @@ body::before {
 .social-person--studio .social-link { width: 100%; padding: 11px 12px; }
 @media (max-width: 760px) { .social-people-grid { grid-template-columns: 1fr 1fr; } .social-person--studio { grid-column: 1 / -1; } .social-subhead { display: block; } .social-subhead p { margin-top: 8px; } }
 @media (max-width: 520px) { .social-people-grid { grid-template-columns: 1fr; } .social-person--studio { grid-column: auto; } .social-person { min-height: 0; } .social-person > img { height: 220px; } .social-story-rail { gap: 10px; } .social-story { flex-basis: 156px; } .social-story-viewer { max-width: 96vw; padding-inline: 30px; } .social-story-step { width: 30px; height: 36px; } .social-story-prev { left: 0; } .social-story-next { right: 0; } }
+
+.social-person--studio .social-link { flex: 0 0 auto; }
+
+.social-story--poster img { object-fit: contain; background: var(--light-bg); }
