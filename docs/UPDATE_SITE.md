@@ -185,3 +185,23 @@ Lady style 25+: ул. Комсомольская, 78, вс 18:00–19:30.
 Локально проверены ширины 430, 1440 и 2560 px, открытые FAQ,
 адреса и расписание; горизонтального переполнения нет.
 Загрузка в Object Storage в этой сессии не выполнялась.
+
+## Обновление 29.09.2026 — мастер-класс Lady Style 25+
+
+Подготовлен пост `lady-style-masterclass-18-october.html` с предоставленной
+афишей, стоимостью мастер-класса 800 ₽ и записью через Telegram. Анонсы
+добавлены на главную и страницу направления. Для публикации в Object Storage
+загрузить файлы из `deploy/` с сохранением вложенного пути:
+
+- `index.html`
+- `lady-style.html`
+- `lady-style-masterclass-18-october.html`
+- `style.css`
+- `sitemap.xml`
+- `assets/web/events/lady-style-masterclass-18-october.webp`
+
+Затем очистить кэш Cloud CDN для `/`, `/index.html`, `/lady-style.html`,
+`/lady-style-masterclass-18-october.html`, `/style.css`, `/sitemap.xml` и
+`/assets/web/events/lady-style-masterclass-18-october.webp`. Проверить
+боевую страницу, ссылки с главной и страницы направления, загрузку афиши.
+Исходная афиша 2 104 426 Б → WebP 119 178 Б; оригинал сохранён отдельно.
