@@ -109,6 +109,7 @@
 | R-066 | 30.09.2026, скриншот выбранного значка к R-065 | Оставить выбранный знак: чёрный скруглённый квадрат, O из четырёх частей, нижняя правая часть красная. | done; deployment pending separate request | Готовый файл Google Ads 1200×1200 в `C:\Users\vlada\Downloads\ONE_OF_STUDIO_Google_Ads\one-of-icon-approved-1200.png`; малый файл `brand_assets/web/one-of-icon-approved.png`; подробности в `docs/GOOGLE_ADS_ASSETS.md`. |
 
 | R-066 | 30.09.2026, диалог Codex после серии о знаках зодиака | Предложить новые рубрики в сходной визуальной стилистике для TikTok и Telegram танцевальной студии. | done; ideas proposed | Семь рубрик, приоритет первого цикла и визуальные правила — `docs/SOCIAL_FEED.md`, раздел «Идеи рубрик для TikTok и Telegram». |
+| R-067 | 01.10.2026, новый исходный PNG значка к R-065/R-066 | Установить выбранный сегментированный знак O в качестве иконки публичного сайта. | local implementation verified; live deployment waiting for Yandex Cloud sign-in | Обновлены `brand_assets/web/favicon.*`, `apple-touch-icon.png`, ссылки на них в 10 публичных HTML-страницах и локальная сборка `deploy/`. Проверены размеры, загрузка SVG/PNG и страницы 390/1440/2560 px. См. `docs/GOOGLE_ADS_ASSETS.md`. |
 
 Для новых запросов добавляйте отдельные строки с датой, смыслом и статусом.
 Если запрос изменяет прежнее решение, укажите связанные ID вместо удаления

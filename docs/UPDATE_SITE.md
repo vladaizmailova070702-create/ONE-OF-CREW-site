@@ -1,5 +1,23 @@
 # Как обновить сайт oneofstudio.ru
 
+## Публикация значка сайта от 01.10.2026
+
+В `deploy/` локально подготовлена новая иконка из утверждённого пользователем
+изображения. Для этой публикации загрузите в бакет `oneofstudio.ru`, сохранив
+пути, десять публичных HTML-файлов из корня `deploy/` (`index.html`,
+`choreo-junior.html`, `choreo.html`, `hip-hop.html`, `kpop.html`,
+`lady-style-masterclass-18-october.html`, `lady-style.html`, `olga-shah.html`,
+`privacy.html`, `vladislava-izmailova.html`) и пять файлов из
+`deploy/brand_assets/web/`: `favicon.svg`, `favicon-32.png`,
+`favicon-192.png`, `favicon.ico`, `apple-touch-icon.png`.
+HTML-ссылки содержат метку версии `20261001`. После загрузки очистите кэш CDN
+для перечисленных HTML-страниц и пяти путей значка, затем проверьте
+`https://oneofstudio.ru/` и `https://oneofstudio.ru/brand_assets/web/favicon-192.png`.
+Ни сайт журнала, ни его конфигурацию при этой публикации не загружайте.
+
+Ниже сохранена инструкция по доступу к Object Storage и CDN. Её раздел
+«Что нужно залить в этот раз» относится к выпуску от 04.09.2026.
+
 Проверено 01.09.2026 запросами к боевому домену.
 
 ## Сначала главное: сайт больше не на Netlify
