@@ -26,7 +26,8 @@ def font(size, bold=True):
 
 
 def render(name, upward_shift, scrim_strength):
-    original = SOURCE_DIR / f"lady-style-motion-{name}.png"
+    source_name = "heels-denim" if name == "heels" else name
+    original = SOURCE_DIR / f"lady-style-motion-{source_name}.png"
     source = Image.open(original).convert("RGB")
     photo = source.resize((W, H), Image.Resampling.LANCZOS)
     if upward_shift:
