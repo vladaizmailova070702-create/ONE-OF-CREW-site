@@ -1,4 +1,4 @@
-"""Export three Lady Style story posters with exact, editable event typography."""
+"""Export Lady Style story posters with exact, editable event typography."""
 
 from pathlib import Path
 
@@ -17,6 +17,7 @@ VARIANTS = (
     ("jazz-funk", 0, 95),
     ("heels", 245, 105),
     ("fusion", 245, 190),
+    ("aura-detail", 0, 100),
 )
 
 
