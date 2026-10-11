@@ -17,7 +17,6 @@ VARIANTS = (
     ("jazz-funk", 0, 95),
     ("heels", 245, 105),
     ("fusion", 245, 190),
-    ("aura-detail", 0, 100),
 )
 
 
