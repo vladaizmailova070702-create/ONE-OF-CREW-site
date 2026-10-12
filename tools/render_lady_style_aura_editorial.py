@@ -1,4 +1,4 @@
-"""Export the approved aura detail story with quiet editorial typography."""
+"""Export the approved aura detail story with a restrained two-font system."""
 
 from pathlib import Path
 
@@ -39,25 +39,24 @@ def render():
     logo.thumbnail((270, 75), Image.Resampling.LANCZOS)
     canvas.paste(logo, (73, 248), logo)
 
-    put(66, 354, "Lady", "GARA.TTF", 194)
-    put(124, 528, "Style", "GARAIT.TTF", 211)
-    put(70, 737, "25+", "GARA.TTF", 109, RED)
-    draw.line((70, 854, 485, 854), fill=RED, width=2)
+    put(66, 354, "LADY", "GARA.TTF", 185)
+    put(66, 525, "STYLE", "GARA.TTF", 185)
+    put(70, 724, "25+", "GARA.TTF", 112, RED)
+    draw.line((70, 854, 485, 854), fill=IVORY, width=2)
 
     put(70, 882, "ДЛЯ ДЕВУШЕК И ЖЕНЩИН", "segoeui.ttf", 30)
     put(70, 936, "НАБОР В ГРУППУ С НУЛЯ", "seguisb.ttf", 33)
-    put(70, 1020, "Ознакомительная", "GARAIT.TTF", 54)
-    put(70, 1080, "тренировка", "GARAIT.TTF", 75)
-    put(70, 1207, "с Ольгой Шах · в студии", "segoeui.ttf", 32)
+    put(70, 1030, "ОЗНАКОМИТЕЛЬНАЯ", "segoeui.ttf", 37)
+    put(70, 1087, "ТРЕНИРОВКА", "segoeui.ttf", 54)
+    put(70, 1207, "С ОЛЬГОЙ ШАХ · В СТУДИИ", "segoeui.ttf", 29)
 
     draw.rectangle((0, 1390, W, 1650), fill=BLACK)
     draw.line((70, 1391, 1010, 1391), fill=IVORY, width=2)
-    put(70, 1410, "18 октября", "GARA.TTF", 62)
+    put(70, 1410, "18 ОКТЯБРЯ", "segoeui.ttf", 51)
     put(630, 1418, "18:00–19:30", "segoeui.ttf", 40)
-    put(70, 1480, "800", "GARA.TTF", 67, RED)
-    put(180, 1478, "₽", "segoeui.ttf", 66, RED)
-    put(338, 1480, "Хабаровск · Комсомольская, 78", "segoeui.ttf", 29)
-    put(338, 1522, "3 этаж · офис 307", "segoeui.ttf", 29)
+    put(70, 1480, "800 ₽", "seguisb.ttf", 58, RED)
+    put(338, 1480, "ХАБАРОВСК · КОМСОМОЛЬСКАЯ, 78", "segoeui.ttf", 28)
+    put(338, 1522, "3 ЭТАЖ · ОФИС 307", "segoeui.ttf", 28)
     put(70, 1565, "ЗАПИСЬ", "segoeui.ttf", 24)
     put(70, 1592, "+7 900 415-37-63", "seguisb.ttf", 49)
     put(580, 1600, "MAX · Telegram · WhatsApp", "segoeui.ttf", 26)
