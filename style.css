@@ -2183,6 +2183,7 @@ body::before {
 .event-text-link { font-size: 0.9rem; font-weight: 600; }
 .event-poster { margin: 0; width: 100%; max-width: 430px; justify-self: end; }
 .event-poster img { width: 100%; height: auto; border: 1px solid rgba(255,255,255,0.15); }
+.event-poster video { display: block; width: 100%; max-height: 75vh; aspect-ratio: 9 / 16; background: #000; border: 1px solid rgba(255,255,255,0.15); }
 .event-group { padding-block: clamp(60px, 8vw, 100px); background: var(--light-bg); color: var(--light-text); }
 .event-group-inner { display: flex; justify-content: space-between; gap: 42px; align-items: end; }
 .event-group-inner > div:first-child { max-width: 760px; }
@@ -2367,6 +2368,8 @@ body::before {
 .social-story-viewer::backdrop { background: rgba(0,0,0,.88); }
 .social-story-viewer figure { margin: 0; }
 .social-story-viewer img { display: block; max-width: 100%; max-height: calc(94vh - 72px); width: auto; height: auto; margin: auto; object-fit: contain; }
+.social-story-viewer video { display: block; max-width: 100%; max-height: calc(94vh - 130px); width: auto; height: auto; margin: auto; background: #000; }
+.social-story-viewer [hidden] { display: none; }
 .social-story-viewer figcaption { padding-top: 8px; text-align: center; font-size: .85rem; }
 .social-story-viewer.has-link img { max-height: calc(94vh - 130px); }
 .social-story-link:not([hidden]) { display: block; width: fit-content; margin: 10px auto 0; padding: 10px 16px; border-radius: 4px; background: var(--accent); color: var(--white); font-size: .88rem; font-weight: 700; text-align: center; text-decoration: none; }
