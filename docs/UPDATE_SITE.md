@@ -2,7 +2,7 @@
 
 ## Видеоистория мастер-класса Lady Style — 19.10.2026
 
-Локальные изменения подготовлены для GitHub. Для публикации на боевом сайте загрузить в Object Storage с сохранением путей `index.html`, `lady-style.html`, `lady-style-masterclass-18-october.html`, `style.css`, `assets/web/social/lady-style-masterclass-2026-10-18.mp4` и `assets/web/social/lady-style-masterclass-2026-10-18-poster.webp`. Исходный файл `video_2026-10-19_13-54-36.mp4` (59,5 МБ) не входит в публикацию. Очистить CDN для `/`, `/index.html`, `/lady-style.html`, `/lady-style-masterclass-18-october.html`, `/style.css` и новых путей медиа; затем проверить главную историю и прямую страницу события. Публикация в Object Storage ещё не выполнена.
+Изменения отправлены в GitHub (`main`, коммит `59d750a`). Для публикации на боевом сайте загрузить в Object Storage с сохранением путей `index.html`, `lady-style.html`, `lady-style-masterclass-18-october.html`, `style.css`, `assets/web/social/lady-style-masterclass-2026-10-18.mp4` и `assets/web/social/lady-style-masterclass-2026-10-18-poster.webp`. Исходный файл `video_2026-10-19_13-54-36.mp4` (59,5 МБ) не входит в публикацию. Очистить CDN для `/`, `/index.html`, `/lady-style.html`, `/lady-style-masterclass-18-october.html`, `/style.css` и новых путей медиа; затем проверить главную историю и прямую страницу события. Публикация в Object Storage ещё не выполнена.
 
 ## Новое фото Владиславы в ленте — 12.10.2026
 
