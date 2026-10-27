@@ -20,7 +20,9 @@ FONT_REGULAR = Path("C:/Windows/Fonts/arial.ttf")
 WIDTH, HEIGHT = 1080, 1350
 INK = "#191816"
 RED = "#b5242b"
-PAPER = (245, 237, 221)
+YELLOW = (247, 199, 75)
+CORAL = (239, 100, 72)
+CREAM = (255, 246, 220)
 
 CARDS = [
     {"number": 1, "slug": "repeat", "source": "01-repeat.png", "title": ["МОЖНО ЕЩЁ РАЗ", "С НАЧАЛА?"], "quote": "«Теперь точно запомню.»", "height": 775, "x": 405, "y": 545},
@@ -37,11 +39,18 @@ def font(path: Path, size: int) -> ImageFont.FreeTypeFont:
 
 
 def base_page() -> Image.Image:
-    page = Image.new("RGB", (WIDTH, HEIGHT), PAPER)
-    # Quiet paper fibers, with enough flat space for bold type to remain crisp.
+    page = Image.new("RGB", (WIDTH, HEIGHT), YELLOW)
+    # Colored sheets meet at a lightly torn edge, like a pasted magazine spread.
+    draw = ImageDraw.Draw(page)
+    edge = [(0, 650), (89, 639), (175, 646), (263, 635), (355, 644),
+            (447, 632), (540, 642), (634, 633), (729, 647), (823, 636),
+            (920, 645), (1000, 633), (WIDTH, 640)]
+    draw.polygon(edge + [(WIDTH, HEIGHT), (0, HEIGHT)], fill=CREAM)
+    draw.polygon([(x, y + 17) for x, y in edge] + [(WIDTH, HEIGHT), (0, HEIGHT)], fill=CORAL)
+    # Fine print grain makes both colored panels feel like physical paper.
     texture = Image.effect_noise((WIDTH, HEIGHT), 8).convert("L")
-    tint = Image.new("RGB", (WIDTH, HEIGHT), PAPER)
-    tint.putalpha(texture.point(lambda value: int(value * 0.045)))
+    tint = Image.new("RGB", (WIDTH, HEIGHT), (255, 247, 216))
+    tint.putalpha(texture.point(lambda value: int(value * 0.025)))
     page = Image.alpha_composite(page.convert("RGBA"), tint).convert("RGB")
     return page
 
@@ -51,9 +60,9 @@ def ink_marks(page: Image.Image, variant: int) -> None:
     draw = ImageDraw.Draw(overlay)
     points = []
     for x in range(-60, 380, 7):
-        y = 1030 + 68 * math.sin(x / 77 + variant * 0.65)
+        y = 1055 + 60 * math.sin(x / 77 + variant * 0.65)
         points.append((x, int(y)))
-    draw.line(points, fill=(181, 36, 43, 24), width=4, joint="curve")
+    draw.line(points, fill=(255, 247, 223, 115), width=6, joint="curve")
     page.paste(overlay, mask=overlay.getchannel("A"))
 
 
@@ -146,7 +155,7 @@ def save(page: Image.Image, stem: str) -> None:
     webp = OUTPUT / f"{stem}.webp"
     jpg = JPG_OUTPUT / f"{stem}.jpg"
     page.save(webp, "WEBP", quality=82, method=6, exif=b"")
-    page.save(jpg, "JPEG", quality=87, optimize=True, progressive=True, exif=b"")
+    page.save(jpg, "JPEG", quality=83, optimize=True, progressive=True, exif=b"")
     print(f"{webp.relative_to(ROOT)} {webp.stat().st_size} bytes; {jpg.relative_to(ROOT)} {jpg.stat().st_size} bytes")
 
 
@@ -158,6 +167,7 @@ def render_card(card: dict) -> Image.Image:
     draw.text((66, 66), f"РЕПЕТИЦИЯ  /  {card['number']:02d}—06", font=font(FONT_BOLD, 27), fill=RED)
     bottom = draw_fit_text(page, card["title"], 154)
     draw.text((69, bottom + 25), card["quote"], font=font(FONT_REGULAR, 43), fill=INK)
+    draw.text((49, 906), f"{card['number']:02d}", font=font(FONT_BOLD, 290), fill="#F5B298")
     collage_person(page, card["source"], x=card["x"], y=card["y"], height=card.get("height"), width=card.get("width"), tape_angle=-17 if card["number"] % 2 else 21, tape_top=card.get("tape_top"))
     save(page, f"{card['number']:02d}-{card['slug']}")
     return page
@@ -175,8 +185,8 @@ def render_cover() -> Image.Image:
     collage_person(page, "03-face.png", x=339, y=733, height=595, tape_angle=-19)
     collage_person(page, "05-run.png", x=720, y=800, height=525, tape_angle=16)
     draw = ImageDraw.Draw(page)
-    draw.rectangle((66, 637, 246, 687), fill=RED)
-    draw.text((81, 643), "ЛИСТАЙ →", font=font(FONT_BOLD, 32), fill="#fffaf0")
+    draw.rectangle((66, 558, 246, 608), fill=RED)
+    draw.text((81, 564), "ЛИСТАЙ →", font=font(FONT_BOLD, 32), fill="#fffaf0")
     save(page, "00-cover")
     return page
 
