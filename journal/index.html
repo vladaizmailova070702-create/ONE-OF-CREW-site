@@ -186,6 +186,11 @@ input[type=month]{min-width:148px}
   transition:background .15s ease,border-color .15s ease,color .15s ease;
 }
 .btn:hover{border-color:var(--accent-soft)}
+.btn:active:not(:disabled){background:var(--surface-2)}
+.lesson-cancelled{border:1px solid var(--warn);border-radius:var(--r);padding:18px;background:var(--surface);overflow-wrap:anywhere}
+.lesson-cancelled h3{font-size:18px;margin-bottom:8px;color:#dcb469}
+.lesson-cancelled p{color:var(--muted);font-size:13px;margin-top:8px}
+.chip.cancelled{border-style:dashed;color:#dcb469}
 .btn:disabled{opacity:.45;cursor:default}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .btn.primary:hover{background:#8f2222;border-color:#8f2222}
@@ -551,7 +556,7 @@ function visitsOf(studentId, ym, g){
   var n=0;
   for(var k in D.sessions){
     var s=D.sessions[k];
-    if(!s||!s.date||String(s.date).slice(0,7)!==ym) continue;
+    if(!s||s.cancelled||!s.date||String(s.date).slice(0,7)!==ym) continue;
     if(g && s.group!==g) continue;
     if((s.present||[]).indexOf(studentId)>=0) n++;
   }
@@ -561,7 +566,7 @@ function sessionsOf(ym,g){
   var out=[];
   for(var k in D.sessions){
     var s=D.sessions[k];
-    if(s&&s.date&&String(s.date).slice(0,7)===ym&&(!g||s.group===g)) out.push(s);
+    if(s&&!s.cancelled&&s.date&&String(s.date).slice(0,7)===ym&&(!g||s.group===g)) out.push(s);
   }
   return out;
 }
@@ -643,7 +648,7 @@ function startDateOf(st){
     var after="";
     for(k in D.sessions){
       s=D.sessions[k];
-      if(!s||!s.date||s.group!==st.group) continue;
+      if(!s||s.cancelled||!s.date||s.group!==st.group) continue;
       if(s.date>st.trialDate && (!after || s.date<after)) after=s.date;
     }
     if(after) return after;
@@ -654,7 +659,7 @@ function startDateOf(st){
   var first="";
   for(k in D.sessions){
     s=D.sessions[k];
-    if(!s||!s.date) continue;
+    if(!s||s.cancelled||!s.date) continue;
     if((s.present||[]).indexOf(st.id)<0) continue;
     if(!first || s.date<first) first=s.date;
   }
@@ -676,7 +681,7 @@ function usedLessons(st){
   var n=0;
   for(var k in D.sessions){
     var s=D.sessions[k];
-    if(!s||!s.date||s.group!==st.group) continue;
+    if(!s||s.cancelled||!s.date||s.group!==st.group) continue;
     if(s.date<from) continue;
     if(st.trialDate && s.date===st.trialDate) continue;
     // переносится только пропуск по справке; прогул и отъезд списываются
@@ -694,7 +699,7 @@ function excusedLessons(st){
   var n=0;
   for(var k in D.sessions){
     var s=D.sessions[k];
-    if(!s||!s.date||s.group!==st.group) continue;
+    if(!s||s.cancelled||!s.date||s.group!==st.group) continue;
     if(s.date<from) continue;
     var why=absenceInfo((s.absence||{})[st.id]);
     if(why && why.keep) n++;
@@ -709,7 +714,7 @@ function missedLessons(st){
   var n=0;
   for(var k in D.sessions){
     var s=D.sessions[k];
-    if(!s||!s.date||s.group!==st.group) continue;
+    if(!s||s.cancelled||!s.date||s.group!==st.group) continue;
     if(s.date<from) continue;
     if(st.trialDate && s.date===st.trialDate) continue;
     var w=absenceInfo((s.absence||{})[st.id]);
@@ -728,7 +733,9 @@ function coveredUntil(st){
   if(weekday===undefined) return "";
   var d=new Date(), seen=0, last="";
   for(var i=0;i<400 && seen<left;i++){
-    if(d.getDay()===weekday){ seen++; last=d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate()); }
+    var iso=d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate());
+    var planned=D.sessions[sessionKey(iso,st.group)];
+    if(d.getDay()===weekday && !(planned&&planned.cancelled)){ seen++; last=iso; }
     d.setDate(d.getDate()+1);
   }
   return last;
@@ -744,7 +751,10 @@ function trialsOf(ym){
   // указали — по первой отметке посещения
   return D.students.filter(function(st){
     if(st.plan!=="trial") return false;
-    if(st.trialDate) return String(st.trialDate).slice(0,7)===ym;
+    if(st.trialDate){
+      var trial=D.sessions[sessionKey(st.trialDate,st.group)];
+      return !(trial&&trial.cancelled) && String(st.trialDate).slice(0,7)===ym;
+    }
     return visitsOf(st.id, ym)>0;
   });
 }
@@ -752,7 +762,7 @@ function trialDayOf(st, ym){
   if(st.trialDate) return st.trialDate;
   for(var k in D.sessions){
     var s=D.sessions[k];
-    if(!s||!s.date) continue;
+    if(!s||s.cancelled||!s.date) continue;
     if(ym && String(s.date).slice(0,7)!==ym) continue;
     if((s.present||[]).indexOf(st.id)>=0) return s.date;
   }
@@ -869,13 +879,18 @@ function viewLesson(){
 
   var dateChips='<div class="chips">'+sundaysOf(S.month).map(function(d){
     var s=D.sessions[sessionKey(d,S.group)], n=s&&s.present?s.present.length:0;
-    return '<button class="chip" data-act="date" data-id="'+d+'" aria-pressed="'+(S.date===d)+'">'+
-      dayLabel(d)+(n?'<span class="n">'+n+'</span>':'')+'</button>';
+    return '<button class="chip'+(s&&s.cancelled?' cancelled':'')+'" data-act="date" data-id="'+d+'" aria-pressed="'+(S.date===d)+'">'+
+      dayLabel(d)+(s&&s.cancelled?' · отмена':(n?'<span class="n">'+n+'</span>':''))+'</button>';
   }).join("")+
   '<label class="chip chip-date">другая дата<input type="date" data-act="date-input" value="'+S.date+'" aria-label="Выбрать дату занятия"></label></div>';
 
   var body;
-  if(!roster.length){
+  if(sess.cancelled){
+    body='<div class="lesson-cancelled" role="status"><h3>Занятие '+esc(dayLabel(S.date))+' отменено</h3>'+
+      '<p>'+esc(sess.cancelReason||'Причина не указана')+'</p>'+
+      '<p>Занятие не списывается с абонементов, посещения и аренда не учитываются.</p>'+
+      '<div class="actions"><button class="btn" data-act="restore-lesson">Восстановить занятие</button></div></div>';
+  } else if(!roster.length){
     body='<div class="empty"><b>На эту дату никого</b>'+
       (activeStudents(S.group).length
         ? 'В группе есть ученики, но к '+esc(dayLabel(S.date))+' у них ещё не начался платный период. Дата начала — в карточке ученика, поле «Занимается с».'
@@ -907,7 +922,8 @@ function viewLesson(){
   return '<section class="view">'+
     '<div class="vhead"><h2>Занятие</h2><span class="sub">'+esc(g.time)+' · '+esc(g.meta)+'</span></div>'+
     groupChips()+dateChips+body+
-    (roster.length?'<div class="actions"><button class="btn ghost" data-act="clear-day">Снять все отметки</button></div>':'')+
+    (!sess.cancelled?'<div class="actions"><button class="btn" data-act="cancel-lesson">Отменить занятие</button>'+
+      (roster.length?'<button class="btn ghost" data-act="clear-day">Снять все отметки</button>':'')+'</div>':'')+
     '</section>';
 }
 
@@ -1358,6 +1374,15 @@ function absenceModal(st){
   );
 }
 
+function cancelLessonModal(){
+  openModal('<h3>Отменить занятие '+esc(dayLabel(S.date))+'?</h3>'+
+    '<p class="hint">'+esc(group(S.group).name)+'. Отмена для всей группы. Занятие не будет списано с абонементов и учтено в аренде. Существующие отметки сохранятся на случай восстановления.</p>'+
+    '<div class="field"><label for="cancel-reason">Причина отмены</label><select id="cancel-reason">'+
+    '<option>Конкурс</option><option>Болезнь тренера</option><option>Другая причина</option></select></div>'+
+    '<div class="field"><label for="cancel-note">Комментарий (необязательно)</label><textarea id="cancel-note" maxlength="300" rows="3"></textarea></div>'+
+    '<div class="actions"><button class="btn primary" data-act="save-cancellation">Отменить занятие</button><button class="btn" data-act="close">Назад</button></div>');
+}
+
 function soloModal(rec, forStudent){
   var isNew=!rec;
   rec = rec || {id:uid(), date:todayISO(), studentId:forStudent||"", hours:1,
@@ -1475,14 +1500,14 @@ function exportCsv(){
     });
   rows.push([]);
   rows.push(["Посещения"]);
-  rows.push(["Дата","Группа","Пришли","Кто"]);
+  rows.push(["Дата","Группа","Пришли","Кто","Статус","Причина отмены"]);
   Object.keys(D.sessions).sort().forEach(function(k){
     var s=D.sessions[k];
     var names=(s.present||[]).map(function(id){
       var st=D.students.filter(function(x){ return x.id===id; })[0];
       return st?st.name:id;
     });
-    rows.push([s.date, group(s.group).name, names.length, names.join(", ")]);
+    rows.push([s.date, group(s.group).name, s.cancelled?0:names.length, s.cancelled?"":names.join(", "), s.cancelled?"Отменено":"Проведено", s.cancelled?s.cancelReason||"":""]);
   });
   var csv=rows.map(function(r){
     return r.map(function(c){
@@ -1527,6 +1552,28 @@ document.addEventListener("click",function(e){
   if(act==="close"){ closeModal(); return; }
   if(act==="group"){ S.group=id; render(); return; }
   if(act==="date"){ S.date=id; render(); return; }
+
+  if(act==="cancel-lesson"){ cancelLessonModal(); return; }
+  if(act==="save-cancellation"){
+    var ck=sessionKey(S.date,S.group), previous=D.sessions[ck];
+    var reason=document.getElementById("cancel-reason").value;
+    var note=document.getElementById("cancel-note").value.trim();
+    D.sessions[ck]=Object.assign({},previous||{date:S.date,group:S.group,present:[],absence:{},cancellationOnly:true},
+      {cancelled:true,cancelReason:reason+(note?' — '+note:'')});
+    closeModal(); commit(); toast("Занятие отменено."); return;
+  }
+  if(act==="restore-lesson"){
+    var rk=sessionKey(S.date,S.group), cancelled=D.sessions[rk];
+    if(!cancelled||!cancelled.cancelled) return;
+    if(!confirm("Восстановить занятие "+dayLabel(S.date)+"? Сохранённые отметки и списания снова будут учитываться.")) return;
+    if(cancelled.cancellationOnly) delete D.sessions[rk];
+    else { delete cancelled.cancelled; delete cancelled.cancelReason; }
+    commit(); toast("Занятие восстановлено."); return;
+  }
+  if(["toggle","absence","set-absence","clear-day"].indexOf(act)>=0){
+    var current=D.sessions[sessionKey(S.date,S.group)];
+    if(current&&current.cancelled) return;
+  }
 
   if(act==="toggle"){
     var key=sessionKey(S.date,S.group);

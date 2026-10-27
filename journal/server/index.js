@@ -124,7 +124,7 @@ function visitDates(sessions, studentId, ym) {
   const out = [];
   for (const k of Object.keys(sessions || {})) {
     const s = sessions[k];
-    if (!s || !s.date || String(s.date).slice(0, 7) !== ym) continue;
+    if (!s || s.cancelled || !s.date || String(s.date).slice(0, 7) !== ym) continue;
     if ((s.present || []).indexOf(studentId) >= 0) out.push(s.date);
   }
   return out.sort();
