@@ -179,7 +179,7 @@ def save(page: Image.Image, stem: str) -> None:
     webp = OUTPUT / f"{stem}.webp"
     jpg = JPG_OUTPUT / f"{stem}.jpg"
     page.save(webp, "WEBP", quality=82, method=6, exif=b"")
-    for quality in range(83, 73, -1):
+    for quality in range(83, 59, -1):
         page.save(jpg, "JPEG", quality=quality, optimize=True, progressive=True, exif=b"")
         if jpg.stat().st_size <= 150_000:
             break
@@ -213,8 +213,7 @@ def render_cover() -> Image.Image:
     draw.text((66, 66), "ONE OF STUDIO  /  ХАБАРОВСК", font=font(FONT_BOLD, 27), fill=RED)
     bottom = draw_fit_text(page, ["КАКОЙ ТЫ", "НА РЕПЕТИЦИИ?"], 205, max_size=116)
     draw.text((69, bottom + 17), "ШЕСТЬ ТИПАЖЕЙ. НАЙДИ СЕБЯ.", font=font(FONT_REGULAR, 37), fill=INK)
-    collage_photo(page, "photo_2025-10-19_21-38-11.jpg", crop=(480, 190, 2040, 1280), x=47, y=746, width=785)
-    collage_person(page, "07-student-battle.png", x=710, y=746, height=575, tape_angle=16, tape_top=(0.73, 0.16))
+    collage_photo(page, "photo_2025-10-19_21-38-11.jpg", crop=(480, 190, 2040, 1280), x=55, y=660, width=970)
     draw = ImageDraw.Draw(page)
     draw.rectangle((66, 558, 246, 608), fill=RED)
     draw.text((81, 564), "ЛИСТАЙ →", font=font(FONT_BOLD, 32), fill="#fffaf0")
