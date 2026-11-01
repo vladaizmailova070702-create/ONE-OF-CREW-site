@@ -1320,6 +1320,9 @@ body::before {
 .soc-photo,
 .soc-media { display: block; width: 100%; height: 100%; }
 .soc-photo { object-fit: cover; }
+/* Широкие командные фото показываем целиком, сохраняя всех участников. */
+.soc-tile--landscape { grid-column: span 2; grid-row: span 3; }
+.soc-tile--landscape .soc-photo { object-fit: contain; }
 .soc-media { position: relative; }
 .soc-tile.is-playing .soc-video { object-fit: contain; }
 .soc-media .soc-poster,
