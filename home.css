@@ -1,28 +1,20 @@
 /* Homepage layout based on the studio's black, white and red reference. */
-.home-root {
-  background: #45454d;
-}
-
 .home {
   --poster-ink: #080809;
   --poster-paper: #f8f8f7;
   --poster-red: #c9252a;
   --poster-red-light: #ff5658;
-  --poster-gutter: clamp(27px, 6.6cqi, 92px);
-  --poster-band-height: max(274px, 37.65cqi);
+  --poster-gutter: max(clamp(27px, 6.6cqi, 92px), calc((100cqi - 1520px) / 2));
+  --poster-band-height: clamp(274px, 37.65cqi, 510px);
   --surface-alt: #141416;
   --surface: #1d1d20;
   --accent-soft: #ff8c8d;
   position: relative;
   isolation: isolate;
   container-type: inline-size;
-  width: min(89%, 1320px);
-  margin: clamp(22px, 5.7vw, 76px) auto;
   overflow: clip;
-  border-radius: 7px;
   background: var(--poster-ink);
   color: var(--white);
-  box-shadow: 0 19px 52px #101014b0, 0 3px 12px #10101470;
 }
 
 .home::before { content: none; }
@@ -52,6 +44,8 @@
   display: flex;
   align-items: center;
   gap: clamp(14px, 5cqi, 72px);
+  max-width: 1600px;
+  margin-inline: auto;
   padding-inline: clamp(14px, 3.4cqi, 48px);
   color: var(--white);
 }
@@ -120,7 +114,7 @@
 }
 
 .poster-hero {
-  min-height: max(290px, 43cqi);
+  min-height: clamp(290px, 43cqi, 580px);
   padding: clamp(66px, 7.2cqi, 104px) var(--poster-gutter) clamp(28px, 4.4cqi, 64px);
   background: var(--poster-ink);
 }
@@ -472,15 +466,29 @@
   .poster-schedule .poster-text-link { font-size: 12px; }
 }
 
-@media (width < 700px) {
-  .home-root { background: var(--bg); }
-  .home {
-    --poster-gutter: clamp(21px, 6cqi, 36px);
-    width: 100%;
-    margin: 0;
-    border-radius: 0;
-    box-shadow: none;
+@media (width >= 1680px) {
+  .poster-band > .poster-hero-photo {
+    width: min(79%, 1760px);
+    object-position: 64% 31%;
+    mask-image: linear-gradient(90deg, transparent, #000 18%);
   }
+
+  .poster-trial-photo {
+    width: min(51%, 1100px);
+    object-position: 41% 38%;
+  }
+
+  .poster-schedule-photo { object-position: center 30%; }
+
+  .poster-about-photo {
+    width: min(73%, 1640px);
+    object-position: 42% 25%;
+    mask-image: linear-gradient(90deg, #000 67%, transparent);
+  }
+}
+
+@media (width < 700px) {
+  .home { --poster-gutter: clamp(21px, 6cqi, 36px); }
 
   .poster-header { justify-content: space-between; gap: 10px; padding: 10px var(--poster-gutter); }
   .poster-header-cta, .poster-menu-toggle { min-height: 44px; }
