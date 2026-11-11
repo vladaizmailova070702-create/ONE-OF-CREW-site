@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="home-root">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -41,11 +41,14 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Oswald:wght@500;600;700&family=Saira:ital,wdth,wght@0,125,700;0,125,800;1,125,700;1,125,800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&family=Saira:ital,wdth,wght@0,125,700;0,125,800;1,125,700;1,125,800&display=swap" rel="stylesheet" />
 
-  <link rel="preload" as="image" href="assets/web/hero.webp" />
+  <link rel="preload" as="image" href="assets/web/social/photo-crew-stage.webp" />
 
   <link rel="stylesheet" href="style.css?v=20261019-story" />
+
+  <link rel="stylesheet" href="home.css?v=20261111" />
+  <script>document.documentElement.classList.add('home-js');</script>
 
   <!-- JSON-LD: DanceSchool + расписание групп -->
   <script type="application/ld+json">
@@ -251,420 +254,118 @@
        См. docs/YANDEX_SEO.md, раздел 2.2. -->
 
 </head>
-<body>
-
-  <!-- ======================= HEADER / NAV ======================= -->
-  <header class="site-header" id="top">
-    <a class="brand" href="#top" aria-label="ONE OF STUDIO — на главную">
-      <img class="brand-logo" src="brand_assets/web/logo.png" alt="ONE OF STUDIO" width="575" height="140" />
-    </a>
-
-    <nav class="nav" aria-label="Основная навигация">
-      <a href="#why">О студии</a>
+<body class="home" id="top">
+  <a class="poster-skip" href="#main">К содержанию</a>
+  <header class="poster-header">
+    <button class="poster-menu-toggle" type="button" aria-expanded="false" aria-controls="home-nav" hidden>Меню</button>
+    <nav class="poster-nav" id="home-nav" aria-label="Основная навигация">
+      <a href="#trial">Пробное</a>
       <a href="#directions">Направления</a>
       <a href="#schedule">Расписание</a>
-      <a href="#teachers">Тренеры</a>
-      <a href="#social">Соцсети</a>
-      <a href="#contacts">Контакты</a>
+      <a href="#why">О студии</a>
+      <a href="#social">Медиа</a>
     </nav>
-
-    <a href="#contacts" class="btn btn-accent nav-cta">Записаться</a>
-
-    <button class="nav-toggle" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu">
-      <span></span><span></span><span></span>
-    </button>
+    <a class="poster-header-cta" href="#contacts">Записаться</a>
   </header>
 
-  <!-- Mobile menu -->
-  <div class="mobile-menu" id="mobile-menu" hidden>
-    <nav aria-label="Мобильная навигация">
-      <a href="#why">О студии</a>
-      <a href="#directions">Направления</a>
-      <a href="#schedule">Расписание</a>
-      <a href="#teachers">Тренеры</a>
-      <a href="#social">Соцсети</a>
-      <a href="#contacts">Контакты</a>
-    </nav>
-    <a href="#contacts" class="btn btn-accent">Записаться</a>
-  </div>
-
-  <main>
-
-    <!-- ======================= 1. HERO ======================= -->
-    <section class="hero" aria-labelledby="hero-title">
-      <img class="hero-bg" src="assets/web/hero.webp"
-           alt="" width="1672" height="941" fetchpriority="high" />
-      <div class="hero-overlay"></div>
-
-      <div class="hero-content">
-        <div class="hero-headline">
-          <span class="hero-wordmark">ONE OF STUDIO</span>
-          <h1 id="hero-title">Место, где<br />начинается<br /><span class="accent-text">твой танец</span></h1>
-        </div>
-        <div class="hero-aside">
-          <p>Танцевальная студия в Хабаровске. Учимся через постановки, музыку и сцену — приходи на бесплатное пробное занятие.</p>
-          <a href="#contacts" class="btn btn-accent btn-lg">Записаться на пробное</a>
-        </div>
-      </div>
-
-      <!-- Style strip — inside hero, above the dark fade -->
-      <ul class="hero-styles" aria-label="Направления студии">
-        <li><a href="#directions">Choreo</a></li>
-        <li><a href="hip-hop.html">Hip-Hop</a></li>
-        <li><a href="#directions">Jazz-Funk</a></li>
-        <li><a href="#directions">Girly Style</a></li>
-        <li><a href="lady-style.html">Lady Style</a></li>
-        <li><a href="#directions">Locking</a></li>
-        <li><a href="#directions">Hands Style</a></li>
-        <li><a href="#directions">K-Pop</a></li>
-        <!-- ВРЕМЕННО СКРЫТО (вернуть позже): <li><a href="#directions">Breaking</a></li> <li><a href="#directions">Contemporary</a></li> -->
-      </ul>
-    </section>
-
-    <!-- ======================= 2. ПОЧЕМУ МЫ ======================= -->
-    <section class="why section section-light section--wide" id="why" aria-labelledby="why-title">
-      <div class="container">
-        <div class="section-head">
-          <h2 id="why-title" class="display-h2">Почему ONE OF STUDIO<br /><span class="accent-text">для тебя?</span></h2>
-        </div>
-
-        <!-- TODO: заменить на реальные фото из зала -->
-        <div class="why-grid">
-          <article class="why-card">
-            <div class="why-media">
-              <img src="assets/web/why-stage.webp?v=2" alt="Команда ONE OF STUDIO на сцене с наградами" width="1200" height="800" loading="lazy" />
-            </div>
-            <div class="why-body">
-              <h3>Обучение через сцену</h3>
-              <p>Сразу начинаем с погружения в музыку и хореографию, обучаясь в процессе участия в постановках.</p>
-            </div>
-          </article>
-
-          <article class="why-card">
-            <div class="why-media">
-              <img src="assets/web/why-dancer.webp" alt="Сольное выступление танцовщицы ONE OF STUDIO" width="1200" height="800" loading="lazy" />
-            </div>
-            <div class="why-body">
-              <h3>Раскрываем танцора</h3>
-              <p>Не гонимся за универсальностью. Помогаем раскрыть тебя и показать с новых сторон.</p>
-            </div>
-          </article>
-
-          <article class="why-card">
-            <div class="why-media">
-              <img src="assets/web/why-support.webp" alt="Танцоры ONE OF STUDIO обнимаются за кулисами перед выходом на сцену" width="1200" height="900" loading="lazy" />
-            </div>
-            <div class="why-body">
-              <h3>Атмосфера поддержки</h3>
-              <p>Чувства, поддержка и понимание твоего пути.</p>
-            </div>
-          </article>
-        </div>
-
-        <a class="arrow-cta" href="#contacts">
-          <svg class="arrow-cta-svg" viewBox="0 0 240 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true">
-            <line x1="0" y1="12" x2="226" y2="12" />
-            <polyline points="214,2 236,12 214,22" />
-          </svg>
-          <span class="arrow-cta-label">Записаться на пробное</span>
-        </a>
+  <main id="main">
+    <section class="poster-band poster-hero" aria-labelledby="hero-title">
+      <img class="poster-hero-photo" src="assets/web/social/photo-crew-stage.webp" alt="Танцоры студии на сцене"
+           width="1400" height="934" fetchpriority="high" />
+      <div class="poster-hero-copy">
+        <h1 id="hero-title">
+          <img src="brand_assets/web/logo.png" alt="ONE OF STUDIO" width="575" height="140" />
+        </h1>
+        <p class="poster-slogan">Место, где начинается <span>твой танец</span></p>
+        <p class="poster-place">Танцевальная студия в Хабаровске</p>
+        <a class="poster-button" href="#contacts">Записаться на пробное</a>
       </div>
     </section>
 
-    <!-- ======================= 4. КРАСНЫЙ БАННЕР / ВИДЕО ======================= -->
-    <section class="band-section" aria-labelledby="band-title">
-      <div class="container">
-        <div class="band" id="band">
-          <video class="band-video band-loop" id="bandLoop" poster="assets/web/video-card-poster.webp" muted loop playsinline preload="none">
-            <source src="assets/web/video-card-loop.mp4" type="video/mp4" />
-          </video>
-          <video class="band-video band-full" id="bandFull" preload="none" playsinline>
-            <source src="assets/web/video-card.mp4" type="video/mp4" />
-          </video>
-          <div class="band-overlay"></div>
-          <button class="band-play" id="bandPlay" type="button" aria-label="Смотреть полное видео ONE OF CREW со звуком">▶</button>
-          <button class="band-stop" id="bandStop" type="button" aria-label="Закрыть видео">✕</button>
-          <div class="band-content">
-            <h2 id="band-title">Открой для себя<br />яркий мир танцев</h2>
-            <p>Приходи на бесплатное пробное и почувствуй энергию зала на любом из направлений студии.</p>
-            <a href="#contacts" class="btn btn-accent">Попробовать бесплатно</a>
+    <section class="poster-band poster-trial" id="trial" aria-labelledby="trial-title">
+      <img class="poster-trial-photo" src="assets/web/social/photo-contemporary-2.webp" alt=""
+           width="1400" height="931" loading="lazy" />
+      <div class="poster-copy">
+        <h2 class="poster-title" id="trial-title">Пробное занятие</h2>
+        <p>Приходи на тренировку вместе с группой. Можно начать с нуля. Первое занятие бесплатно до 31 декабря 2026 года.</p>
+        <div class="poster-actions">
+          <a class="poster-button" href="#contacts">Записаться</a>
+          <a class="poster-text-link" href="assets/web/video-card.mp4" data-trial-video>Смотреть видео</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="poster-band poster-directions" id="directions" aria-labelledby="directions-title">
+      <div class="poster-direction-photos" aria-hidden="true">
+        <img src="assets/web/choreo.webp?v=2" alt="" width="900" height="1200" loading="lazy" />
+        <img src="assets/web/social/photo-stage-1.webp" alt="" width="1400" height="934" loading="lazy" />
+        <img src="assets/web/social/photo-solo-stage.webp" alt="" width="1400" height="934" loading="lazy" />
+      </div>
+      <div class="poster-directions-copy">
+        <h2 class="poster-title" id="directions-title">Направления</h2>
+        <ul class="poster-direction-list">
+          <li><a href="choreo.html"><strong>Choreo 16+</strong><span>Постановочная хореография</span></a></li>
+          <li><a href="kpop.html"><strong>K-Pop 12+</strong><span>Cover dance</span></a></li>
+          <li><a href="choreo-junior.html"><strong>Choreo 9+</strong><span>Детская группа</span></a></li>
+          <li><a href="lady-style.html"><strong>Lady Style 25+</strong><span>Женская хореография</span></a></li>
+        </ul>
+        <p class="poster-styles"><a href="hip-hop.html">Hip-Hop</a> · Jazz-Funk · Girly Style в Choreo</p>
+      </div>
+      <!-- Breaking и Contemporary скрыты до возобновления набора. Jazz-Funk входит в Choreo. -->
+    </section>
+
+    <section id="schedule" aria-labelledby="schedule-title">
+      <div class="poster-band poster-schedule">
+        <img class="poster-schedule-photo" src="assets/web/social/photo-studio-cap.webp" alt=""
+             width="933" height="1400" loading="lazy" />
+        <div class="poster-copy">
+          <h2 class="poster-title" id="schedule-title">Расписание <span>и цены</span></h2>
+          <ul class="poster-schedule-list">
+            <li>
+              <div class="poster-schedule-row">
+                <a href="choreo.html">Choreo 16+</a>
+                <span>4 000 ₽<small> / мес.</small></span>
+              </div>
+              <p>Вс <time datetime="13:00">13:00</time>–<time datetime="15:00">15:00</time> · Комсомольская, 78</p>
+            </li>
+            <li>
+              <div class="poster-schedule-row">
+                <a href="kpop.html">K-Pop 12+</a>
+                <span>3 500 ₽<small> / мес.</small></span>
+              </div>
+              <p>Вс <time datetime="15:00">15:00</time>–<time datetime="17:00">17:00</time> · Комсомольская, 78</p>
+            </li>
+            <li>
+              <div class="poster-schedule-row">
+                <a href="choreo-junior.html">Choreo 9+</a>
+                <span>4 000 ₽<small> / мес.</small></span>
+              </div>
+              <p>Идёт набор · Истомина, 41</p>
+            </li>
+            <li>
+              <div class="poster-schedule-row">
+                <a href="lady-style.html">Lady Style 25+</a>
+                <span>3 000 ₽<small> / мес.</small></span>
+              </div>
+              <p>Идёт набор · Комсомольская, 78</p>
+            </li>
+          </ul>
+            <a class="poster-text-link" href="#services">Полный прайс и расписание</a>
+        </div>
+      </div>
+
+      <section class="poster-panel section" id="services" data-home-panel aria-labelledby="services-title">
+        <div class="container">
+          <a class="poster-return" href="#schedule">К расписанию</a>
+          <h2 class="poster-title" id="services-title">Условия занятий</h2>
+          <div class="poster-planned">
+            <h3>Плановое расписание групп, которые набираются</h3>
+            <ul>
+              <li><strong>Choreo 9+</strong> — ср 18:00–19:00, вс 14:00–15:00 · Истомина, 41</li>
+              <li><strong>Lady Style 25+</strong> — вс 18:00–19:30 · Комсомольская, 78</li>
+            </ul>
+            <p>Ведем набор, дата запуска будет озвучена по достижении необходимого количества участников.</p>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ======================= 5. НАПРАВЛЕНИЯ (СВЕТЛАЯ СЕКЦИЯ) ======================= -->
-    <section class="directions section section-light section--wide" id="directions" aria-labelledby="directions-title">
-      <div class="container">
-        <div class="section-head">
-          <h2 id="directions-title" class="display-h2">Выбери своё<br />направление</h2>
-        </div>
-
-        <!-- Направления общие: без деления на детские / взрослые группы.
-             Порог входа указан в .dir-meta каждой карточки. -->
-        <div class="dir-grid dir-grid--quad">
-          <article class="dir-card">
-            <div class="dir-card-inner">
-              <div class="dir-face dir-face--front">
-                <img src="assets/web/choreo.webp?v=2" alt="Группа Choreo ONE OF CREW на сцене" width="800" height="1000" loading="lazy" />
-                <div class="dir-overlay"></div>
-                <div class="dir-info">
-                  <span class="dir-meta">ONE OF CREW · 16–30 лет</span>
-                  <h3>Choreo 16+</h3>
-                  <div class="dir-actions">
-                    <button type="button" class="btn btn-accent btn-sm dir-flip-open" aria-label="Подробнее о направлении Choreo 16+">Узнать подробнее</button>
-                    <a href="#contacts" class="btn btn-light btn-sm">Пробное занятие</a>
-                  </div>
-                </div>
-              </div>
-              <div class="dir-face dir-face--back">
-                <div class="dir-back-body">
-                  <span class="dir-meta">ONE OF CREW · 16–30 лет</span>
-                  <h3>Choreo 16+</h3>
-                  <p class="dir-back-lead">Постановочная хореография: отрабатываем связки под конкретный трек, сценический образ и синхрон в команде.</p>
-                  <ul class="dir-styles" aria-label="Стили внутри направления Choreo">
-                    <li>Hip-Hop</li>
-                    <li>Jazz-Funk</li>
-                    <li>Girly Style</li>
-                  </ul>
-                  <ul class="dir-back-list">
-                    <li>Постановки под конкретные треки и образы</li>
-                    <li>Работа над синхроном и сценической подачей</li>
-                    <li>Выступления и конкурсы в составе команды ONE OF CREW</li>
-                  </ul>
-                  <p class="dir-back-fit"><span class="dir-back-fit-label">Кому подходит:</span> тем, кто хочет танцевать на сцене в команде и выступать на конкурсах.</p>
-                  <p class="dir-back-more"><a href="choreo.html">Подробнее о направлении Choreo →</a></p>
-                </div>
-                <div class="dir-actions dir-actions--back">
-                  <a href="#contacts" class="btn btn-accent btn-sm">Пробное занятие</a>
-                  <button type="button" class="btn btn-light btn-sm dir-flip-close" aria-label="Вернуться к фото">Назад</button>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <article class="dir-card">
-            <div class="dir-card-inner">
-              <div class="dir-face dir-face--front">
-                <img src="assets/web/k-pop.webp?v=2" alt="Занятие группы K-Pop Cover Dance в ONE OF STUDIO" width="800" height="1000" loading="lazy" />
-                <div class="dir-overlay"></div>
-                <div class="dir-info">
-                  <span class="dir-meta">Siesta · 12–25 лет</span>
-                  <h3>K-Pop 12+</h3>
-                  <div class="dir-actions">
-                    <button type="button" class="btn btn-accent btn-sm dir-flip-open" aria-label="Подробнее о направлении K-Pop 12+">Узнать подробнее</button>
-                    <a href="#contacts" class="btn btn-light btn-sm">Пробное занятие</a>
-                  </div>
-                </div>
-              </div>
-              <div class="dir-face dir-face--back">
-                <div class="dir-back-body">
-                  <span class="dir-meta">Siesta · 12–25 лет</span>
-                  <h3>K-Pop 12+</h3>
-                  <p class="dir-back-lead">Проектная cover-dance группа: разбираем и ставим полноценные номера k-pop групп для выхода на сцену.</p>
-                  <ul class="dir-back-list">
-                    <li>Работа над цельным номером от разбора до сцены</li>
-                    <li>Синхрон, формации и перестроения в команде</li>
-                    <li>Сценический образ, подача и работа на зрителя</li>
-                    <li>Выступления, съёмки и cover-dance проекты на мероприятиях</li>
-                  </ul>
-                  <p class="dir-back-fit"><span class="dir-back-fit-label">Кому подходит:</span> тем, кто хочет не просто повторять движения, а выступать в команде с полноценными k-pop номерами на сцене.</p>
-                  <p class="dir-back-more"><a href="kpop.html">Подробнее о K-Pop cover dance →</a></p>
-                </div>
-                <div class="dir-actions dir-actions--back">
-                  <a href="#contacts" class="btn btn-accent btn-sm">Пробное занятие</a>
-                  <button type="button" class="btn btn-light btn-sm dir-flip-close" aria-label="Вернуться к фото">Назад</button>
-                </div>
-              </div>
-            </div>
-          </article>
-          <article class="dir-card">
-            <div class="dir-card-inner">
-              <div class="dir-face dir-face--front">
-                <img src="assets/web/choreo-junior.webp?v=2" alt="Детская танцевальная группа на сцене" width="800" height="1000" loading="lazy" />
-                <div class="dir-overlay"></div>
-                <div class="dir-info">
-                  <span class="dir-meta">Детская группа · 9–16 лет</span>
-                  <h3>Choreo 9+</h3>
-                  <div class="dir-actions">
-                    <button type="button" class="btn btn-accent btn-sm dir-flip-open" aria-label="Подробнее о направлении Choreo 9+">Узнать подробнее</button>
-                    <a href="#contacts" class="btn btn-light btn-sm">Записаться</a>
-                  </div>
-                </div>
-              </div>
-              <div class="dir-face dir-face--back">
-                <div class="dir-back-body">
-                  <span class="dir-meta">Детская группа · 9–16 лет</span>
-                  <h3>Choreo 9+</h3>
-                  <p class="dir-back-lead">Та же постановочная хореография, что и у старших, но своим темпом: материал даётся меньшими кусками и с бо́льшим числом повторов.</p>
-                  <ul class="dir-back-list">
-                    <li>8 часов в месяц — два занятия в неделю по 1 часу</li>
-                    <li>Hip-Hop, Jazz-Funk и Girly Style в постановках</li>
-                    <li>Сцена и съёмки — по желанию, без принуждения</li>
-                    <li>Отдельный преподаватель под детскую группу</li>
-                  </ul>
-                  <p class="dir-back-fit"><span class="dir-back-fit-label">Кому подходит:</span> детям и подросткам 9–16 лет, которым хочется танцевать, а не стоять у станка.</p>
-                  <p class="dir-back-more"><a href="choreo-junior.html">Подробнее о Choreo 9+ →</a></p>
-                </div>
-                <div class="dir-actions dir-actions--back">
-                  <a href="#contacts" class="btn btn-accent btn-sm">Записаться</a>
-                  <button type="button" class="btn btn-light btn-sm dir-flip-close" aria-label="Вернуться к фото">Назад</button>
-                </div>
-              </div>
-            </div>
-          </article>
-          <article class="dir-card">
-            <div class="dir-card-inner">
-              <div class="dir-face dir-face--front">
-                <img src="assets/web/lady-style.webp" alt="Женская танцевальная группа на сцене в сценическом свете" width="800" height="1000" loading="lazy" />
-                <div class="dir-overlay"></div>
-                <div class="dir-info">
-                  <span class="dir-meta">Новое направление · от 25 лет</span>
-                  <h3>Lady style 25+</h3>
-                  <div class="dir-actions">
-                    <button type="button" class="btn btn-accent btn-sm dir-flip-open" aria-label="Подробнее о направлении Lady style 25+">Узнать подробнее</button>
-                    <a href="#contacts" class="btn btn-light btn-sm">Записаться</a>
-                  </div>
-                </div>
-              </div>
-              <div class="dir-face dir-face--back">
-                <div class="dir-back-body">
-                  <span class="dir-meta">Новое направление · от 25 лет</span>
-                  <h3>Lady style 25+</h3>
-                  <p class="dir-back-lead">Женская хореография для взрослых: пластика, походка, подача и работа с образом. Группа собирается из ровесниц.</p>
-                  <ul class="dir-back-list">
-                    <li>Четыре занятия по 1,5 часа в месяц, по воскресеньям</li>
-                    <li>Для женщин от 25 лет</li>
-                    <li>Можно с нуля и после долгого перерыва</li>
-                    <li>Отдельный преподаватель под направление</li>
-                  </ul>
-                  <p class="dir-back-fit"><span class="dir-back-fit-label">Кому подходит:</span> тем, кто откладывал танцы, считая, что уже поздно или не к кому идти.</p>
-                  <p class="dir-back-more"><a href="lady-style.html">Подробнее о Lady style 25+ →</a></p>
-                </div>
-                <div class="dir-actions dir-actions--back">
-                  <a href="#contacts" class="btn btn-accent btn-sm">Записаться</a>
-                  <button type="button" class="btn btn-light btn-sm dir-flip-close" aria-label="Вернуться к фото">Назад</button>
-                </div>
-              </div>
-            </div>
-          </article>
-        </div>
-
-
-
-        <!-- ВРЕМЕННО СКРЫТО (вернуть, когда группы снова наберутся):
-             Breaking (с 0 до PRO · 10+, assets/web/breaking.webp),
-             Jazz-Funk Choreo (MALINA · 16+, assets/web/jazz-funk.webp) —
-             стиль сейчас входит в Choreo и показан чипом на обороте карточки,
-             Contemporary (Choreo · 10+, assets/web/contemporary.webp).
-             При возврате: вернуть карточки в .dir-grid, снять модификатор
-             .dir-grid--duo, добавить строки в прайс, расписание и hero-styles. -->
-      </div>
-    </section>
-
-
-    <!-- ======================= 6. РАСПИСАНИЕ И ЦЕНЫ ======================= -->
-    <section class="schedule section section--wide" id="schedule" aria-labelledby="schedule-title">
-      <div class="container">
-        <div class="pricing-title">
-          <span class="pricing-title-sm">прайс-лист</span>
-          <h2 id="schedule-title" class="pricing-title-lg">Цены<span class="pricing-title-and"> и расписание</span></h2>
-        </div>
-
-        <!-- Цены по направлениям (группы общие, без деления на детские / взрослые) -->
-        <div class="price-cards">
-          <article class="price-card">
-            <div class="price-card-main">
-              <h3>Choreo 16+</h3>
-              <p class="price-card-sub">ONE OF CREW · 16–30 лет</p>
-              <ul class="price-feats">
-                <li>8 часов в месяц — занятие раз в неделю по 2 часа</li>
-                <li>Hip-Hop, Jazz-Funk, Girly Style в постановках</li>
-                <li>Работа над синхроном и сценической подачей</li>
-                <li>Выступления и конкурсы в составе команды</li>
-              </ul>
-            </div>
-            <div class="price-card-side">
-              <p class="price-amount">4 000&nbsp;₽<span>/мес</span></p>
-              <div class="price-meta">
-                <p>Воскресенье 13:00–15:00</p>
-                <p>ул. Комсомольская, 78</p>
-                <p>Пробное занятие — бесплатно</p>
-              </div>
-              <a href="#contacts" class="btn btn-accent btn-sm">Записаться</a>
-            </div>
-          </article>
-
-          <article class="price-card">
-            <div class="price-card-main">
-              <h3>K-Pop 12+</h3>
-              <p class="price-card-sub">Siesta · 12–25 лет</p>
-              <ul class="price-feats">
-                <li>8 часов в месяц — занятие раз в неделю по 2 часа</li>
-                <li>Разбор и постановка полноценных k-pop номеров</li>
-                <li>Синхрон, формации и сценический образ</li>
-                <li>Выступления, съёмки и cover-dance проекты</li>
-              </ul>
-            </div>
-            <div class="price-card-side">
-              <p class="price-amount">3 500&nbsp;₽<span>/мес</span></p>
-              <div class="price-meta">
-                <p>Воскресенье 15:00–17:00</p>
-                <p>ул. Комсомольская, 78</p>
-                <p>Пробное занятие — бесплатно</p>
-              </div>
-              <a href="#contacts" class="btn btn-accent btn-sm">Записаться</a>
-            </div>
-          </article>
-
-          <article class="price-card price-card--soon">
-            <div class="price-card-main">
-              <h3>Choreo 9+</h3>
-              <p class="price-card-sub">Детская группа · 9–16 лет</p>
-              <ul class="price-feats">
-                <li>8 часов в месяц — два занятия в неделю по 1 часу</li>
-                <li>Постановочная хореография: hip-hop, jazz-funk, girly style</li>
-                <li>Своя скорость разбора и больше повторов</li>
-                <li>Отдельный преподаватель под детскую группу</li>
-                <li>Ведем набор, дата запуска будет озвучена по достижении необходимого количества участников</li>
-              </ul>
-            </div>
-            <div class="price-card-side">
-              <p class="price-amount">4 000&nbsp;₽<span>/мес</span></p>
-              <div class="price-meta">
-                <p>Среда 18:00–19:00 · Воскресенье 14:00–15:00</p>
-                <p>ул. Истомина, 41</p>
-                <p>Пробное занятие — бесплатно</p>
-              </div>
-              <a href="#contacts" class="btn btn-accent btn-sm">Записаться</a>
-            </div>
-          </article>
-
-          <article class="price-card price-card--soon">
-            <div class="price-card-main">
-              <h3>Lady style 25+</h3>
-              <p class="price-card-sub">Новое направление · от 25 лет</p>
-              <ul class="price-feats">
-                <li>6 часов в месяц — занятие раз в неделю по 1,5 часа</li>
-                <li>Женская хореография: пластика, подача, образ</li>
-                <li>Группа для женщин от 25 лет</li>
-                <li>Можно начать с нуля и после перерыва</li>
-                <li>Ведем набор, дата запуска будет озвучена по достижении необходимого количества участников</li>
-              </ul>
-            </div>
-            <div class="price-card-side">
-              <p class="price-amount">3 000&nbsp;₽<span>/мес</span></p>
-              <div class="price-meta">
-                <p>Воскресенье 18:00–19:30</p>
-                <p>ул. Комсомольская, 78</p>
-                <p>Пробное занятие — бесплатно</p>
-              </div>
-              <a href="#contacts" class="btn btn-accent btn-sm">Записаться</a>
-            </div>
-          </article>
-        </div>
-
-        <!-- Дополнительные услуги -->
         <h3 class="addon-title">Дополнительные услуги</h3>
         <div class="addon-table">
           <div class="addon-row">
@@ -693,63 +394,18 @@
           </div>
         </div>
 
-        <!-- Актуальное расписание групп -->
-        <div class="schedule-board" aria-labelledby="schedule-board-title">
-          <div class="schedule-board-head">
-            <h3 id="schedule-board-title">Расписание</h3>
-            <span class="schedule-board-note">Адрес указан у каждой группы</span>
-          </div>
-
-          <ul class="schedule-list">
-            <li class="schedule-row">
-              <span class="schedule-day">Воскресенье</span>
-              <span class="schedule-time"><time datetime="13:00">13:00</time>–<time datetime="15:00">15:00</time></span>
-              <span class="schedule-group">
-                <span class="schedule-group-name">Choreo 16+</span>
-                <span class="schedule-group-meta">ONE OF CREW · 16–30 лет · ул. Комсомольская, 78</span>
-              </span>
-              <a href="#contacts" class="btn btn-accent btn-sm schedule-cta">Записаться</a>
-            </li>
-            <li class="schedule-row">
-              <span class="schedule-day">Воскресенье</span>
-              <span class="schedule-time"><time datetime="15:00">15:00</time>–<time datetime="17:00">17:00</time></span>
-              <span class="schedule-group">
-                <span class="schedule-group-name">K-Pop 12+</span>
-                <span class="schedule-group-meta">Siesta · 12–25 лет · ул. Комсомольская, 78</span>
-              </span>
-              <a href="#contacts" class="btn btn-accent btn-sm schedule-cta">Записаться</a>
-            </li>
-            <li class="schedule-row">
-              <span class="schedule-day">Среда</span>
-              <span class="schedule-time"><time datetime="18:00">18:00</time>–<time datetime="19:00">19:00</time></span>
-              <span class="schedule-group">
-                <span class="schedule-group-name">Choreo 9+</span>
-                <span class="schedule-group-meta">9–16 лет · ул. Истомина, 41</span>
-              </span>
-              <a href="#contacts" class="btn btn-accent btn-sm schedule-cta">Записаться</a>
-            </li>
-            <li class="schedule-row">
-              <span class="schedule-day">Воскресенье</span>
-              <span class="schedule-time"><time datetime="14:00">14:00</time>–<time datetime="15:00">15:00</time></span>
-              <span class="schedule-group">
-                <span class="schedule-group-name">Choreo 9+</span>
-                <span class="schedule-group-meta">9–16 лет · ул. Истомина, 41</span>
-              </span>
-              <a href="#contacts" class="btn btn-accent btn-sm schedule-cta">Записаться</a>
-            </li>
-            <li class="schedule-row">
-              <span class="schedule-day">Воскресенье</span>
-              <span class="schedule-time"><time datetime="18:00">18:00</time>–<time datetime="19:30">19:30</time></span>
-              <span class="schedule-group">
-                <span class="schedule-group-name">Lady style 25+</span>
-                <span class="schedule-group-meta">от 25 лет · ул. Комсомольская, 78</span>
-              </span>
-              <a href="#contacts" class="btn btn-accent btn-sm schedule-cta">Записаться</a>
-            </li>
-          </ul>
-
-          <p class="schedule-soon">Choreo 9+ и Lady Style 25+: Ведем набор, дата запуска будет озвучена по достижении необходимого количества участников.</p>
+          <a class="poster-button" href="#contacts">Записаться на пробное</a>
         </div>
+      </section>
+    </section>
+
+    <section class="poster-band poster-about" id="why" aria-labelledby="why-title">
+      <img class="poster-about-photo" src="assets/web/why-support.webp" alt=""
+           width="1200" height="900" loading="lazy" />
+      <div class="poster-copy">
+        <h2 class="poster-title" id="why-title">О студии</h2>
+        <p>В ONE OF STUDIO разбираем хореографию, собираем номера и репетируем с командой. Можно начать с нуля и выступать, когда будешь готов.</p>
+        <a class="poster-button" href="#teachers">Студия и тренеры</a>
       </div>
     </section>
 
@@ -764,24 +420,18 @@
             alt, подпись и width/height. Видео грузится только по клику,
             поэтому длина ленты почти не влияет на скорость страницы.
          ================================================================= -->
-    <section class="social section" id="social" aria-labelledby="social-title">
+    <section class="social section" id="social" data-home-panel aria-labelledby="social-title">
       <div class="container">
-        <div class="section-head social-head">
-          <div class="social-head-text">
-            <span class="tag">Соцсети студии</span>
-            <h2 id="social-title" class="display-h2">Жизнь<br /><span class="accent-text">студии</span></h2>
-            <p class="section-lead">Кадры с репетиций и сцены, истории о группах, афиши и страницы людей, с которыми ты будешь танцевать.</p>
-          </div>
-
-        </div>
+        <a class="poster-return" href="#why">К главной странице</a>
+        <h2 class="poster-title" id="social-title">Жизнь студии</h2>
 
         <nav class="social-jump" aria-label="Разделы ленты">
           <a href="#social-feed">Фото и видео</a>
           <a href="#social-stories">Истории и афиши</a>
-          <a href="#social-people">Люди студии</a>
+          <a href="#teachers">Студия и тренеры</a>
         </nav>
 
-        <div class="social-subhead" id="social-feed">
+        <div class="social-subhead" id="social-feed" tabindex="-1">
           <h3>Фото и видео</h3>
           <p>Репетиции, съёмки, выступления — моменты из жизни студии.</p>
         </div>
@@ -1061,7 +711,7 @@
         </div>
 
         <div class="social-divider" aria-hidden="true"></div>
-        <div class="social-subhead" id="social-stories">
+        <div class="social-subhead" id="social-stories" tabindex="-1">
           <h3>Истории и афиши</h3>
           <p>Набор в группы, знакомство с тренером и подсказки, как найти зал.</p>
         </div>
@@ -1076,8 +726,9 @@
         </div>
 
         <div class="social-divider" aria-hidden="true"></div>
-        <section id="teachers" aria-labelledby="social-people-title">
-          <div class="social-subhead" id="social-people">
+        <section id="teachers" tabindex="-1" aria-labelledby="social-people-title">
+          <a class="poster-return" href="#why">К главной странице</a>
+          <div class="social-subhead" id="social-people" tabindex="-1">
             <h3 id="social-people-title">Студия и тренеры</h3>
             <p>Смотри новости студии и знакомься с теми, кто ведёт занятия.</p>
           </div>
@@ -1130,19 +781,18 @@
         <dialog class="social-story-viewer" aria-label="Просмотр истории">
           <button class="social-story-close" type="button" aria-label="Закрыть историю">×</button>
           <button class="social-story-step social-story-prev" type="button" aria-label="Предыдущая история">‹</button>
-          <figure><img src="" alt="" width="1080" height="1920" /><video controls playsinline preload="none" poster="assets/web/social/lady-style-masterclass-2026-10-18-poster.webp" aria-label="Видео с мастер-класса Lady Style 25+" hidden></video><figcaption></figcaption></figure>
+          <figure><img alt="" width="1080" height="1920" /><video controls playsinline preload="none" poster="assets/web/social/lady-style-masterclass-2026-10-18-poster.webp" aria-label="Видео с мастер-класса Lady Style 25+" hidden></video><figcaption></figcaption></figure>
           <a class="social-story-link" href="lady-style.html" hidden></a>
           <button class="social-story-step social-story-next" type="button" aria-label="Следующая история">›</button>
         </dialog>
       </div>
     </section>
 
-    <!-- ======================= 8. ЧАСТЫЕ ВОПРОСЫ ======================= -->
-    <section class="faq section section-light" id="faq" aria-labelledby="faq-title">
+    <section class="faq section section-light poster-panel" id="faq" data-home-panel aria-labelledby="faq-title">
       <div class="container">
         <div class="section-head">
-          <span class="tag">Вопросы</span>
-          <h2 id="faq-title" class="display-h2">Частые вопросы<br /><span class="accent-text">о занятиях</span></h2>
+          <a class="poster-return" href="#contacts">К контактам</a>
+          <h2 id="faq-title" class="poster-title">Частые вопросы</h2>
         </div>
 
         <div class="faq-list">
@@ -1203,47 +853,11 @@
       </div>
     </section>
 
-    <!-- ======================= 9. КОНТАКТЫ ======================= -->
-    <section class="contacts section section--wide" id="contacts" aria-labelledby="contacts-title">
-      <div class="container contacts-inner">
-        <span class="tag">Свяжитесь с нами</span>
-        <h2 id="contacts-title" class="display-h2">Запишись на<br />пробное занятие</h2>
-        <p class="section-lead">Напиши напрямую — расскажем про группы, расписание и стоимость.</p>
 
-        <div class="contact-links">
-          <a class="contact-btn" href="https://t.me/E_D_Khiro" target="_blank" rel="noopener">
-            <span class="contact-name">Telegram</span>
-          </a>
-          <a class="contact-btn" href="https://wa.me/79004153763" target="_blank" rel="noopener">
-            <span class="contact-name">WhatsApp</span>
-          </a>
-          <a class="contact-btn" href="https://vk.com/vladislavandreevna" target="_blank" rel="noopener">
-            <span class="contact-name">ВКонтакте</span>
-          </a>
-          <a class="contact-btn" href="https://max.ru/u/f9LHodD0cOLn3SlAJWYa4_-fZzZDwelDAIgd1G3CEeoWNyKy9dZ7q0JIsmI" target="_blank" rel="noopener">
-            <span class="contact-name">MAX</span>
-          </a>
-        </div>
-
-        <ul class="contact-addresses">
-          <!-- ВРЕМЕННО СКРЫТО (вернуть позже, вместе с направлением Contemporary):
-          <li><span class="contact-address-label">Contemporary</span> · ул. Морозова Павла Леонтьевича, 92Б</li>
-          <li><span class="contact-address-label">Остальные направления</span> · ул. Комсомольская, 78</li>
-          -->
-          <li><span class="contact-address-label">Choreo 9+</span> · ул. Истомина, 41</li>
-          <li><span class="contact-address-label">Choreo 16+, K-Pop, Lady style 25+</span> · ул. Комсомольская, 78</li>
-          <li class="contact-map">
-            <a href="https://yandex.ru/maps/76/khabarovsk/house/ulitsa_istomina_41/ZUoDaAdmSEcFW0Jua2J1dn9jbAg=/" target="_blank" rel="noopener">
-              ул. Истомина, 41 на Яндекс Картах
-            </a>
-          </li>
-          <li class="contact-map">
-            <a href="https://yandex.ru/maps/org/one_of_studio/126776741866/" target="_blank" rel="noopener">
-              ул. Комсомольская, 78 на Яндекс Картах
-            </a>
-          </li>
-        </ul>
-
+    <section class="poster-panel section" id="addresses" data-home-panel aria-labelledby="addresses-title">
+      <div class="container">
+        <a class="poster-return" href="#contacts">К контактам</a>
+        <h2 class="poster-title" id="addresses-title">Адреса студии</h2>
         <div class="studio-maps" aria-label="Адреса студии на карте">
           <article class="studio-map" aria-labelledby="map-komsomolskaya-title">
             <h3 id="map-komsomolskaya-title">Комсомольская, 78</h3>
@@ -1251,6 +865,7 @@
             <p class="studio-map-access">3-й этаж: офис 308 — Choreo и K-Pop, офис 307 — Lady style.</p>
             <iframe class="studio-map-frame" title="ONE OF STUDIO на Комсомольской, 78 — карта 2ГИС" src="https://makemap.2gis.ru/widget?data=eJxNkFFvgjAUhf9L9ziyVERBEh8QFDHYgegWXfaA0nXdqiVtGYLxv6_qtuy-NPecc0-a7wS4KLDARYj5HitBsQTuywmopsTABROcq0pgYIBS8BILdfVPYMcZF9q_g6bTeTO1r6hil4sl7E2i8SCMJmj1tFrMlvVwqO0Cy52gpaL8oEPJ1LuHM5F-Kd-B6-ntje20GoTzy14pv4ZrR0bBzoqp18aF34tQiOA6TiXyzUca6JtwDOOPBcm8dh4QYnF_FY0R33ZnbNt4R0QlgTEhWdNJt11PRsi_h-tlWqFwFAXzGjUBJbOULMPJJ85GbTFlcpN5DcpklfiDOiHXj7fRocBH4Hbg75wNQG6wmguKH1IJpwel8zuugdJDrq4gO93eA-zDvm0ZlvNg2WbfsV91AS2Aazvm-dUA-7xMuKQ3MifAcgXcv6wB2EX-VwNazvdasXWLRsoZe37HmG2u6lvOJD5_AxDSkw8" width="640" height="400" loading="lazy"></iframe>
             <div class="studio-map-links">
+              <a href="https://yandex.ru/maps/org/one_of_studio/126776741866/" target="_blank" rel="noopener">Яндекс Карты</a>
               <a href="https://2gis.ru/khabarovsk/firm/70000001117606574" target="_blank" rel="noopener">Открыть в 2ГИС</a>
               <a href="https://2gis.ru/khabarovsk/center/135.060674,48.472687/zoom/16/routeTab/rsType/bus/to/135.060674,48.472687%E2%95%8EOne%20of%20studio" target="_blank" rel="noopener">Построить маршрут</a>
             </div>
@@ -1261,6 +876,7 @@
             <p class="studio-map-access">Синий зал. Вход студии «Я в танцах».</p>
             <iframe class="studio-map-frame" title="Choreo 9+ на Истомина, 41 — карта 2ГИС" src="https://makemap.2gis.ru/widget?data=eJxNUFtvgjAU_i_d44gptwkkPhgYiHaGGnVxiw8MKjYrlJR6QeJ_X9FtsS9Nvts55-sAFzkRJI8IL4kUlDTA--yAbGsCPBCSVB4EARqoBa-JkDe-AxlnXCj-CRqOvjMUL6lkvQMb-2NWro9x8C3it5kZz_0N3EwWhfSfIbrgw9x3IRo3cYDPypaTJhO0lpRXypxMxs9LaIfxqxvF4Xy1Xi2myzagxRQXj8GIBpjnvgWR2QfaaogJUYAP7amACC32eT8MF_fBUQDRstdZaiEBZ47SxIpDuOmX2XypPwpPojkkvntKitFILXaJq5ycgafDv3fVQHEvqe0r-G0o4bSSSp9xVSStUnkrUDftAXzRoa1rljOwhobrmlsVQHPgDR3jutVAmdYJb-j98g6wVALvX6sB1sMPMeDCeamQoUpRlXHG3veEsI8buktZQ64_9uCPaA" width="640" height="400" loading="lazy" sandbox="allow-modals allow-forms allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation"></iframe>
             <div class="studio-map-links">
+              <a href="https://yandex.ru/maps/76/khabarovsk/house/ulitsa_istomina_41/ZUoDaAdmSEcFW0Jua2J1dn9jbAg=/" target="_blank" rel="noopener">Яндекс Карты</a>
               <a href="https://2gis.ru/khabarovsk/search/%D0%98%D1%81%D1%82%D0%BE%D0%BC%D0%B8%D0%BD%D0%B0%2C%2041" target="_blank" rel="noopener">Открыть в 2ГИС</a>
               <a href="https://2gis.ru/khabarovsk/center/135.061051,48.472993/zoom/17/routeTab/rsType/bus/to/135.061051,48.472993%E2%95%8E%D0%98%D1%81%D1%82%D0%BE%D0%BC%D0%B8%D0%BD%D0%B0%2C%2041" target="_blank" rel="noopener">Построить маршрут</a>
             </div>
@@ -1268,149 +884,114 @@
         </div>
       </div>
     </section>
-
-    <!-- ======================= 10. ТЕКСТ О СТУДИИ (SEO) ======================= -->
-    <section class="seo-text section section--wide" aria-labelledby="seo-title">
-      <div class="container seo-inner">
-        <h2 id="seo-title">Танцевальная студия в Хабаровске</h2>
-
-        <p>ONE OF STUDIO — школа танцев в Хабаровске на ул. Комсомольская, 78 и ул. Истомина, 41. Обучение идёт через постановку: участники работают над номером, учатся слышать музыку, двигаться вместе с командой и постепенно готовятся к выступлению.</p>
-
-        <p>Для подростков и взрослых действуют <a href="choreo.html">Choreo 16+ — команда ONE OF CREW</a>, 16–30 лет: постановочная хореография на стыке hip-hop, jazz-funk и girly style, работа над синхроном и сценической подачей, выступления и конкурсы; и <a href="kpop.html">K-Pop cover dance 12+</a> — команда Siesta, 12–25 лет: разбор и постановка k-pop номеров, формации, выступления и съёмки.</p>
-
-        <p>Для детей 9–16 лет набираем <a href="choreo-junior.html">Choreo 9+</a> — группу современной хореографии. Для женщин от 25 лет набираем <a href="lady-style.html">Lady style 25+</a>: пластика, подача, работа с образом. Оба новых направления ведёт хореограф Ольга Шах. Напишите нам, чтобы попасть в предварительный список.</p>
-
-        <p>Choreo и K-Pop занимаются раз в неделю по воскресеньям, по два часа: Choreo в 13:00–15:00, K-Pop в 15:00–17:00 — за месяц это 8 часов в зале. Для Choreo 9+ запланированы среда 18:00–19:00 и воскресенье 14:00–15:00 на ул. Истомина, 41: 8 часов в месяц за 4 000 ₽. Для Lady style 25+ — воскресенье 18:00–19:30 на ул. Комсомольская, 78, 3 000 ₽ в месяц. Ведем набор, дата запуска будет озвучена по достижении необходимого количества участников. Абонементы стоят 3 000–4 000 ₽ в месяц в зависимости от направления, разовое посещение — 800 ₽ только для группы Lady Style 25+, есть индивидуальные занятия. Первое пробное занятие бесплатно до 31 декабря 2026 года.</p>
-
-        <p>Начать можно с нуля — подготовка не нужна. Если сомневаешься, какое направление выбрать, напиши нам в мессенджер: расскажем про группы, текущий состав и ближайшие постановки, и поможем определиться до того, как ты за что-то заплатишь.</p>
-      </div>
-    </section>
-
   </main>
 
-  <!-- ======================= FOOTER ======================= -->
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <a class="brand footer-brand" href="#top" aria-label="ONE OF STUDIO — наверх">
-        <img class="brand-logo" src="brand_assets/web/logo.png" alt="ONE OF STUDIO" width="575" height="140" />
-      </a>
-
-      <nav class="footer-nav" aria-label="Навигация в подвале">
-        <a href="#why">О студии</a>
-        <a href="#directions">Направления</a>
-        <a href="#schedule">Расписание</a>
-        <a href="#teachers">Тренеры</a>
-        <a href="#social">Соцсети</a>
-        <a href="#faq">Вопросы</a>
-        <a href="#contacts">Контакты</a>
-      </nav>
-
-      <nav class="footer-links" aria-label="Страницы направлений">
-        <a href="choreo.html">Choreo в Хабаровске</a>
-        <a href="kpop.html">K-Pop cover dance</a>
-        <a href="hip-hop.html">Хип-хоп</a>
-        <a href="lady-style.html">Lady style 25+</a>
-        <a href="choreo-junior.html">Choreo 9+</a>
-      </nav>
-
-      <div class="footer-meta">
-        <span class="tag">Хабаровск</span>
-        <span class="tag">Танцевальная студия</span>
-        <span class="tag">© <span id="year">2026</span></span>
+  <footer class="poster-footer" id="contacts" aria-labelledby="contacts-title">
+    <div class="poster-footer-main">
+      <div>
+        <h2 class="poster-title" id="contacts-title">Записаться на пробное</h2>
+        <a class="poster-phone" href="tel:+79004153763">+7 900 415-37-63</a>
       </div>
-      <p class="copyright">All rights reserved · ONE OF STUDIO</p>
-      <p class="copyright copyright-legal"><a href="privacy.html">Политика обработки персональных данных</a></p>
+      <nav class="poster-actions" aria-label="Запись в мессенджерах">
+        <a class="poster-button" href="https://t.me/E_D_Khiro" target="_blank" rel="noopener">Telegram</a>
+        <a class="poster-button" href="https://wa.me/79004153763" target="_blank" rel="noopener">WhatsApp</a>
+        <a class="poster-button" href="https://vk.com/vladislavandreevna" target="_blank" rel="noopener">ВКонтакте</a>
+        <a class="poster-button" href="https://max.ru/u/f9LHodD0cOLn3SlAJWYa4_-fZzZDwelDAIgd1G3CEeoWNyKy9dZ7q0JIsmI" target="_blank" rel="noopener">MAX</a>
+      </nav>
+    </div>
+    <div class="poster-footer-meta">
+      <a href="#top"><span>© <span id="year">2026</span> ONE OF STUDIO</span></a>
+      <nav aria-label="Информация о студии">
+        <a href="#addresses">Адреса</a>
+        <a href="#faq">Частые вопросы</a>
+        <a href="privacy.html">Политика конфиденциальности</a>
+      </nav>
     </div>
   </footer>
 
+  <dialog class="poster-video-dialog" aria-label="Видео ONE OF CREW">
+    <form method="dialog">
+      <button class="poster-button" type="submit" autofocus>Закрыть видео</button>
+    </form>
+    <video controls playsinline preload="none" width="1280" height="720"></video>
+  </dialog>
+
   <script>
-    // Auto-update copyright year (fallback 2026 stays if JS disabled)
-    (function () {
-      var y = document.getElementById('year');
-      if (y) y.textContent = new Date().getFullYear();
-    })();
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Mobile menu toggle
+    // На узком экране пункты навигации открываются одной кнопкой.
     (function () {
-      var toggle = document.querySelector('.nav-toggle');
-      var menu = document.getElementById('mobile-menu');
-      if (!toggle || !menu) return;
+      var header = document.querySelector('.poster-header');
+      var toggle = header.querySelector('.poster-menu-toggle');
+      var compact = window.matchMedia('(width < 700px)');
+      toggle.hidden = false;
 
-      function close() {
-        menu.hidden = true;
-        toggle.setAttribute('aria-expanded', 'false');
-        document.body.classList.remove('menu-open');
-      }
-      toggle.addEventListener('click', function () {
-        var open = menu.hidden;
-        menu.hidden = !open;
+      function setMenu(open) {
+        header.classList.toggle('is-open', open);
         toggle.setAttribute('aria-expanded', String(open));
-        document.body.classList.toggle('menu-open', open);
+      }
+
+      toggle.addEventListener('click', function () {
+        setMenu(toggle.getAttribute('aria-expanded') === 'false');
       });
-      menu.querySelectorAll('a').forEach(function (a) {
-        a.addEventListener('click', close);
+      header.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () { setMenu(false); });
       });
+      header.addEventListener('keydown', function (event) {
+        if (event.key !== 'Escape' || toggle.getAttribute('aria-expanded') !== 'true') return;
+        setMenu(false);
+        toggle.focus();
+      });
+      compact.addEventListener('change', function () { setMenu(false); });
     })();
 
-    // Band video — light muted loop autoplays in view; play button opens
-    // the full clip with sound (full preloads only on click).
+    // Открываем дополнительный блок, когда на него ведёт ссылка или адрес с якорем.
     (function () {
-      var band = document.getElementById('band');
-      var loop = document.getElementById('bandLoop');
-      var full = document.getElementById('bandFull');
-      var pb = document.getElementById('bandPlay');
-      if (!band || !loop || !pb) return;
-      loop.muted = true;
-
-      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (!reduce && 'IntersectionObserver' in window) {
-        var io = new IntersectionObserver(function (entries) {
-          entries.forEach(function (e) {
-            if (band.classList.contains('is-playing')) return;
-            if (e.isIntersecting) { var p = loop.play(); if (p && p.catch) p.catch(function () {}); }
-            else { loop.pause(); }
-          });
-        }, { threshold: 0.25 });
-        io.observe(band);
-      }
-
-      function openVideo() {
-        loop.pause();
-        band.classList.add('is-playing');
-        document.body.classList.add('video-open');
-        full.currentTime = 0;
-        var p = full.play();
-        if (p && p.catch) p.catch(function () {});
-      }
-
-      function closeVideo() {
-        full.pause();
-        full.currentTime = 0;
-        band.classList.remove('is-playing');
-        document.body.classList.remove('video-open');
-        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-          var p = loop.play(); if (p && p.catch) p.catch(function () {});
+      var panels = Array.from(document.querySelectorAll('[data-home-panel]'));
+      function update() {
+        var target = document.getElementById(window.location.hash.slice(1));
+        var openPanel = target && target.closest('[data-home-panel]');
+        var changed = false;
+        panels.forEach(function (panel) {
+          var open = panel === openPanel;
+          if (panel.classList.contains('is-open') !== open) {
+            panel.classList.toggle('is-open', open);
+          if (!open) {
+            panel.querySelectorAll('video').forEach(function (video) { video.pause(); });
+          }
+            changed = true;
+          }
+        });
+        if (changed && target) {
+          target.setAttribute('tabindex', '-1');
+          target.focus({ preventScroll: true });
+          target.scrollIntoView({ block: 'start', behavior: 'instant' });
         }
       }
 
-      pb.addEventListener('click', openVideo);
-
-      // click on video = pause/resume
-      full.addEventListener('click', function () {
-        if (full.paused) { var p = full.play(); if (p && p.catch) p.catch(function(){}); }
-        else full.pause();
-      });
-
-      // ✕ button exits fullscreen mode
-      var stopBtn = document.getElementById('bandStop');
-      if (stopBtn) stopBtn.addEventListener('click', closeVideo);
-
-      // Escape key also exits
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && band.classList.contains('is-playing')) closeVideo();
-      });
+      update();
+      window.addEventListener('hashchange', update);
     })();
 
+    // Полное видео загружается по запросу и останавливается при закрытии.
+    (function () {
+      var link = document.querySelector('[data-trial-video]');
+      var viewer = document.querySelector('.poster-video-dialog');
+      var video = viewer.querySelector('video');
+
+      link.addEventListener('click', function (event) {
+        if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || !viewer.showModal) return;
+        event.preventDefault();
+        video.src = link.href;
+        viewer.showModal();
+        video.play().catch(function () {});
+      });
+      viewer.addEventListener('close', function () {
+        video.pause();
+        video.removeAttribute('src');
+        video.load();
+      });
+    })();
 
     // Истории и афиши: крупный просмотр, стрелки и закрытие клавишей Esc.
     (function () {
@@ -1499,56 +1080,9 @@
         if (grid.parentElement) grid.parentElement.classList.toggle('is-open', open);
         btn.setAttribute('aria-expanded', String(open));
         btn.textContent = open ? 'Свернуть ленту' : 'Показать ещё';
-        if (!open) grid.scrollIntoView({ block: 'start', behavior: 'smooth' });
+        if (!open) grid.scrollIntoView({ block: 'start' });
       });
     })();
-
-    // Direction cards — flip to reveal the style description
-    (function () {
-      var cards = document.querySelectorAll('.dir-card');
-      if (!cards.length) return;
-
-      cards.forEach(function (card) {
-        var front = card.querySelector('.dir-face--front');
-        var back = card.querySelector('.dir-face--back');
-        var openBtn = card.querySelector('.dir-flip-open');
-        var closeBtn = card.querySelector('.dir-flip-close');
-
-        // keep the hidden face out of the tab order / AT tree
-        if (back) back.inert = true;
-
-        function setFlipped(state) {
-          card.classList.toggle('is-flipped', state);
-          if (front) front.inert = state;
-          if (back) back.inert = !state;
-        }
-
-        if (openBtn) openBtn.addEventListener('click', function () {
-          setFlipped(true);
-          if (closeBtn) closeBtn.focus();
-        });
-        if (closeBtn) closeBtn.addEventListener('click', function () {
-          setFlipped(false);
-          if (openBtn) openBtn.focus();
-        });
-      });
-
-      // Escape flips any open card back to the front
-      document.addEventListener('keydown', function (e) {
-        if (e.key !== 'Escape') return;
-        document.querySelectorAll('.dir-card.is-flipped').forEach(function (card) {
-          card.classList.remove('is-flipped');
-          var front = card.querySelector('.dir-face--front');
-          var back = card.querySelector('.dir-face--back');
-          if (front) front.inert = false;
-          if (back) back.inert = true;
-          var openBtn = card.querySelector('.dir-flip-open');
-          if (openBtn) openBtn.focus();
-        });
-      });
-    })();
-
   </script>
-
 </body>
 </html>
