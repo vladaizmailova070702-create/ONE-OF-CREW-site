@@ -627,8 +627,13 @@ function paymentMonth(p){ return String(p.month||p.date||ymNow()).slice(0,7); }
 // Подтверждённые тарифы второго направления: 1500 до декабря, 2000 с декабря.
 function lessonPrice(st, date){
   if(st.plan==="single") return +st.fee||0;
+  var month=String(date||todayISO()).slice(0,7);
   var fee=+st.fee||0;
-  if(isSecondDirection(st)) fee=String(date||todayISO()).slice(0,10)>="2026-12-01" ? 2000 : 1500;
+  if(st.monthlyFees && Object.prototype.hasOwnProperty.call(st.monthlyFees,month)){
+    fee=+st.monthlyFees[month]||0;
+  }else if(isSecondDirection(st)){
+    fee=month>="2026-12" ? 2000 : 1500;
+  }
   var pack = group(st.group).lessons || 4;
   return pack>0 ? fee/pack : 0;
 }
@@ -1319,7 +1324,7 @@ function saveStudentFromForm(){
   };
   var at=-1;
   for(var i=0;i<D.students.length;i++) if(D.students[i].id===obj.id) at=i;
-  if(at>=0) D.students[at]=obj; else D.students.push(obj);
+  if(at>=0) D.students[at]=Object.assign({},D.students[at],obj); else D.students.push(obj);
   return obj;
 }
 
